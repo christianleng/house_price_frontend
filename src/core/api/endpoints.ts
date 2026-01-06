@@ -1,0 +1,29 @@
+export const API_ENDPOINTS = {
+  AUTH: {
+    LOGIN: "/api/auth/token",
+    LOGOUT: "/api/auth/logout",
+    REFRESH: "/api/auth/refresh",
+    ME: "/api/auth/me",
+    REGISTER: "/api/auth/register",
+  },
+
+  PROPERTIES: {
+    LIST: "/api/properties",
+    DETAIL: (id: string) => `/api/properties/${id}`,
+    CREATE: "/api/properties",
+    UPDATE: (id: string) => `/api/properties/${id}`,
+    DELETE: (id: string) => `/api/properties/${id}`,
+  },
+
+  AGENTS: {
+    REGISTER: "/api/agents/register",
+    ME: "/api/agents/me",
+    UPDATE: "/api/agents/me",
+  },
+
+  PHOTOS: {
+    LIST: (propertyId: string) => `/api/photos/property/${propertyId}`,
+    UPLOAD: (propertyId: string) => `/api/photos/property/${propertyId}`,
+    DELETE: (photoId: string) => `/api/photos/${photoId}`,
+  },
+} as const;
