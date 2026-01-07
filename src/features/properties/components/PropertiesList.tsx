@@ -14,7 +14,7 @@ const PropertiesList = observer(() => {
   if (isError) return <div>Error {error.message}</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
       <h1 className="text-3xl font-bold mb-8">Propriétés disponibles</h1>
 
       <div className="mb-6 text-gray-600">
