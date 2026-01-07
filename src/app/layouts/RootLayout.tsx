@@ -1,23 +1,27 @@
+import { useIsMobile } from "@/core/hooks/use-mobile";
+import { AppSidebar } from "@/app/layouts/sidebar/appSidebar";
+import Footer from "@/app/layouts/components/Footer";
+import Header from "@/app/layouts/components/Header";
+import { SidebarInset, SidebarProvider } from "@/core/ui/sidebar";
 import { Outlet } from "react-router-dom";
 
 export function RootLayout() {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-white">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex items-center justify-between">nav</nav>
-        </div>
-      </header>
+    <SidebarProvider>
+      {isMobile && <AppSidebar />}
+      <SidebarInset className="flex flex-col min-h-screen">
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <Header />
+        </header>
 
-      <main>
-        <Outlet />
-      </main>
+        <main className="flex-1">
+          <Outlet />
+        </main>
 
-      <footer className="border-t bg-gray-50 py-8 mt-20">
-        <div className="container mx-auto px-4 text-center text-gray-600">
-          © footer
-        </div>
-      </footer>
-    </div>
+        <Footer />
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
