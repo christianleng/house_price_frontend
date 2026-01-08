@@ -4,7 +4,7 @@ import Footer from "@/app/layouts/components/Footer";
 import Header from "@/app/layouts/components/Header";
 import { SidebarInset, SidebarProvider } from "@/core/ui/sidebar";
 import { Outlet } from "react-router-dom";
-import Search from "@/features/properties/components/Search";
+import Search from "@/features/search/Search";
 
 export function RootLayout() {
   const isMobile = useIsMobile();

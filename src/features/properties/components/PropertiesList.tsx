@@ -1,15 +1,14 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
 import { propertyFiltersStore } from "@/core/stores";
-import { Link } from "react-router-dom";
-import { Card } from "@/core/ui/card";
+import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
+import { PropertiesSkeleton } from "./PropertiesSkeleton";
+import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
+import PropertiesAllList from "@/core/components/properties-all-list";
 
 const PropertiesList = observer(() => {
   const { filters } = propertyFiltersStore;
-  const { data, isLoading, isError, error } = useProperties(filters);
-
-  if (isLoading) return <div>Loading</div>;
-  if (isError) return <div>Error {error.message}</div>;
+  const { data, isLoading, error, refetch } = useProperties(filters);
 
   return (
     <div>
@@ -19,52 +18,23 @@ const PropertiesList = observer(() => {
         {data?.total} biens trouvés - Page {data?.page} sur {data?.total_pages}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {data?.items.map((property) => {
-          const isRental = property.transaction_type === "rent";
-          const displayPrice = isRental
-            ? property.rent_price_monthly
-            : property.price;
-          const priceSuffix = isRental ? "€ / mois" : "€";
-
-          return (
-            <Link key={property.id} to={`/properties/${property.id}`}>
-              <Card className="overflow-hidden cursor-pointer">
-                <div className="h-48 bg-gray-200 flex items-center justify-center">
-                  {property.thumbnail_url ? (
-                    <img
-                      src={property.thumbnail_url}
-                      alt={property.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-gray-400">Pas d'image</span>
-                  )}
-                </div>
-                <span className="text-2xl font-bold text-blue-600">
-                  {displayPrice?.toLocaleString()} {priceSuffix}
-                </span>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-2 line-clamp-1">
-                    {property.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm mb-2">
-                    {property.city} - {property.postal_code}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-blue-600">
-                      {property.price?.toLocaleString()} €
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      {property.surface_area}m² • {property.rooms} pièces
-                    </span>
-                  </div>
-                </div>
-              </Card>
-            </Link>
-          );
-        })}
-      </div>
+      <SmartLoader
+        isLoading={isLoading}
+        error={error}
+        data={data?.items}
+        skeleton={<PropertiesSkeleton />}
+        emptyState={
+          <p className="text-center py-10">
+            Aucune propriété à vendre pour le moment.
+          </p>
+        }
+        errorFallback={(err, retry) => (
+          <ErrorDisplay error={err} onRetry={retry} />
+        )}
+        retryFn={refetch}
+      >
+        {(items) => <PropertiesAllList properties={items} />}
+      </SmartLoader>
     </div>
   );
 });

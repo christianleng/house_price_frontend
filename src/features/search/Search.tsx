@@ -4,7 +4,7 @@ import { Button } from "@/core/ui/button";
 import { PreferenceHorizontalIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { propertyFiltersStore } from "@/core/stores";
-import PropertyFiltersDialog from "./PropertyFiltersDialog";
+import PropertyFiltersDialog from "../properties/components/PropertyFiltersDialog";
 
 const Search = observer(() => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
