@@ -11,6 +11,11 @@ export const propertiesKeys = {
   lists: () => [...propertiesKeys.all, "list"] as const,
   list: (filters?: PropertyFilters) =>
     [...propertiesKeys.lists(), filters] as const,
+
+  counts: () => [...propertiesKeys.all, "count"] as const,
+  count: (filters?: PropertyFilters) =>
+    [...propertiesKeys.counts(), filters] as const,
+
   details: () => [...propertiesKeys.all, "detail"] as const,
   detail: (id: string) => [...propertiesKeys.details(), id] as const,
 };
@@ -31,5 +36,15 @@ export function useProperty(id: string): UseQueryResult<Property, Error> {
     queryFn: () => propertiesService.getPropertyById(id),
     staleTime: 10 * 60 * 1000,
     enabled: !!id,
+  });
+}
+
+export function useCountProperties(
+  filters?: PropertyFilters
+): UseQueryResult<number, Error> {
+  return useQuery({
+    queryKey: propertiesKeys.count(filters),
+    queryFn: () => propertiesService.getCountProperties(filters),
+    staleTime: 1 * 60 * 1000,
   });
 }
