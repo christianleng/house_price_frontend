@@ -4,6 +4,7 @@ import Footer from "@/app/layouts/components/Footer";
 import Header from "@/app/layouts/components/Header";
 import { SidebarInset, SidebarProvider } from "@/core/ui/sidebar";
 import { Outlet } from "react-router-dom";
+import Search from "@/features/properties/components/Search";
 
 export function RootLayout() {
   const isMobile = useIsMobile();
@@ -15,6 +16,8 @@ export function RootLayout() {
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <Header />
         </header>
+
+        <Search />
 
         <main className="flex-1">
           <Outlet />

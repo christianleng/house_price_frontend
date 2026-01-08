@@ -408,6 +408,7 @@
     @apply font-sans;
   }
 }
+
 @layer utilities {
   .rounded-sm {
     border-radius: var(--radius-sm);
