@@ -74,7 +74,7 @@ export interface Property {
   parking_spaces: number | null;
 
   energy_rating: EnergyRating | null;
-  heating_type: HeatingType | null;
+  heating_type: HeatingType;
 
   construction_year: number | null;
   available_from: string | null;
@@ -104,6 +104,8 @@ export interface PropertySummary {
   thumbnail_url: string | null;
   transaction_type: TransactionType;
   rent_price_monthly: number;
+  energy_rating: EnergyRating;
+  photos_count: number;
 }
 
 export interface PropertyFilters {

@@ -1,86 +1,50 @@
-import { observer } from "mobx-react-lite";
-import { useProperties } from "@/features/properties/api/properties.queries";
-import { PropertiesSkeleton } from "@/features/properties/components/PropertiesSkeleton";
-import type { PropertyFilters } from "@/core/types";
-import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
-import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
-import PropertiesList from "@/core/components/properties-list";
-import { Link } from "react-router-dom";
+import { PropertyCarouselSection } from "@/features/home/components/PropertyCarouselSection";
+import { InfoCardSection } from "@/features/home/components/InfoCardSection";
+import { CTASection } from "@/features/home/components/CTASection";
 
-const HomePage = observer(() => {
-  const initialFiltersPropertiesSale: PropertyFilters = {
-    transaction_type: "sale",
-    page: 1,
-    page_size: 10,
-    sort_by: "created_at",
-    sort_order: "desc",
-  };
-
-  const initialFiltersPropertiesRent: PropertyFilters = {
-    transaction_type: "rent",
-    page: 1,
-    page_size: 10,
-    sort_by: "created_at",
-    sort_order: "desc",
-  };
-
-  const {
-    data: dataSale,
-    isLoading: isLoadingSale,
-    error: errorSale,
-    refetch: refetchSale,
-  } = useProperties(initialFiltersPropertiesSale);
-  const { data, isLoading, error, refetch } = useProperties(
-    initialFiltersPropertiesRent
-  );
-
+const HomePage = () => {
   return (
-    <div className="container max-w-6xl mx-auto px-4 py-16 flex flex-col gap-4">
-      <div className="flex justify-between">
-        <h1 className="text-xl font-bold">Dernières propriétés à vendre</h1>
-        <Link to="/properties">Voir plus</Link>
-      </div>
-      <SmartLoader
-        isLoading={isLoadingSale}
-        error={errorSale}
-        data={dataSale?.items}
-        skeleton={<PropertiesSkeleton />}
-        emptyState={
-          <p className="text-center py-10">
-            Aucune propriété à vendre pour le moment.
-          </p>
-        }
-        errorFallback={(err, retry) => (
-          <ErrorDisplay error={err} onRetry={retry} />
-        )}
-        retryFn={refetchSale}
-      >
-        {(items) => <PropertiesList properties={items} />}
-      </SmartLoader>
+    <div className="container max-w-4/5 mx-auto px-4 py-16 flex flex-col gap-16">
+      <PropertyCarouselSection
+        title="Dernières propriétés à vendre"
+        transactionType="sale"
+      />
 
-      <div className="flex justify-between">
-        <h1 className="text-xl font-bold">Dernières propriétés en location</h1>
-        <Link to="/">Voir plus</Link>
-      </div>
-      <SmartLoader
-        isLoading={isLoading}
-        error={error}
-        data={data?.items}
-        skeleton={<PropertiesSkeleton />}
-        emptyState={
-          <p className="text-center py-10">
-            Aucune propriété à vendre pour le moment.
-          </p>
-        }
-        errorFallback={(err, retry) => (
-          <ErrorDisplay error={err} onRetry={retry} />
-        )}
-        retryFn={refetch}
-      >
-        {(items) => <PropertiesList properties={items} />}
-      </SmartLoader>
+      <PropertyCarouselSection
+        title="Dernières propriétés en location"
+        transactionType="rent"
+      />
+
+      <InfoCardSection
+        badge="Restez informé!"
+        title="Découvrez les prix de l'immobilier en France"
+        description="Utilisez la carte des prix de SeLoger pour obtenir facilement des informations sur le marché de l'immobilier. Découvrez le prix au mètre carré pour des adresses, des villes et des quartiers spécifiques. Informez-vous et découvrez les prix dans la région de votre choix dès aujourd'hui !"
+        ctaText="Explorer la carte des prix"
+        ctaLink="/price-map"
+      />
+
+      <InfoCardSection
+        badge="Restez informé!"
+        title="Estimez votre bien immobilier"
+        description="Réalisez votre estimation maison ou appartement maintenant avec notre outil intelligent basé sur les données du marché."
+        ctaText="Estimer mon bien"
+        ctaLink="/estimate"
+        reversed
+      />
+
+      <CTASection
+        badge="100% gratuit"
+        title="Vendez vous-même un bien immobilier sur SeLoger"
+        features={[
+          "Présentez votre bien et ses caractéristiques",
+          "Définissez le prix de vente de votre maison ou appartement",
+          "Mettez en avant ce qui le rend unique",
+        ]}
+        ctaText="Déposer une annonce"
+        ctaLink="/post-listing"
+      />
     </div>
   );
-});
+};
 
 export default HomePage;
