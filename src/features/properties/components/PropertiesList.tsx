@@ -4,7 +4,7 @@ import { propertyFiltersStore } from "@/core/stores";
 import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
 import { PropertiesSkeleton } from "./PropertiesSkeleton";
 import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
-import PropertiesAllList from "@/core/components/properties-all-list";
+import { PropertyCard } from "./property-card/PropertiesCard";
 
 const PropertiesList = observer(() => {
   const { filters } = propertyFiltersStore;
@@ -33,7 +33,7 @@ const PropertiesList = observer(() => {
         )}
         retryFn={refetch}
       >
-        {(items) => <PropertiesAllList properties={items} />}
+        {(items) => items.map((items) => <PropertyCard property={items} />)}
       </SmartLoader>
     </div>
   );

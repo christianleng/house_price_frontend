@@ -5,6 +5,7 @@ import Header from "@/app/layouts/components/Header";
 import { SidebarInset, SidebarProvider } from "@/core/ui/sidebar";
 import { Outlet } from "react-router-dom";
 import Search from "@/features/search/Search";
+import { Separator } from "@/core/ui/separator";
 
 export function RootLayout() {
   const isMobile = useIsMobile();
@@ -18,6 +19,8 @@ export function RootLayout() {
         </header>
 
         <Search />
+
+        <Separator />
 
         <main className="flex-1">
           <Outlet />

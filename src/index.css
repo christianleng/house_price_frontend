@@ -432,3 +432,133 @@
     border-radius: var(--radius-4xl);
   }
 }
+
+.embla {
+  max-width: 100%;
+  margin: auto;
+  --slide-spacing: 0.75rem;
+  --slide-spacing-sm: 1rem;
+  --slide-spacing-lg: 1.25rem;
+}
+
+.embla__viewport {
+  overflow: hidden;
+}
+
+.embla__container {
+  backface-visibility: hidden;
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+
+@media (min-width: 640px) {
+  .embla__container {
+    margin-left: calc(var(--slide-spacing-sm) * -1);
+  }
+}
+
+@media (min-width: 1024px) {
+  .embla__container {
+    margin-left: calc(var(--slide-spacing-lg) * -1);
+  }
+}
+
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+}
+
+/*  2 slides */
+@media (min-width: 640px) {
+  .embla__slide {
+    flex: 0 0 50%;
+    padding-left: var(--slide-spacing-sm);
+  }
+}
+
+/*  3 slides */
+@media (min-width: 768px) {
+  .embla__slide {
+    flex: 0 0 33.333%;
+  }
+}
+
+/*  4 slides */
+@media (min-width: 1024px) {
+  .embla__slide {
+    flex: 0 0 25%;
+    padding-left: var(--slide-spacing-lg);
+  }
+}
+
+/* 5 slides */
+@media (min-width: 1280px) {
+  .embla__slide {
+    flex: 0 0 20%;
+  }
+}
+
+/* 6 slides */
+@media (min-width: 1536px) {
+  .embla__slide {
+    flex: 0 0 16.666%;
+  }
+}
+
+/*  7 slides */
+@media (min-width: 1920px) {
+  .embla__slide {
+    flex: 0 0 14.285%;
+  }
+}
+
+/*8 slides */
+@media (min-width: 2560px) {
+  .embla__slide {
+    flex: 0 0 12.5%;
+  }
+}
+
+.embla__buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.embla__button {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+  cursor: pointer;
+
+  width: 2.5rem;
+  height: 2.5rem;
+
+  border-radius: 50%;
+  background-color: rgb(229 231 235);
+  color: rgb(9 9 11);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.2s ease-out;
+}
+
+@media (hover: hover) {
+  .embla__button:hover:not(:disabled) {
+    background-color: rgb(209 213 219);
+    transform: scale(1.05);
+  }
+}
+
+.embla__button:disabled {
+  background-color: rgb(243 244 246);
+  color: rgb(107 114 128);
+  cursor: not-allowed;
+  opacity: 0.6;
+}

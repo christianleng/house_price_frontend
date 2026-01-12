@@ -16,7 +16,7 @@ const Header = () => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container max-w-4/5 mx-auto px-4 py-4">
       <nav className="flex justify-between">
         <div className="flex items-center">
           {isMobile && <SidebarTrigger className="-ml-1" />}
