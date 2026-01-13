@@ -2,7 +2,7 @@ import { env } from "@/core/config/01-env";
 import { ApiError } from "./api-error";
 
 interface RequestConfig extends RequestInit {
-  params?: Record<string, string | number | boolean | undefined>;
+  params?: Record<string, unknown>;
 }
 
 class APIClient {
@@ -14,15 +14,16 @@ class APIClient {
     this.baseURL = baseURL;
   }
 
-  private buildURL(
-    endpoint: string,
-    params?: Record<string, string | number | boolean | undefined>
-  ): string {
+  private buildURL(endpoint: string, params?: Record<string, unknown>): string {
     const url = new URL(`${this.baseURL}${endpoint}`);
 
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
+        if (value === undefined || value === null) return;
+
+        if (Array.isArray(value)) {
+          value.forEach((item) => url.searchParams.append(key, String(item)));
+        } else {
           url.searchParams.append(key, String(value));
         }
       });
@@ -50,7 +51,6 @@ class APIClient {
 
     if (response.status === 401 && !endpoint.includes("/auth/refresh")) {
       await this.handleTokenRefresh();
-
       response = await fetch(url, config);
     }
 

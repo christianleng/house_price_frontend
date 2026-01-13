@@ -4,10 +4,13 @@ import type {
   Property,
   PropertyFilters,
   PaginatedProperties,
+  CitiesPropertiesResponse,
+  TransactionType,
 } from "@/core/types";
 
 export const propertiesKeys = {
   all: ["properties"] as const,
+
   lists: () => [...propertiesKeys.all, "list"] as const,
   list: (filters?: PropertyFilters) =>
     [...propertiesKeys.lists(), filters] as const,
@@ -18,6 +21,17 @@ export const propertiesKeys = {
 
   details: () => [...propertiesKeys.all, "detail"] as const,
   detail: (id: string) => [...propertiesKeys.details(), id] as const,
+
+  cities: () => [...propertiesKeys.all, "cities"] as const,
+  citiesList: (
+    cities: string[],
+    transactionType: TransactionType,
+    pageSize: number
+  ) =>
+    [
+      ...propertiesKeys.cities(),
+      { cities, transactionType, pageSize },
+    ] as const,
 };
 
 export function useProperties(
@@ -46,5 +60,24 @@ export function useCountProperties(
     queryKey: propertiesKeys.count(filters),
     queryFn: () => propertiesService.getCountProperties(filters),
     staleTime: 1 * 60 * 1000,
+  });
+}
+
+export function useCitiesProperties(
+  cities: string[],
+  transactionType: TransactionType,
+  pageSize: number = 10
+): UseQueryResult<CitiesPropertiesResponse, Error> {
+  return useQuery({
+    queryKey: propertiesKeys.citiesList(cities, transactionType, pageSize),
+    queryFn: () =>
+      propertiesService.getPropertiesByCities(
+        cities,
+        transactionType,
+        pageSize
+      ),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    enabled: cities.length > 0,
   });
 }

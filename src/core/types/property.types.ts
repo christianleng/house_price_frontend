@@ -109,36 +109,23 @@ export interface PropertySummary {
 }
 
 export interface PropertyFilters {
-  // --------------------
-  // Localisation
-  // --------------------
+  [key: string]: string | number | boolean | undefined;
+
   city?: string;
   postal_code?: string;
   district?: string;
   neighborhood?: string;
 
-  // --------------------
-  // Transaction
-  // --------------------
-  transaction_type?: TransactionType; // sale | rent
+  transaction_type?: TransactionType;
 
-  // --------------------
-  // Prix (vente)
-  // --------------------
   price_min?: number;
   price_max?: number;
   price_per_sqm_min?: number;
   price_per_sqm_max?: number;
 
-  // --------------------
-  // Prix (location)
-  // --------------------
   rent_price_min?: number;
   rent_price_max?: number;
 
-  // --------------------
-  // Surfaces & pièces
-  // --------------------
   surface_min?: number;
   surface_max?: number;
 
@@ -152,14 +139,8 @@ export interface PropertyFilters {
   floors_min?: number;
   floor_number_min?: number;
 
-  // --------------------
-  // Type de bien
-  // --------------------
   property_type?: PropertyType;
 
-  // --------------------
-  // Équipements
-  // --------------------
   has_garden?: boolean;
   has_terrace?: boolean;
   has_balcony?: boolean;
@@ -171,31 +152,16 @@ export interface PropertyFilters {
   is_furnished?: boolean;
   is_quiet?: boolean;
 
-  // --------------------
-  // Parking / étage
-  // --------------------
   parking_spaces_min?: number;
 
-  // --------------------
-  // Année / disponibilité
-  // --------------------
   construction_year_min?: number;
-  available_from?: string; // ISO date string
+  available_from?: string;
 
-  // --------------------
-  // Énergie
-  // --------------------
   energy_rating?: EnergyRating;
   heating_type?: HeatingType;
 
-  // --------------------
-  // Métadonnées
-  // --------------------
   is_active?: boolean;
 
-  // --------------------
-  // Tri & pagination
-  // --------------------
   sort_by?: "created_at" | "price" | "surface_area" | "price_per_sqm" | "rooms";
 
   sort_order?: "asc" | "desc";
@@ -211,3 +177,16 @@ export interface PaginatedProperties {
   page_size: number;
   total_pages: number;
 }
+
+export interface CityPropertiesResponse {
+  city: string;
+  properties: PropertySummary[];
+  total: number;
+}
+
+export interface CitiesPropertiesResponse {
+  data: Record<string, CityPropertiesResponse>;
+  transaction_type: TransactionType;
+}
+
+export type ApiParams = Record<string, unknown>;
