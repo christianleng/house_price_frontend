@@ -67,37 +67,37 @@ export const PropertyCarouselSection = observer(
           </div>
         </div>
 
-        <section className="embla">
-          <div className="embla__viewport" ref={emblaRef}>
-            <div className="embla__container">
-              <SmartLoader
-                isLoading={isLoading}
-                error={error}
-                data={data?.items}
-                skeleton={<PropertiesSkeleton />}
-                emptyState={
-                  <p className="text-center py-10">
-                    Aucune propriété{" "}
-                    {transactionType === "sale" ? "à vendre" : "à louer"} pour
-                    le moment.
-                  </p>
-                }
-                errorFallback={(err, retry) => (
-                  <ErrorDisplay error={err} onRetry={retry} />
-                )}
-                retryFn={refetch}
-              >
-                {(items) =>
-                  items.map((item) => (
+        <SmartLoader
+          isLoading={isLoading}
+          error={error}
+          data={data?.items}
+          skeleton={<PropertiesSkeleton count={filters.page_size} />}
+          emptyState={
+            <p className="text-center py-10">
+              Aucune propriété{" "}
+              {transactionType === "sale" ? "à vendre" : "à louer"} pour le
+              moment.
+            </p>
+          }
+          errorFallback={(err, retry) => (
+            <ErrorDisplay error={err} onRetry={retry} />
+          )}
+          retryFn={refetch}
+        >
+          {(items) => (
+            <section className="embla">
+              <div className="embla__viewport" ref={emblaRef}>
+                <div className="embla__container">
+                  {items.map((item) => (
                     <div key={item.id} className="embla__slide">
                       <PropertyCard property={item} />
                     </div>
-                  ))
-                }
-              </SmartLoader>
-            </div>
-          </div>
-        </section>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+        </SmartLoader>
       </div>
     );
   }

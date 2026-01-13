@@ -1,6 +1,7 @@
 import { PropertyCarouselSection } from "@/features/home/components/PropertyCarouselSection";
 import { InfoCardSection } from "@/features/home/components/InfoCardSection";
 import { CTASection } from "@/features/home/components/CTASection";
+import PropertyCarouselSectionCity from "@/features/home/components/PropertyCarouselSectionCity";
 
 const HomePage = () => {
   return (
@@ -31,6 +32,8 @@ const HomePage = () => {
         ctaLink="/estimate"
         reversed
       />
+
+      <PropertyCarouselSectionCity />
 
       <CTASection
         badge="100% gratuit"

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useProperty } from "../../api/properties.queries";
 import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
-import { PropertiesSkeleton } from "../PropertiesSkeleton";
+// import { PropertiesSkeleton } from "../PropertiesSkeleton";
 import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
 import PropertiesDetailsView from "@/features/properties/components/property-detail/PropertiesDetailsView";
 
@@ -20,7 +20,7 @@ const PropertyDetail = observer(
           isLoading={isLoading}
           error={error}
           data={property}
-          skeleton={<PropertiesSkeleton />}
+          skeleton={null}
           emptyState={
             <p className="text-center py-10">
               Aucune propriété à vendre pour le moment.
