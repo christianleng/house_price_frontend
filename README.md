@@ -6,6 +6,14 @@ A comprehensive real estate platform built with modern web technologies, demonst
 
 ---
 
+## 📚 Learning Resources
+
+- [Design System Documentation](src/core/config/design-tokens.md)
+- [Naming Conventions Guide](src/core/config/naming-conventions.md)
+- [Performance Guide](src/core/config/performance.md)
+
+---
+
 ## 🎯 Project Vision
 
 House Price reimagines real estate discovery by combining intuitive property browsing with machine learning-driven insights. The platform draws architectural inspiration from established players (SeLoger, Compass, Sotheby's) while adapting proven patterns for local market needs.
@@ -66,7 +74,7 @@ const colors = {
 Server state (API data) and client state are deliberately separated:
 
 - **TanStack Query**: Handles caching, refetching, loading/error states
-- **Zustand stores**: Client-only state (UI toggles, filters, user preferences)
+- **Mobx stores**: Client-only state (UI toggles, filters, user preferences)
 
 This separation prevents the complexity that comes from mixing server and client state patterns.
 
@@ -162,7 +170,7 @@ class Agent(Base):
 | Layer                | Technology                  | Why                                                          |
 | -------------------- | --------------------------- | ------------------------------------------------------------ |
 | **Frontend**         | React 19 + TypeScript       | Type safety, latest features, ecosystem maturity             |
-| **State**            | TanStack Query + Zustand    | Separation of concerns, automatic cache management           |
+| **State**            | TanStack Query + Mobx       | Separation of concerns, automatic cache management           |
 | **Styling**          | Tailwind CSS v4 + shadcn/ui | Utility-first, design tokens, composable components          |
 | **Form Handling**    | React Hook Form             | Minimal re-renders, excellent TypeScript support             |
 | **Backend**          | FastAPI + SQLAlchemy        | Fast async performance, automatic OpenAPI docs, ORM elegance |
@@ -221,7 +229,7 @@ src/
 │   ├── config/                   # Environment, design tokens
 │   ├── hooks/                    # Shared custom hooks
 │   ├── lib/                      # Utilities & helpers
-│   ├── stores/                   # Zustand client state
+│   ├── stores/                   # Mobx client state
 │   ├── types/                    # TypeScript definitions
 │   └── ui/                       # shadcn/ui components (base layer only)
 │
@@ -307,45 +315,6 @@ try {
 - **ESLint & Prettier**: Consistent formatting
 - **No `any` types**: Forces proper typing
 - **Responsive design first**: All components mobile-ready
-
----
-
-## 💡 Engineering Decisions & Trade-offs
-
-### Feature-Based Over Layer-Based Organization
-
-**Trade-off**: Slightly more directories at scale, but gained scoped modifications and clear ownership.
-
-### TanStack Query Over Redux/Zustand-only
-
-**Trade-off**: Additional dependency, but eliminated entire class of data-sync bugs.
-
-### Tailwind + shadcn/ui Over Custom Component Library
-
-**Trade-off**: Less customization than building from scratch, but 10x faster development and consistent accessibility.
-
-### Cursor-Based Pagination
-
-**Trade-off**: More complex backend logic, but eliminates offset bugs and scales naturally.
-
-### Docker from Day 1
-
-**Trade-off**: Small overhead for setup, but perfect reproducibility and eliminates "works on my machine."
-
----
-
-## 📚 Learning Resources
-
-- [Architecture Decision Records (ADRs)](docs/adr/) - Why we made these choices
-- [Design System Documentation](src/core/config/design-tokens.md)
-- [API Documentation](docs/api.md)
-- [Naming Conventions Guide](src/core/config/naming-conventions.md)
-
----
-
-## 🤝 Contributing
-
-This is a portfolio project, but the architecture and patterns are designed to be maintainable and extendable. If you're interested in the engineering approach, feel free to explore the codebase or open discussions on architectural decisions.
 
 ---
 
