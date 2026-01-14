@@ -1,6 +1,6 @@
 # House Price 🏠
 
-A comprehensive real estate platform built with modern web technologies, demonstrating full-stack engineering principles, scalable architecture, and performance optimization strategies for the French property market.
+A comprehensive house price platform built with modern web technologies, demonstrating full-stack engineering principles, scalable architecture, and performance optimization strategies for the French property market.
 
 > **Note:** This project serves as both a learning exercise in full-stack development and a portfolio piece showcasing engineering methodology—not just feature implementation.
 
@@ -16,7 +16,7 @@ A comprehensive real estate platform built with modern web technologies, demonst
 
 ## 🎯 Project Vision
 
-House Price reimagines real estate discovery by combining intuitive property browsing with machine learning-driven insights. The platform draws architectural inspiration from established players (SeLoger, Compass, Sotheby's) while adapting proven patterns for local market needs.
+House Price reimagines house price discovery by combining intuitive property browsing with machine learning-driven insights. The platform draws architectural inspiration from established players (SeLoger, Compass, Sotheby's) while adapting proven patterns for local market needs.
 
 The project demonstrates engineering thinking through:
 
