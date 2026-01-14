@@ -24,16 +24,30 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   );
 }
 
-function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
+interface SelectValueProps extends SelectPrimitive.Value.Props {
+  placeholder?: string;
+}
+
+function SelectValue({
+  className,
+  placeholder,
+  children,
+  ...props
+}: SelectValueProps) {
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
-      className={cn("flex flex-1 text-left", className)}
+      className={cn(
+        "flex flex-1 text-left text-muted-foreground",
+        !children && placeholder ? "text-muted-foreground" : "text-foreground",
+        className
+      )}
       {...props}
-    />
+    >
+      {children || placeholder}
+    </SelectPrimitive.Value>
   );
 }
-
 function SelectTrigger({
   className,
   size = "default",
