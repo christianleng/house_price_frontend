@@ -1,10 +1,14 @@
 import type { RouteObject } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import { RootLayout } from "@/app/layouts/RootLayout";
+import { PageLoader } from "./PageLoader";
 
-import HomePage from "@/pages/public/Home.page";
-import PropertiesPage from "@/pages/public/Properties.page";
-import PropertyDetailPage from "@/pages/public/PropertyDetail.page";
-import NotFoundPage from "@/pages/errors/NotFound.page";
+const HomePage = lazy(() => import("@/pages/public/Home.page"));
+const PropertiesPage = lazy(() => import("@/pages/public/Properties.page"));
+const PropertyDetailPage = lazy(
+  () => import("@/pages/public/PropertyDetail.page")
+);
+const NotFoundPage = lazy(() => import("@/pages/errors/NotFound.page"));
 
 export const routes: RouteObject[] = [
   {
@@ -13,19 +17,35 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <HomePage />
+          </Suspense>
+        ),
       },
       {
         path: "properties",
-        element: <PropertiesPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PropertiesPage />
+          </Suspense>
+        ),
       },
       {
         path: "properties/:id",
-        element: <PropertyDetailPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PropertyDetailPage />
+          </Suspense>
+        ),
       },
       {
         path: "*",
-        element: <NotFoundPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <NotFoundPage />
+          </Suspense>
+        ),
       },
     ],
   },
