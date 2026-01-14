@@ -1,0 +1,242 @@
+.embla {
+  max-width: 100%;
+  --slide-spacing: 0.75rem;
+  --slide-spacing-sm: 1rem;
+  --slide-spacing-lg: 1.25rem;
+}
+
+.embla__viewport {
+  overflow: hidden;
+}
+
+.embla__container {
+  backface-visibility: hidden;
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+
+@media (min-width: 640px) {
+  .embla__container {
+    margin-left: calc(var(--slide-spacing-sm) * -1);
+  }
+}
+
+@media (min-width: 1024px) {
+  .embla__container {
+    margin-left: calc(var(--slide-spacing-lg) * -1);
+  }
+}
+
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+}
+
+/* 2 slides - Small tablet */
+@media (min-width: 640px) {
+  .embla__slide {
+    flex: 0 0 50%;
+    padding-left: var(--slide-spacing-sm);
+  }
+}
+
+/* 3 slides - Tablet */
+@media (min-width: 768px) {
+  .embla__slide {
+    flex: 0 0 33.333%;
+  }
+}
+
+/* 4 slides - Desktop */
+@media (min-width: 1024px) {
+  .embla__slide {
+    flex: 0 0 25%;
+    padding-left: var(--slide-spacing-lg);
+  }
+}
+
+/* 5 slides - Large desktop */
+@media (min-width: 1280px) {
+  .embla__slide {
+    flex: 0 0 20%;
+  }
+}
+
+/* 6 slides - XL desktop */
+@media (min-width: 1536px) {
+  .embla__slide {
+    flex: 0 0 16.666%;
+  }
+}
+
+/* 7 slides - Full HD */
+@media (min-width: 1920px) {
+  .embla__slide {
+    flex: 0 0 14.285%;
+  }
+}
+
+/* 8 slides - 4K */
+@media (min-width: 2560px) {
+  .embla__slide {
+    flex: 0 0 12.5%;
+  }
+}
+
+.embla__buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.embla__button {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-appearance: none;
+  appearance: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 1px solid var(--gray-200);
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .embla__button:hover:not(:disabled) {
+    background-color: var(--gray-200);
+    border-color: var(--gray-300);
+    transform: scale(1.05);
+  }
+}
+
+.embla__button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.embla__button:disabled {
+  background-color: var(--gray-50);
+  border-color: var(--gray-100);
+  color: var(--gray-400);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.embla__button--primary {
+  background-color: var(--teal-500);
+  border-color: var(--teal-500);
+  color: white;
+}
+
+@media (hover: hover) {
+  .embla__button--primary:hover:not(:disabled) {
+    background-color: var(--teal-600);
+    border-color: var(--teal-600);
+  }
+}
+
+.embla__button--outline {
+  background-color: transparent;
+  border-color: var(--gray-300);
+  color: var(--gray-600);
+}
+
+@media (hover: hover) {
+  .embla__button--outline:hover:not(:disabled) {
+    background-color: var(--gray-100);
+  }
+}
+
+.embla__dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.embla__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--gray-300);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.embla__dot:hover {
+  background-color: var(--gray-400);
+}
+
+.embla__dot--active {
+  background-color: var(--teal-500);
+  width: 1.5rem;
+  border-radius: 0.25rem;
+}
+
+.embla__progress {
+  width: 100%;
+  height: 4px;
+  background-color: var(--gray-200);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+
+.embla__progress__bar {
+  height: 100%;
+  background-color: var(--teal-500);
+  border-radius: 2px;
+  transition: width var(--duration-base) var(--ease-out);
+}
+
+.dark .embla__button {
+  background-color: var(--gray-800);
+  border-color: var(--gray-700);
+  color: var(--gray-200);
+}
+
+.dark .embla__button:hover:not(:disabled) {
+  background-color: var(--gray-700);
+  border-color: var(--gray-600);
+}
+
+.dark .embla__button:disabled {
+  background-color: var(--gray-900);
+  border-color: var(--gray-800);
+  color: var(--gray-600);
+}
+
+.dark .embla__button--primary {
+  background-color: var(--teal-600);
+  border-color: var(--teal-600);
+}
+
+.dark .embla__dot {
+  background-color: var(--gray-600);
+}
+
+.dark .embla__dot:hover {
+  background-color: var(--gray-500);
+}
+
+.dark .embla__dot--active {
+  background-color: var(--teal-400);
+}
+
+.dark .embla__progress {
+  background-color: var(--gray-700);
+}
+
+.dark .embla__progress__bar {
+  background-color: var(--teal-400);
+}
