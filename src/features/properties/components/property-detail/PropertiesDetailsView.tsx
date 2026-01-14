@@ -1,34 +1,14 @@
-import { useProperty } from "../api/properties.queries";
-import { Link } from "react-router-dom";
-import { Button } from "@/core/ui/button";
 import { Card } from "@/core/ui/card";
+import { Button } from "@/core/ui/button";
+import type { Property } from "@/core/types";
 
-const PropertyDetail = ({ propertyId }: { propertyId: string | undefined }) => {
-  const {
-    data: property,
-    isLoading,
-    isError,
-    error,
-  } = useProperty(propertyId!);
+interface IPropertiesDetailsView {
+  property: Property;
+}
 
-  if (isLoading) return <div>Loading</div>;
-  if (isError || !property) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center text-red-600">
-          Erreur : {error?.message || "Propriété non trouvée"}
-        </div>
-        <div className="text-center mt-4">
-          <Link to="/properties">
-            <Button variant="outline">Retour aux propriétés</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
+const PropertiesDetailsView = ({ property }: IPropertiesDetailsView) => {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container max-w-4/5 mx-auto px-4">
       <h1 className="text-4xl font-bold mb-2">{property.title}</h1>
       <p className="text-gray-600 mb-6">
         {property.city} - {property.postal_code} - {property.neighborhood}
@@ -103,4 +83,4 @@ const PropertyDetail = ({ propertyId }: { propertyId: string | undefined }) => {
   );
 };
 
-export default PropertyDetail;
+export default PropertiesDetailsView;

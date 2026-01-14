@@ -1,5 +1,5 @@
 import { useParams, Navigate } from "react-router-dom";
-import PropertyDetail from "@/features/properties/components/PropertyDetail";
+import PropertyDetail from "@/features/properties/components/property-detail/PropertyDetail";
 
 export default function PropertyDetailPage() {
   const { id } = useParams<{ id: string }>();

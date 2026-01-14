@@ -74,7 +74,7 @@ export interface Property {
   parking_spaces: number | null;
 
   energy_rating: EnergyRating | null;
-  heating_type: HeatingType | null;
+  heating_type: HeatingType;
 
   construction_year: number | null;
   available_from: string | null;
@@ -102,38 +102,70 @@ export interface PropertySummary {
   has_garden: boolean;
   created_at: string;
   thumbnail_url: string | null;
+  transaction_type: TransactionType;
+  rent_price_monthly: number;
+  energy_rating: EnergyRating;
+  photos_count: number;
 }
 
 export interface PropertyFilters {
+  [key: string]: string | number | boolean | undefined;
+
   city?: string;
   postal_code?: string;
   district?: string;
   neighborhood?: string;
 
+  transaction_type?: TransactionType;
+
   price_min?: number;
   price_max?: number;
+  price_per_sqm_min?: number;
+  price_per_sqm_max?: number;
+
+  rent_price_min?: number;
+  rent_price_max?: number;
 
   surface_min?: number;
   surface_max?: number;
 
   rooms_min?: number;
   rooms_max?: number;
+
   bedrooms_min?: number;
+  bathrooms_min?: number;
+  toilets_min?: number;
+
+  floors_min?: number;
+  floor_number_min?: number;
 
   property_type?: PropertyType;
 
   has_garden?: boolean;
-  has_parking?: boolean;
-  has_balcony?: boolean;
   has_terrace?: boolean;
+  has_balcony?: boolean;
+  has_parking?: boolean;
+  has_cave?: boolean;
   has_elevator?: boolean;
+  has_pool?: boolean;
+
   is_furnished?: boolean;
+  is_quiet?: boolean;
+
+  parking_spaces_min?: number;
+
+  construction_year_min?: number;
+  available_from?: string;
 
   energy_rating?: EnergyRating;
-  transaction_type?: TransactionType;
+  heating_type?: HeatingType;
+
+  is_active?: boolean;
 
   sort_by?: "created_at" | "price" | "surface_area" | "price_per_sqm" | "rooms";
+
   sort_order?: "asc" | "desc";
+
   page?: number;
   page_size?: number;
 }
@@ -145,3 +177,16 @@ export interface PaginatedProperties {
   page_size: number;
   total_pages: number;
 }
+
+export interface CityPropertiesResponse {
+  city: string;
+  properties: PropertySummary[];
+  total: number;
+}
+
+export interface CitiesPropertiesResponse {
+  data: Record<string, CityPropertiesResponse>;
+  transaction_type: TransactionType;
+}
+
+export type ApiParams = Record<string, unknown>;

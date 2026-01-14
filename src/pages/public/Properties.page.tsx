@@ -9,7 +9,7 @@ const PropertiesPage = () => {
         content="Découvrez notre sélection de propriétés à vendre et à louer en France."
       />
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container max-w-4/5 mx-auto px-4 py-8">
         <PropertiesList />
       </div>
     </>

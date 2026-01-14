@@ -13,6 +13,8 @@ export const API_ENDPOINTS = {
     CREATE: "/api/properties",
     UPDATE: (id: string) => `/api/properties/${id}`,
     DELETE: (id: string) => `/api/properties/${id}`,
+    COUNT: "/api/properties/count",
+    BY_CITIES: "/api/properties/by-cities",
   },
 
   AGENTS: {
