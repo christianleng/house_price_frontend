@@ -1,4 +1,4 @@
-# Real Estate Design System (REDS) - Design Tokens
+# House Price Design System - Design Tokens
 
 ## 🎨 Colors
 
