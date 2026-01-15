@@ -56,8 +56,10 @@ const PropertyFiltersDialog = observer(
       useState<PropertyFilters>(initialFilters);
 
     const debouncedFilters = useDebounce(localFilters, 400);
-    const { data: totalCount } = useCountProperties(debouncedFilters);
-
+    // const { data: totalCount } = useCountProperties(debouncedFilters);
+    const { data: totalCount } = useCountProperties(debouncedFilters, {
+      enabled: open,
+    });
     useEffect(() => {
       if (open) setLocalFilters(initialFilters);
     }, [open, initialFilters]);
@@ -294,4 +296,5 @@ const PropertyFiltersDialog = observer(
   }
 );
 
+PropertyFiltersDialog.displayName = "PropertyFiltersDialog";
 export default PropertyFiltersDialog;

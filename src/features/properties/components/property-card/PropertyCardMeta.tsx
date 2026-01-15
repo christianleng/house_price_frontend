@@ -1,10 +1,6 @@
 import type { PropertySummary } from "@/core/types";
 
-export const PropertyCardMeta = ({
-  property,
-}: {
-  property: PropertySummary;
-}) => {
+const PropertyCardMeta = ({ property }: { property: PropertySummary }) => {
   const title =
     property.transaction_type === "sale"
       ? "Appartement à vendre"
@@ -30,3 +26,6 @@ export const PropertyCardMeta = ({
     </div>
   );
 };
+
+PropertyCardMeta.displayName = "PropertyCardMeta";
+export { PropertyCardMeta };

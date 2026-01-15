@@ -6,6 +6,7 @@ import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
 import { FEATURED_CITIES } from "@/core/config/cities.config";
 import { CityPropertySection } from "./CityPropertySection";
 import type { TransactionType } from "@/core/types";
+import { useCallback } from "react";
 
 interface PropertyCarouselSectionCityProps {
   transactionType?: TransactionType;
@@ -25,6 +26,13 @@ const PropertyCarouselSectionCity = observer(
       pageSize
     );
 
+    const handleError = useCallback(
+      (err: Error, retry: () => void) => (
+        <ErrorDisplay error={err} onRetry={retry} />
+      ),
+      []
+    );
+
     return (
       <div className="flex flex-col gap-10">
         <SmartLoader
@@ -37,9 +45,7 @@ const PropertyCarouselSectionCity = observer(
               Aucune propriété disponible pour le moment.
             </p>
           }
-          errorFallback={(err, retry) => (
-            <ErrorDisplay error={err} onRetry={retry} />
-          )}
+          errorFallback={handleError}
           retryFn={refetch}
         >
           {(citiesData) =>
@@ -64,4 +70,5 @@ const PropertyCarouselSectionCity = observer(
   }
 );
 
+PropertyCarouselSectionCity.displayName = "PropertyCarouselSectionCity";
 export default PropertyCarouselSectionCity;

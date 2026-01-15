@@ -27,13 +27,8 @@ const MainNavigation = () => {
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-r from-brand-700 to-brand-400 shadow-brand">
           <HugeiconsIcon icon={Home12Icon} />
         </div>
-        <div>
-          <div className="text-2xl font-bold tracking-[-0.5px] text-secondary-foreground">
-            House Price
-          </div>
-          <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
-            Immobilier premium
-          </div>
+        <div className="text-2xl font-bold tracking-[-0.5px] text-secondary-foreground">
+          House Price
         </div>
       </Link>
 
@@ -103,8 +98,6 @@ const MainNavigation = () => {
   );
 };
 
-export default MainNavigation;
-
 function MenuColumn({
   title,
   children,
@@ -137,3 +130,6 @@ function MenuLink({
     </li>
   );
 }
+
+MainNavigation.displayName = "MainNavigation";
+export default MainNavigation;

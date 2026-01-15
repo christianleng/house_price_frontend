@@ -4,7 +4,7 @@ import { PropertiesSkeleton } from "@/features/properties/components/PropertiesS
 import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
 import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
 import { Link } from "react-router-dom";
-import { PropertyCard } from "@/features/properties/components/property-card/PropertiesCard";
+import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { PrevButton } from "@/core/components/carousel/PrevButton";
@@ -13,6 +13,7 @@ import { usePrevNextButtons } from "@/core/components/carousel/useCarouselNaviga
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { PropertyFilters } from "@/core/types";
+import { useMemo, useCallback } from "react";
 
 interface PropertyCarouselSectionProps {
   title: string;
@@ -25,7 +26,7 @@ const DEFAULT_CAROUSEL_OPTIONS: EmblaOptionsType = {
   duration: 25,
 };
 
-export const PropertyCarouselSection = observer(
+const PropertyCarouselSection = observer(
   ({
     title,
     transactionType,
@@ -34,15 +35,25 @@ export const PropertyCarouselSection = observer(
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
 
-    const filters: PropertyFilters = {
-      transaction_type: transactionType,
-      page: 1,
-      page_size: 10,
-      sort_by: "created_at",
-      sort_order: "desc",
-    };
+    const filters = useMemo<PropertyFilters>(
+      () => ({
+        transaction_type: transactionType,
+        page: 1,
+        page_size: 10,
+        sort_by: "created_at",
+        sort_order: "desc",
+      }),
+      [transactionType]
+    );
 
     const { data, isLoading, error, refetch } = useProperties(filters);
+
+    const handleError = useCallback(
+      (err: Error, retry: () => void) => (
+        <ErrorDisplay error={err} onRetry={retry} />
+      ),
+      []
+    );
 
     return (
       <div className="flex flex-col gap-4">
@@ -79,18 +90,16 @@ export const PropertyCarouselSection = observer(
               moment.
             </p>
           }
-          errorFallback={(err, retry) => (
-            <ErrorDisplay error={err} onRetry={retry} />
-          )}
+          errorFallback={handleError}
           retryFn={refetch}
         >
           {(items) => (
             <section className="embla">
               <div className="embla__viewport" ref={emblaRef}>
                 <div className="embla__container">
-                  {items.map((item) => (
+                  {items.map((item, index) => (
                     <div key={item.id} className="embla__slide">
-                      <PropertyCard property={item} />
+                      <PropertyCard property={item} isPriority={index < 2} />
                     </div>
                   ))}
                 </div>
@@ -102,3 +111,6 @@ export const PropertyCarouselSection = observer(
     );
   }
 );
+
+PropertyCarouselSection.displayName = "PropertyCarouselSection";
+export { PropertyCarouselSection };
