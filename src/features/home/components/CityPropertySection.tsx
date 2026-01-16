@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
-import { PropertyCard } from "@/features/properties/components/property-card/PropertiesCard";
+import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { PrevButton } from "@/core/components/carousel/PrevButton";
@@ -23,7 +23,7 @@ const DEFAULT_CAROUSEL_OPTIONS: EmblaOptionsType = {
   duration: 25,
 };
 
-export const CityPropertySection = observer(
+const CityPropertySection = observer(
   ({
     city,
     transactionType,
@@ -89,3 +89,6 @@ export const CityPropertySection = observer(
     );
   }
 );
+
+CityPropertySection.displayName = "CityPropertySection";
+export { CityPropertySection };

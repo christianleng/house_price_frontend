@@ -16,4 +16,5 @@ const PropertiesPage = () => {
   );
 };
 
+PropertiesPage.displayName = "PropertiesPage";
 export default PropertiesPage;

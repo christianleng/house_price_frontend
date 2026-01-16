@@ -1,7 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
 import PropertyDetail from "@/features/properties/components/property-detail/PropertyDetail";
 
-export default function PropertyDetailPage() {
+const PropertyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
 
   if (!id) return <Navigate to="/properties" replace />;
@@ -17,4 +17,7 @@ export default function PropertyDetailPage() {
       <PropertyDetail propertyId={id!} />
     </>
   );
-}
+};
+
+PropertyDetailPage.displayName = "PropertyDetailPage";
+export default PropertyDetailPage;

@@ -4,6 +4,7 @@ import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
 // import { PropertiesSkeleton } from "../PropertiesSkeleton";
 import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
 import PropertiesDetailsView from "@/features/properties/components/property-detail/PropertiesDetailsView";
+import { useCallback } from "react";
 
 const PropertyDetail = observer(
   ({ propertyId }: { propertyId: string | undefined }) => {
@@ -13,6 +14,13 @@ const PropertyDetail = observer(
       error,
       refetch,
     } = useProperty(propertyId!);
+
+    const handleError = useCallback(
+      (err: Error, retry: () => void) => (
+        <ErrorDisplay error={err} onRetry={retry} />
+      ),
+      []
+    );
 
     return (
       <div className="container mx-auto px-4 py-8">
@@ -26,9 +34,7 @@ const PropertyDetail = observer(
               Aucune propriété à vendre pour le moment.
             </p>
           }
-          errorFallback={(err, retry) => (
-            <ErrorDisplay error={err} onRetry={retry} />
-          )}
+          errorFallback={handleError}
           retryFn={refetch}
         >
           {(items) => <PropertiesDetailsView property={items} />}

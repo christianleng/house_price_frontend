@@ -12,7 +12,7 @@ interface InfoCardSectionProps {
   reversed?: boolean;
 }
 
-export const InfoCardSection = ({
+const InfoCardSection = ({
   imageSrc,
   imageAlt = "",
   badge,
@@ -58,3 +58,6 @@ export const InfoCardSection = ({
     </div>
   );
 };
+
+InfoCardSection.displayName = "InfoCardSection";
+export { InfoCardSection };
