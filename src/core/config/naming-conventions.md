@@ -1,5 +1,13 @@
 # Naming Conventions
 
+## 📚 Ressources d'Apprentissage & Case Studies
+
+### Ressources Générales
+
+- [README.md](../../../README.md)
+- [Documentation du Design System](./design-tokens.md)
+- 🔥 [Performance Guide - Render as you fetch](./case-study-render-as-you-fetch.md)
+
 ## Vue d'ensemble
 
 Ce document définit les conventions de nommage utilisées dans le projet **House Price**. Ces conventions assurent la cohérence, la lisibilité et la maintenabilité du code.
