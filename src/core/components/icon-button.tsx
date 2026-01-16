@@ -6,7 +6,7 @@ interface IconButtonProps
   icon: IconSvgElement;
 }
 
-export function IconButton({ icon, className, ...props }: IconButtonProps) {
+const IconButton = ({ icon, className, ...props }: IconButtonProps) => {
   return (
     <button
       className={cn(
@@ -18,4 +18,7 @@ export function IconButton({ icon, className, ...props }: IconButtonProps) {
       <HugeiconsIcon icon={icon} />
     </button>
   );
-}
+};
+
+IconButton.displayName = "IconButton";
+export { IconButton };

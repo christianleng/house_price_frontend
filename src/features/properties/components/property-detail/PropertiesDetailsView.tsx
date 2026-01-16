@@ -83,4 +83,5 @@ const PropertiesDetailsView = ({ property }: IPropertiesDetailsView) => {
   );
 };
 
+PropertiesDetailsView.displayName = "PropertiesDetailsView";
 export default PropertiesDetailsView;

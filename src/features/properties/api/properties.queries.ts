@@ -54,12 +54,14 @@ export function useProperty(id: string): UseQueryResult<Property, Error> {
 }
 
 export function useCountProperties(
-  filters?: PropertyFilters
+  filters?: PropertyFilters,
+  options?: { enabled?: boolean }
 ): UseQueryResult<number, Error> {
   return useQuery({
     queryKey: propertiesKeys.count(filters),
     queryFn: () => propertiesService.getCountProperties(filters),
     staleTime: 1 * 60 * 1000,
+    enabled: options?.enabled ?? true,
   });
 }
 

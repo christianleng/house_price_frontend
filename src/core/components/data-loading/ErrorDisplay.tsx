@@ -3,7 +3,7 @@ interface IErrorDisplayProps {
   onRetry?: () => void;
 }
 
-export const ErrorDisplay = ({ error, onRetry }: IErrorDisplayProps) => {
+const ErrorDisplay = ({ error, onRetry }: IErrorDisplayProps) => {
   return (
     <div className="text-center py-10 text-red-600">
       <p>Une erreur est survenue : {error.message}</p>
@@ -18,3 +18,6 @@ export const ErrorDisplay = ({ error, onRetry }: IErrorDisplayProps) => {
     </div>
   );
 };
+
+ErrorDisplay.displayName = "ErrorDisplay";
+export { ErrorDisplay };

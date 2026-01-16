@@ -2,13 +2,19 @@ import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
 import { propertyFiltersStore } from "@/core/stores";
 import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
-import { PropertiesSkeleton } from "./PropertiesSkeleton";
 import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
-import { PropertyCard } from "./property-card/PropertiesCard";
+import { PropertyCard } from "./property-card/PropertyCard";
+import { useCallback } from "react";
 
 const PropertiesList = observer(() => {
   const { filters } = propertyFiltersStore;
   const { data, isLoading, error, refetch } = useProperties(filters);
+  const handleError = useCallback(
+    (err: Error, retry: () => void) => (
+      <ErrorDisplay error={err} onRetry={retry} />
+    ),
+    []
+  );
 
   return (
     <div>
@@ -22,15 +28,13 @@ const PropertiesList = observer(() => {
         isLoading={isLoading}
         error={error}
         data={data?.items}
-        skeleton={<PropertiesSkeleton />}
+        skeleton={null}
         emptyState={
           <p className="text-center py-10">
             Aucune propriété à vendre pour le moment.
           </p>
         }
-        errorFallback={(err, retry) => (
-          <ErrorDisplay error={err} onRetry={retry} />
-        )}
+        errorFallback={handleError}
         retryFn={refetch}
       >
         {(items) => items.map((items) => <PropertyCard property={items} />)}
@@ -39,4 +43,5 @@ const PropertiesList = observer(() => {
   );
 });
 
+PropertiesList.displayName = "PropertiesList";
 export default PropertiesList;

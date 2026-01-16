@@ -161,20 +161,19 @@ const SearchBar = observer(() => {
           </button>
         </div>
       </div>
-
-      <PropertyFiltersDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        initialFilters={filters}
-        onApply={(newFilters) =>
-          propertyFiltersStore.setFilters({ ...newFilters, page: 1 })
-        }
-      />
+      {isDialogOpen && (
+        <PropertyFiltersDialog
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          initialFilters={filters}
+          onApply={(newFilters) =>
+            propertyFiltersStore.setFilters({ ...newFilters, page: 1 })
+          }
+        />
+      )}
     </div>
   );
 });
-
-export default SearchBar;
 
 function SearchField({
   label,
@@ -194,3 +193,6 @@ function SearchField({
     </div>
   );
 }
+
+SearchBar.displayName = "SearchBar";
+export default SearchBar;

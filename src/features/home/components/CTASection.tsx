@@ -9,7 +9,7 @@ interface CTASectionProps {
   onCtaClick?: () => void;
 }
 
-export const CTASection = ({
+const CTASection = ({
   badge,
   title,
   features,
@@ -45,3 +45,6 @@ export const CTASection = ({
     </div>
   );
 };
+
+CTASection.displayName = "CTASection";
+export { CTASection };

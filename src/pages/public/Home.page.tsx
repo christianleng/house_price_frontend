@@ -2,6 +2,7 @@ import { PropertyCarouselSection } from "@/features/home/components/PropertyCaro
 import { InfoCardSection } from "@/features/home/components/InfoCardSection";
 import { CTASection } from "@/features/home/components/CTASection";
 import PropertyCarouselSectionCity from "@/features/home/components/PropertyCarouselSectionCity";
+import { LazySection } from "@/core/components/LazySection";
 
 const HomePage = () => {
   return (
@@ -11,10 +12,12 @@ const HomePage = () => {
         transactionType="sale"
       />
 
-      <PropertyCarouselSection
-        title="Dernières propriétés en location"
-        transactionType="rent"
-      />
+      <LazySection height="450px">
+        <PropertyCarouselSection
+          title="Dernières propriétés en location"
+          transactionType="rent"
+        />
+      </LazySection>
 
       <InfoCardSection
         badge="Restez informé!"
@@ -22,6 +25,8 @@ const HomePage = () => {
         description="Utilisez la carte des prix de SeLoger pour obtenir facilement des informations sur le marché de l'immobilier. Découvrez le prix au mètre carré pour des adresses, des villes et des quartiers spécifiques. Informez-vous et découvrez les prix dans la région de votre choix dès aujourd'hui !"
         ctaText="Explorer la carte des prix"
         ctaLink="/price-map"
+        imageSrc="/docs/istockphoto-1133446766-612x612.jpg"
+        imageAlt="paris"
       />
 
       <InfoCardSection
@@ -31,9 +36,13 @@ const HomePage = () => {
         ctaText="Estimer mon bien"
         ctaLink="/estimate"
         reversed
+        imageSrc="/docs/istockphoto-1940793176-612x612.jpg"
+        imageAlt="Estimation house"
       />
 
-      <PropertyCarouselSectionCity />
+      <LazySection height="600px">
+        <PropertyCarouselSectionCity />
+      </LazySection>
 
       <CTASection
         badge="100% gratuit"
@@ -50,4 +59,5 @@ const HomePage = () => {
   );
 };
 
+HomePage.displayName = "HomePage";
 export default HomePage;

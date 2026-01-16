@@ -45,4 +45,5 @@ const TopBar = () => {
   );
 };
 
+TopBar.displayName = "TopBar";
 export default TopBar;
