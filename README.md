@@ -10,7 +10,7 @@ A comprehensive house price platform built with modern web technologies, demonst
 
 - [Design System Documentation](src/core/config/design-tokens.md)
 - [Naming Conventions Guide](src/core/config/naming-conventions.md)
-- [Performance Guide](src/core/config/performance.md)
+- 🔥 [Performance Guide - Render as you fetch](src/core/config/case-study-render-as-you-fetch.md)
 
 ---
 

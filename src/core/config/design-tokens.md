@@ -1,5 +1,13 @@
 # House Price Design System - Design Tokens
 
+## 📚 Ressources d'Apprentissage & Case Studies
+
+### Ressources Générales
+
+- [README.md](../../../README.md)
+- [Guide des Conventions de Nommage](./naming-conventions.md)
+- 🔥 [Performance Guide - Render as you fetch](./case-study-render-as-you-fetch.md)
+
 ## 🎨 Colors
 
 ### Brand Colors
