@@ -1,8 +1,8 @@
 import { queryClient } from "@/app/providers/QueryProvider";
 import { propertiesKeys } from "@/features/properties/api/properties.queries";
 import { propertiesService } from "@/features/properties/api/properties.service";
-import HomePage from "@/pages/public/Home.page";
 import { RootLayout } from "@/app/layouts/RootLayout";
+import { FEATURED_CITIES } from "@/core/config/cities.config";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -20,6 +20,8 @@ const RENT_FILTERS = {
   sort_order: "desc",
 } as const;
 
+const CITY_PAGE_SIZE = 10;
+
 export const routes = [
   {
     path: "/",
@@ -28,7 +30,10 @@ export const routes = [
     children: [
       {
         index: true,
-        Component: HomePage,
+        lazy: async () => {
+          const module = await import("@/pages/public/Home.page");
+          return { Component: module.default };
+        },
         loader: async () => {
           await Promise.all([
             queryClient.prefetchQuery({
@@ -39,6 +44,20 @@ export const routes = [
             queryClient.prefetchQuery({
               queryKey: propertiesKeys.list(RENT_FILTERS),
               queryFn: () => propertiesService.getProperties(RENT_FILTERS),
+              staleTime: 60 * 1000,
+            }),
+            queryClient.prefetchQuery({
+              queryKey: propertiesKeys.citiesList(
+                FEATURED_CITIES as unknown as string[],
+                "sale",
+                CITY_PAGE_SIZE,
+              ),
+              queryFn: () =>
+                propertiesService.getPropertiesByCities(
+                  FEATURED_CITIES as unknown as string[],
+                  "sale",
+                  CITY_PAGE_SIZE,
+                ),
               staleTime: 60 * 1000,
             }),
           ]);

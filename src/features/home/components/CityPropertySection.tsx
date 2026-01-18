@@ -9,6 +9,7 @@ import { usePrevNextButtons } from "@/core/components/carousel/useCarouselNaviga
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { PropertySummary, TransactionType } from "@/core/types";
+import { useCallback, useEffect, useState } from "react";
 
 interface CityPropertySectionProps {
   city: string;
@@ -21,6 +22,7 @@ interface CityPropertySectionProps {
 const DEFAULT_CAROUSEL_OPTIONS: EmblaOptionsType = {
   loop: false,
   duration: 25,
+  align: "start",
 };
 
 const CityPropertySection = observer(
@@ -34,14 +36,31 @@ const CityPropertySection = observer(
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
 
+    const [slidesInView, setSlidesInView] = useState<number[]>([]);
+
+    const updateSlidesInView = useCallback(() => {
+      if (!emblaApi) return;
+
+      const inView = emblaApi.slidesInView();
+      setSlidesInView((prev) => {
+        const allSeen = new Set([...prev, ...inView]);
+        return Array.from(allSeen);
+      });
+    }, [emblaApi]);
+
+    useEffect(() => {
+      if (!emblaApi) return;
+      updateSlidesInView();
+      emblaApi.on("slidesInView", updateSlidesInView);
+      emblaApi.on("reInit", updateSlidesInView);
+    }, [emblaApi, updateSlidesInView]);
+
     const title =
       transactionType === "sale"
         ? `Dernières propriétés à vendre · ${city}`
         : `Dernières propriétés en location · ${city}`;
 
-    const redirectUrl = `/properties?transaction_type=${transactionType}&city=${encodeURIComponent(
-      city
-    )}`;
+    const redirectUrl = `/properties?transaction_type=${transactionType}&city=${encodeURIComponent(city)}`;
 
     if (properties.length === 0) return null;
 
@@ -49,7 +68,7 @@ const CityPropertySection = observer(
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <Link
-            className="flex items-center gap-2 font-bold text-lg hover:underline transition-colors group"
+            className="flex items-center gap-2 font-bold text-lg hover:underline group"
             to={redirectUrl}
           >
             <span>{title}</span>
@@ -61,7 +80,6 @@ const CityPropertySection = observer(
               className="h-5 w-5 group-hover:translate-x-1 transition-transform"
             />
           </Link>
-
           <div className="flex gap-2">
             <PrevButton
               onClick={nav.onPrevButtonClick}
@@ -77,17 +95,27 @@ const CityPropertySection = observer(
         <section className="embla">
           <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
-              {properties.map((property) => (
-                <div key={property.id} className="embla__slide">
-                  <PropertyCard property={property} />
-                </div>
-              ))}
+              {properties.map((property, index) => {
+                const isVisible = slidesInView.includes(index);
+                return (
+                  <div key={property.id} className="embla__slide">
+                    {isVisible ? (
+                      <PropertyCard
+                        property={property}
+                        isPriority={index < 2}
+                      />
+                    ) : (
+                      <div className="h-80 w-full bg-gray-50 animate-pulse rounded-xl" />
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
       </div>
     );
-  }
+  },
 );
 
 CityPropertySection.displayName = "CityPropertySection";

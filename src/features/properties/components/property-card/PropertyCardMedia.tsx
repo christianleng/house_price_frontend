@@ -40,6 +40,9 @@ const PropertyCardMedia = memo(
             <img
               src={thumbnail_url}
               alt={title}
+              decoding={isPriority ? "sync" : "async"}
+              // fetchPriority={"high"}
+              // fetchPriority={isPriority ? "high" : "low"}
               fetchPriority={isPriority ? "high" : "auto"}
               loading={isPriority ? "eager" : "lazy"}
               className={`h-full w-full object-cover transition-opacity duration-300 ${
@@ -61,7 +64,7 @@ const PropertyCardMedia = memo(
         </div>
       </div>
     );
-  }
+  },
 );
 
 PropertyCardMedia.displayName = "PropertyCardMedia";
