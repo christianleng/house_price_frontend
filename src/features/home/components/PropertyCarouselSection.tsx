@@ -1,7 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
-import { PropertiesSkeleton } from "@/features/properties/components/PropertiesSkeleton";
-import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
 import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
 import { Link } from "react-router-dom";
 import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
@@ -13,7 +11,7 @@ import { usePrevNextButtons } from "@/core/components/carousel/useCarouselNaviga
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import type { PropertyFilters } from "@/core/types";
-import { useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 interface PropertyCarouselSectionProps {
   title: string;
@@ -35,6 +33,25 @@ const PropertyCarouselSection = observer(
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
 
+    const [slidesInView, setSlidesInView] = useState<number[]>([]);
+
+    const updateSlidesInView = useCallback(() => {
+      if (!emblaApi) return;
+
+      const inView = emblaApi.slidesInView();
+      setSlidesInView((prev) => {
+        const allSeen = new Set([...prev, ...inView]);
+        return Array.from(allSeen);
+      });
+    }, [emblaApi]);
+
+    useEffect(() => {
+      if (!emblaApi) return;
+      updateSlidesInView();
+      emblaApi.on("slidesInView", updateSlidesInView);
+      emblaApi.on("reInit", updateSlidesInView);
+    }, [emblaApi, updateSlidesInView]);
+
     const filters = useMemo<PropertyFilters>(
       () => ({
         transaction_type: transactionType,
@@ -43,17 +60,18 @@ const PropertyCarouselSection = observer(
         sort_by: "created_at",
         sort_order: "desc",
       }),
-      [transactionType]
+      [transactionType],
     );
 
-    const { data, isLoading, error, refetch } = useProperties(filters);
+    const { data, isError, error, refetch } = useProperties(filters);
 
-    const handleError = useCallback(
-      (err: Error, retry: () => void) => (
-        <ErrorDisplay error={err} onRetry={retry} />
-      ),
-      []
-    );
+    if (isError) {
+      return (
+        <div className="flex flex-col gap-4">
+          <ErrorDisplay error={error} onRetry={refetch} />
+        </div>
+      );
+    }
 
     return (
       <div className="flex flex-col gap-4">
@@ -78,38 +96,28 @@ const PropertyCarouselSection = observer(
           </div>
         </div>
 
-        <SmartLoader
-          isLoading={isLoading}
-          error={error}
-          data={data?.items}
-          skeleton={<PropertiesSkeleton count={filters.page_size} />}
-          emptyState={
-            <p className="text-center py-10">
-              Aucune propriété{" "}
-              {transactionType === "sale" ? "à vendre" : "à louer"} pour le
-              moment.
-            </p>
-          }
-          errorFallback={handleError}
-          retryFn={refetch}
-        >
-          {(items) => (
-            <section className="embla">
-              <div className="embla__viewport" ref={emblaRef}>
-                <div className="embla__container">
-                  {items.map((item, index) => (
-                    <div key={item.id} className="embla__slide">
-                      <PropertyCard property={item} isPriority={index < 2} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
-        </SmartLoader>
+        <section className="embla">
+          <div className="embla__viewport" ref={emblaRef}>
+            <div className="embla__container">
+              {data?.items.map((property, index) => {
+                const isVisible = slidesInView.includes(index);
+
+                return (
+                  <div key={property.id} className="embla__slide">
+                    {isVisible ? (
+                      <PropertyCard property={property} />
+                    ) : (
+                      <div className="h-80 w-full bg-gray-50 animate-pulse rounded-xl" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
       </div>
     );
-  }
+  },
 );
 
 PropertyCarouselSection.displayName = "PropertyCarouselSection";

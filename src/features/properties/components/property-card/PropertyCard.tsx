@@ -34,7 +34,7 @@ const PropertyCard = memo(
         </div>
       </Link>
     );
-  }
+  },
 );
 
 PropertyCard.displayName = "PropertyCard";

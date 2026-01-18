@@ -28,7 +28,7 @@ class PropertiesService {
   async getPropertiesByCities(
     cities: string[],
     transactionType: TransactionType,
-    pageSize: number = 10
+    pageSize: number = 10,
   ): Promise<CitiesPropertiesResponse> {
     return apiClient.get<CitiesPropertiesResponse>(
       API_ENDPOINTS.PROPERTIES.BY_CITIES,
@@ -40,7 +40,7 @@ class PropertiesService {
           sort_order: "desc",
           cities,
         },
-      }
+      },
     );
   }
 }
