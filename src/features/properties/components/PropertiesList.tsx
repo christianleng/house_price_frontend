@@ -1,44 +1,48 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
 import { propertyFiltersStore } from "@/core/stores";
-import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
 import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
 import { PropertyCard } from "./property-card/PropertyCard";
-import { useCallback } from "react";
 
 const PropertiesList = observer(() => {
   const { filters } = propertyFiltersStore;
-  const { data, isLoading, error, refetch } = useProperties(filters);
-  const handleError = useCallback(
-    (err: Error, retry: () => void) => (
-      <ErrorDisplay error={err} onRetry={retry} />
-    ),
-    []
-  );
+  const { data, isError, error, refetch } = useProperties(filters);
+
+  if (isError) {
+    return (
+      <div className="flex flex-col gap-4 py-10">
+        <ErrorDisplay error={error} onRetry={refetch} />
+      </div>
+    );
+  }
+
+  if (data?.items && data.items.length === 0) {
+    return (
+      <div className="py-20 text-center text-gray-500">
+        <p className="text-xl font-semibold">Aucun résultat trouvé</p>
+        <p>Essayez de modifier vos filtres.</p>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8">Propriétés disponibles</h1>
-
-      <div className="mb-6 text-gray-600">
-        {data?.total} biens trouvés - Page {data?.page} sur {data?.total_pages}
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-sm font-bold text-gray-900">
+          Propriétés disponibles
+        </h1>
+        <p className="text-xs text-gray-500 mt-1">
+          {data?.total || 0} logements trouvés
+        </p>
       </div>
 
-      <SmartLoader
-        isLoading={isLoading}
-        error={error}
-        data={data?.items}
-        skeleton={null}
-        emptyState={
-          <p className="text-center py-10">
-            Aucune propriété à vendre pour le moment.
-          </p>
-        }
-        errorFallback={handleError}
-        retryFn={refetch}
-      >
-        {(items) => items.map((items) => <PropertyCard property={items} />)}
-      </SmartLoader>
+      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
+        {data?.items.map((property) => (
+          <div key={property.id} className="h-full">
+            <PropertyCard property={property} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 });

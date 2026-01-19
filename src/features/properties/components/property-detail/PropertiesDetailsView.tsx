@@ -8,7 +8,7 @@ interface IPropertiesDetailsView {
 
 const PropertiesDetailsView = ({ property }: IPropertiesDetailsView) => {
   return (
-    <div className="container max-w-4/5 mx-auto px-4">
+    <div className="container max-w-4/5 m-auto p-4">
       <h1 className="text-4xl font-bold mb-2">{property.title}</h1>
       <p className="text-gray-600 mb-6">
         {property.city} - {property.postal_code} - {property.neighborhood}
