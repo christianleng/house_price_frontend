@@ -1,12 +1,12 @@
 import { apiClient } from "@/core/api/api-client";
 import { API_ENDPOINTS } from "@/core/api/endpoints";
 import type {
-  Property,
   PropertyFilters,
   PaginatedProperties,
+  Property,
   TransactionType,
   CitiesPropertiesResponse,
-} from "@/core/types";
+} from "../types/property.types";
 
 class PropertiesService {
   async getProperties(filters?: PropertyFilters): Promise<PaginatedProperties> {

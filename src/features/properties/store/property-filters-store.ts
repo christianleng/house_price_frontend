@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import type { PropertyFilters } from "@/core/types";
+import type { PropertyFilters } from "../types/property.types";
 
 class PropertyFiltersStore {
   filters: PropertyFilters = {
@@ -15,7 +15,7 @@ class PropertyFiltersStore {
 
   setFilter = <K extends keyof PropertyFilters>(
     key: K,
-    value: PropertyFilters[K]
+    value: PropertyFilters[K],
   ) => {
     this.filters = { ...this.filters, [key]: value };
   };

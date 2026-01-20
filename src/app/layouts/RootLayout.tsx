@@ -1,8 +1,8 @@
 import { memo } from "react";
 import { Outlet, useNavigation } from "react-router-dom";
-import TopBar from "@/features/header/components/TopBar";
-import MainNavigation from "@/features/header/components/MainNavigation";
-import SearchBar from "@/features/header/components/SearchBar";
+import TopBar from "@/app/layouts/components/header/TopBar";
+import MainNavigation from "@/app/layouts/components/header/MainNavigation";
+import SearchBar from "@/features/properties/components/SearchBar";
 import Footer from "@/app/layouts/components/Footer";
 
 const MemoizedTopBar = memo(TopBar);

@@ -1,5 +1,5 @@
 import { apiClient } from "@/core/api/api-client";
-import { tokenStorage } from "@/core/auth/token.storage";
+import { tokenStorage } from "@/features/auth/api/token.storage";
 import type {
   LoginCredentials,
   User,

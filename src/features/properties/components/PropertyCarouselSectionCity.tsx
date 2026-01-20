@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { useCitiesProperties } from "@/features/properties/api/properties.queries";
-import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
+import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import { FEATURED_CITIES } from "@/core/config/cities.config";
-import { CityPropertySection } from "./CityPropertySection";
+import { CityPropertySection } from "./property-card/CityPropertySection";
 import type { TransactionType } from "@/core/types";
 
 interface PropertyCarouselSectionCityProps {

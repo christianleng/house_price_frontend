@@ -6,7 +6,7 @@ import { FEATURED_CITIES } from "@/core/config/cities.config";
 import { RequireAuth } from "@/features/auth/components/RequireAuth";
 import { favoriteKeys } from "@/features/favorite/api/favorites.queries";
 import { favoritesService } from "@/features/favorite/api/favorites.service";
-import { tokenStorage } from "@/core/auth/token.storage";
+import { tokenStorage } from "@/features/auth/api/token.storage";
 import RootErrorBoundary from "@/core/components/RootErrorBoundary";
 
 const SALE_FILTERS = {

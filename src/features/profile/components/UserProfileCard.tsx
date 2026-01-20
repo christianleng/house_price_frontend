@@ -48,7 +48,7 @@ export const UserProfileCard = memo(
               icon={UserIcon}
               className="h-4 w-4 text-muted-foreground"
             />
-            <span className="text-sm font-mono text-xs text-muted-foreground">
+            <span className="text-sm font-mono text-muted-foreground">
               {user.id}
             </span>
           </div>

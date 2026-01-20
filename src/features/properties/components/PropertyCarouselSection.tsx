@@ -1,17 +1,17 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
-import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
+import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import { Link } from "react-router-dom";
 import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import { PrevButton } from "@/core/components/carousel/PrevButton";
-import { NextButton } from "@/core/components/carousel/NextButton";
-import { usePrevNextButtons } from "@/core/components/carousel/useCarouselNavigation";
+import { PrevButton } from "@/shared/components/carousel/PrevButton";
+import { NextButton } from "@/shared/components/carousel/NextButton";
+import { usePrevNextButtons } from "@/shared/components/carousel/useCarouselNavigation";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import type { PropertyFilters } from "@/core/types";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { PropertyFilters } from "../types/property.types";
 
 interface PropertyCarouselSectionProps {
   title: string;
