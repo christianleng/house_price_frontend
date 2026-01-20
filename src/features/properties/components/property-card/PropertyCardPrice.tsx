@@ -1,12 +1,13 @@
-import { FavouriteIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import FavoriteButton from "@/features/favorite/components/FavoriteButton";
 
 const PropertyCardPrice = ({
   price,
   price_per_sqm,
+  propertyId,
 }: {
   price: number | null;
   price_per_sqm: number | null;
+  propertyId: string;
 }) => {
   return (
     <div className="flex items-start justify-between gap-2">
@@ -18,16 +19,7 @@ const PropertyCardPrice = ({
           {price_per_sqm}/m²
         </span>
       </div>
-
-      <button
-        aria-label="Ajouter aux favoris"
-        className="shrink-0 hover:scale-110 transition-transform"
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <HugeiconsIcon icon={FavouriteIcon} className="w-5 h-5" />
-      </button>
+      <FavoriteButton propertyId={propertyId} />
     </div>
   );
 };

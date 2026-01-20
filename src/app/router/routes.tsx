@@ -3,6 +3,7 @@ import { propertiesKeys } from "@/features/properties/api/properties.queries";
 import { propertiesService } from "@/features/properties/api/properties.service";
 import { RootLayout } from "@/app/layouts/RootLayout";
 import { FEATURED_CITIES } from "@/core/config/cities.config";
+import { RequireAuth } from "@/features/auth/components/RequireAuth";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -79,6 +80,19 @@ export const routes = [
         },
       },
       {
+        path: "profile",
+        lazy: async () => {
+          const module = await import("@/pages/profile/Profile.page");
+          return {
+            Component: () => (
+              <RequireAuth>
+                <module.default />
+              </RequireAuth>
+            ),
+          };
+        },
+      },
+      {
         path: "*",
         lazy: async () => {
           const module = await import("@/pages/errors/NotFound.page");
@@ -86,5 +100,12 @@ export const routes = [
         },
       },
     ],
+  },
+  {
+    path: "auth/login",
+    lazy: async () => {
+      const module = await import("@/pages/auth/Login.page");
+      return { Component: module.default };
+    },
   },
 ];

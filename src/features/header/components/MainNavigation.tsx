@@ -32,7 +32,11 @@ const MainNavigation = () => {
         </div>
       </Link>
 
-      <NavigationMenu value={value} onValueChange={setValue}>
+      <NavigationMenu
+        value={value}
+        onValueChange={setValue}
+        className="hidden xl:flex"
+      >
         <NavigationMenuList className="flex items-center gap-2">
           {HEADER_NAVIGATION.map((section) => (
             <NavigationMenuItem key={section.id} value={section.id}>
@@ -90,9 +94,12 @@ const MainNavigation = () => {
           <HugeiconsIcon icon={PlusSignIcon} />
           Déposer une annonce
         </Button>
-        <button className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-border bg-linear-to-br from-muted to-border">
+        <Link
+          to="/profile"
+          className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-border bg-linear-to-br from-muted to-border"
+        >
           <HugeiconsIcon icon={User03Icon} />
-        </button>
+        </Link>
       </div>
     </div>
   );
