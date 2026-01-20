@@ -1,4 +1,4 @@
-import type { PropertySummary } from "@/core/types";
+import type { PropertySummary } from "@/features/properties/types/property.types";
 
 export interface Favorite {
   id: string;

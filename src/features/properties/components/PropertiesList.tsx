@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
-import { propertyFiltersStore } from "@/core/stores";
-import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
+import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import { PropertyCard } from "./property-card/PropertyCard";
+import { propertyFiltersStore } from "../store/property-filters-store";
 
 const PropertiesList = observer(() => {
   const { filters } = propertyFiltersStore;

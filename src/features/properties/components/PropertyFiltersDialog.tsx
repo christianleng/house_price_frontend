@@ -18,16 +18,9 @@ import {
   SelectValue,
 } from "@/core/ui/select";
 import { Checkbox } from "@/core/ui/checkbox";
-import type {
-  EnergyRating,
-  HeatingType,
-  PropertyFilters,
-  PropertyType,
-  TransactionType,
-} from "@/core/types";
 import { observer } from "mobx-react-lite";
 import { useCountProperties } from "../api/properties.queries";
-import { useDebounce } from "@/core/hooks/use-debounce";
+import { useDebounce } from "@/shared/hooks/use-debounce";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   PrisonGuardIcon,
@@ -37,6 +30,13 @@ import {
   FireIcon,
   EnergyIcon,
 } from "@hugeicons/core-free-icons";
+import type {
+  PropertyFilters,
+  TransactionType,
+  PropertyType,
+  EnergyRating,
+  HeatingType,
+} from "../types/property.types";
 
 interface IPropertyFiltersDialogProps {
   open: boolean;
@@ -66,7 +66,7 @@ const PropertyFiltersDialog = observer(
 
     const updateFilter = <K extends keyof PropertyFilters>(
       key: K,
-      value: PropertyFilters[K] | ""
+      value: PropertyFilters[K] | "",
     ) => {
       setLocalFilters((prev) => ({
         ...prev,
@@ -128,7 +128,7 @@ const PropertyFiltersDialog = observer(
               onChange={(e) =>
                 updateFilter(
                   "price_min",
-                  e.target.value ? Number(e.target.value) : undefined
+                  e.target.value ? Number(e.target.value) : undefined,
                 )
               }
             />
@@ -139,7 +139,7 @@ const PropertyFiltersDialog = observer(
               onChange={(e) =>
                 updateFilter(
                   "price_max",
-                  e.target.value ? Number(e.target.value) : undefined
+                  e.target.value ? Number(e.target.value) : undefined,
                 )
               }
             />
@@ -153,7 +153,7 @@ const PropertyFiltersDialog = observer(
               onChange={(e) =>
                 updateFilter(
                   "surface_min",
-                  e.target.value ? Number(e.target.value) : undefined
+                  e.target.value ? Number(e.target.value) : undefined,
                 )
               }
             />
@@ -164,7 +164,7 @@ const PropertyFiltersDialog = observer(
               onChange={(e) =>
                 updateFilter(
                   "rooms_min",
-                  e.target.value ? Number(e.target.value) : undefined
+                  e.target.value ? Number(e.target.value) : undefined,
                 )
               }
             />
@@ -175,7 +175,7 @@ const PropertyFiltersDialog = observer(
               onChange={(e) =>
                 updateFilter(
                   "bedrooms_min",
-                  e.target.value ? Number(e.target.value) : undefined
+                  e.target.value ? Number(e.target.value) : undefined,
                 )
               }
             />
@@ -186,7 +186,7 @@ const PropertyFiltersDialog = observer(
               onChange={(e) =>
                 updateFilter(
                   "bathrooms_min",
-                  e.target.value ? Number(e.target.value) : undefined
+                  e.target.value ? Number(e.target.value) : undefined,
                 )
               }
             />
@@ -197,7 +197,7 @@ const PropertyFiltersDialog = observer(
             onValueChange={(v) =>
               updateFilter(
                 "property_type",
-                v === "all" ? undefined : (v as PropertyType)
+                v === "all" ? undefined : (v as PropertyType),
               )
             }
           >
@@ -228,7 +228,7 @@ const PropertyFiltersDialog = observer(
                   onCheckedChange={(checked) =>
                     updateFilter(
                       key as keyof PropertyFilters,
-                      checked ? true : undefined
+                      checked ? true : undefined,
                     )
                   }
                 />
@@ -244,7 +244,7 @@ const PropertyFiltersDialog = observer(
               onValueChange={(v) =>
                 updateFilter(
                   "energy_rating",
-                  v === "all" ? undefined : (v as EnergyRating)
+                  v === "all" ? undefined : (v as EnergyRating),
                 )
               }
             >
@@ -267,7 +267,7 @@ const PropertyFiltersDialog = observer(
               onValueChange={(v) =>
                 updateFilter(
                   "heating_type",
-                  v === "all" ? undefined : (v as HeatingType)
+                  v === "all" ? undefined : (v as HeatingType),
                 )
               }
             >
@@ -293,7 +293,7 @@ const PropertyFiltersDialog = observer(
         </DialogContent>
       </Dialog>
     );
-  }
+  },
 );
 
 PropertyFiltersDialog.displayName = "PropertyFiltersDialog";

@@ -1,12 +1,12 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { propertiesService } from "./properties.service";
 import type {
-  Property,
   PropertyFilters,
-  PaginatedProperties,
-  CitiesPropertiesResponse,
   TransactionType,
-} from "@/core/types";
+  PaginatedProperties,
+  Property,
+  CitiesPropertiesResponse,
+} from "../types/property.types";
 
 export const propertiesKeys = {
   all: ["properties"] as const,

@@ -1,6 +1,6 @@
 import { env } from "@/core/config/01-env";
 import { ApiError } from "./api-error";
-import { tokenStorage } from "../auth/token.storage";
+import { tokenStorage } from "../../features/auth/api/token.storage";
 
 interface RequestConfig extends RequestInit {
   params?: Record<string, unknown>;

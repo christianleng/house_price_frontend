@@ -3,13 +3,16 @@ import { Link } from "react-router-dom";
 import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
-import { PrevButton } from "@/core/components/carousel/PrevButton";
-import { NextButton } from "@/core/components/carousel/NextButton";
-import { usePrevNextButtons } from "@/core/components/carousel/useCarouselNavigation";
+import { PrevButton } from "@/shared/components/carousel/PrevButton";
+import { NextButton } from "@/shared/components/carousel/NextButton";
+import { usePrevNextButtons } from "@/shared/components/carousel/useCarouselNavigation";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import type { PropertySummary, TransactionType } from "@/core/types";
 import { useCallback, useEffect, useState } from "react";
+import type {
+  PropertySummary,
+  TransactionType,
+} from "../../types/property.types";
 
 interface CityPropertySectionProps {
   city: string;

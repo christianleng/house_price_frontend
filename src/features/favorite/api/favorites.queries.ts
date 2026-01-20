@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { favoritesService } from "./favorites.service";
 import type { FavoriteList } from "../types/favorite.types";
-import type { PropertySummary } from "@/core/types";
-import { tokenStorage } from "@/core/auth/token.storage";
+import { tokenStorage } from "@/features/auth/api/token.storage";
+import type { PropertySummary } from "@/features/properties/types/property.types";
 
 export const favoriteKeys = {
   all: ["favorites"] as const,

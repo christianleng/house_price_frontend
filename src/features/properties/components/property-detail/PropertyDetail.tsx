@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useProperty } from "../../api/properties.queries";
-import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
-import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
+import { SmartLoader } from "@/shared/components/data-loading/SmartLoader";
+import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import PropertiesDetailsView from "@/features/properties/components/property-detail/PropertiesDetailsView";
 import { useCallback } from "react";
 

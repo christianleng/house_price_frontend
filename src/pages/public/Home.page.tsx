@@ -1,7 +1,7 @@
-import { PropertyCarouselSection } from "@/features/home/components/PropertyCarouselSection";
-import { InfoCardSection } from "@/features/home/components/InfoCardSection";
-import { CTASection } from "@/features/home/components/CTASection";
-import PropertyCarouselSectionCity from "@/features/home/components/PropertyCarouselSectionCity";
+import { PropertyCarouselSection } from "@/features/properties/components/PropertyCarouselSection";
+import { InfoCardSection } from "@/shared/components/InfoCardSection";
+import { CTASection } from "@/shared/components/CTASection";
+import PropertyCarouselSectionCity from "@/features/properties/components/PropertyCarouselSectionCity";
 import { LazySection } from "@/core/components/LazySection";
 
 const HomePage = () => {

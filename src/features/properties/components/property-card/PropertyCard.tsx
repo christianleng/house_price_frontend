@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { PropertyCardMedia } from "./PropertyCardMedia";
 import { PropertyCardPrice } from "./PropertyCardPrice";
 import { PropertyCardMeta } from "./PropertyCardMeta";
-import type { PropertySummary } from "@/core/types";
+import type { PropertySummary } from "../../types/property.types";
 
 interface IPropertyCardProps {
   property: PropertySummary;
