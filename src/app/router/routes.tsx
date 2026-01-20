@@ -7,6 +7,7 @@ import { RequireAuth } from "@/features/auth/components/RequireAuth";
 import { favoriteKeys } from "@/features/favorite/api/favorites.queries";
 import { favoritesService } from "@/features/favorite/api/favorites.service";
 import { tokenStorage } from "@/core/auth/token.storage";
+import RootErrorBoundary from "@/core/components/RootErrorBoundary";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -31,7 +32,15 @@ export const routes = [
     path: "/",
     Component: RootLayout,
     HydrateFallback: null, //TODO add fallback
+    ErrorBoundary: RootErrorBoundary,
     children: [
+      {
+        path: "test/error",
+        lazy: async () => {
+          const module = await import("@/core/components/test/CrashTest");
+          return { Component: module.default };
+        },
+      },
       {
         index: true,
         lazy: async () => {
