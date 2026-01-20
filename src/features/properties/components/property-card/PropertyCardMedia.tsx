@@ -41,8 +41,6 @@ const PropertyCardMedia = memo(
               src={thumbnail_url}
               alt={title}
               decoding={isPriority ? "sync" : "async"}
-              // fetchPriority={"high"}
-              // fetchPriority={isPriority ? "high" : "low"}
               fetchPriority={isPriority ? "high" : "auto"}
               loading={isPriority ? "eager" : "lazy"}
               className={`h-full w-full object-cover transition-opacity duration-300 ${
@@ -58,10 +56,12 @@ const PropertyCardMedia = memo(
           <EnergyPerformanceIcon value={energy_rating} />
         </div>
 
-        <div className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-black/70 px-2 py-1 text-xs text-white">
-          <HugeiconsIcon icon={Camera01Icon} className="h-4 w-4" />
-          {photos_count || 0}
-        </div>
+        {photos_count !== undefined && photos_count > 0 && (
+          <div className="absolute bottom-3 right-3 z-20 flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2 py-1 text-[10px] font-semibold text-white">
+            <HugeiconsIcon icon={Camera01Icon} className="h-3 w-3" />
+            {photos_count}
+          </div>
+        )}
       </div>
     );
   },

@@ -10,9 +10,7 @@ import {
 } from "@/core/ui/navigation-menu";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  FavouriteIcon,
   Home12Icon,
-  Notification01Icon,
   PlusSignIcon,
   User03Icon,
 } from "@hugeicons/core-free-icons";
@@ -81,15 +79,6 @@ const MainNavigation = () => {
       </NavigationMenu>
 
       <div className="flex items-center gap-3">
-        <button className="relative flex h-11 w-11 items-center justify-center rounded-xl border hover:bg-icon-btn-hover-bg hover:cursor-pointer">
-          <HugeiconsIcon icon={FavouriteIcon} />
-          <span className="absolute -right-1 -top-1 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-destructive text-xs font-semibold text-destructive-foreground">
-            3
-          </span>
-        </button>
-        <button className="flex h-11 w-11 items-center justify-center rounded-xl border hover:bg-icon-btn-hover-bg hover:cursor-pointer">
-          <HugeiconsIcon icon={Notification01Icon} />
-        </button>
         <Button className="flex items-center h-full gap-2 rounded-xl bg-linear-to-br from-brand-700 to-brand-300 px-6 py-3 text-sm font-semibold text-white shadow-brand">
           <HugeiconsIcon icon={PlusSignIcon} />
           Déposer une annonce
