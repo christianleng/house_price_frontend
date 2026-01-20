@@ -20,14 +20,16 @@ const AUTH_KEYS = { user: ["auth", "user"] as const };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = useQueryClient();
+  const token = tokenStorage.getToken();
 
   const {
     data: user,
-    isLoading: isUserLoading,
+    isFetched,
     error: userError,
   } = useQuery({
     queryKey: AUTH_KEYS.user,
     queryFn: authService.getMe,
+    enabled: !!token,
     retry: (failureCount, error) => {
       if ((error as { status?: number }).status === 401) return false;
       return failureCount < 2;
@@ -61,7 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     logoutMutation.mutate();
   };
 
-  const isLoading = isUserLoading || loginMutation.isPending;
+  const isLoading = (!!token && !isFetched) || loginMutation.isPending;
 
   return (
     <AuthContext.Provider

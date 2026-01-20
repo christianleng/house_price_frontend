@@ -2,9 +2,7 @@ export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: "/api/auth/token",
     LOGOUT: "/api/auth/logout",
-    REFRESH: "/api/auth/refresh",
     ME: "/api/auth/me",
-    REGISTER: "/api/auth/register",
   },
 
   PROPERTIES: {
@@ -27,5 +25,11 @@ export const API_ENDPOINTS = {
     LIST: (propertyId: string) => `/api/photos/property/${propertyId}`,
     UPLOAD: (propertyId: string) => `/api/photos/property/${propertyId}`,
     DELETE: (photoId: string) => `/api/photos/${photoId}`,
+  },
+
+  FAVORITE: {
+    POST: (id: string) => `/api/favorites/${id}`,
+    DELETE: (id: string) => `/api/favorites/${id}`,
+    LIST: "/api/favorites/",
   },
 } as const;
