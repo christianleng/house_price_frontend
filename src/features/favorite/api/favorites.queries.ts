@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { favoritesService } from "./favorites.service";
 import type { FavoriteList } from "../types/favorite.types";
 import type { PropertySummary } from "@/core/types";
+import { tokenStorage } from "@/core/auth/token.storage";
 
 export const favoriteKeys = {
   all: ["favorites"] as const,
@@ -13,6 +14,7 @@ export const useGetFavorites = (options = {}) => {
     queryKey: favoriteKeys.lists(),
     queryFn: () => favoritesService.getFavoriteProperties(),
     staleTime: 5 * 60 * 1000,
+    enabled: tokenStorage.isAuthenticated(),
     ...options,
   });
 };

@@ -4,6 +4,9 @@ import { propertiesService } from "@/features/properties/api/properties.service"
 import { RootLayout } from "@/app/layouts/RootLayout";
 import { FEATURED_CITIES } from "@/core/config/cities.config";
 import { RequireAuth } from "@/features/auth/components/RequireAuth";
+import { favoriteKeys } from "@/features/favorite/api/favorites.queries";
+import { favoritesService } from "@/features/favorite/api/favorites.service";
+import { tokenStorage } from "@/core/auth/token.storage";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -36,6 +39,8 @@ export const routes = [
           return { Component: module.default };
         },
         loader: async () => {
+          const isAuthenticated = tokenStorage.isAuthenticated();
+
           await Promise.all([
             queryClient.prefetchQuery({
               queryKey: propertiesKeys.list(SALE_FILTERS),
@@ -61,7 +66,18 @@ export const routes = [
                 ),
               staleTime: 60 * 1000,
             }),
+
+            ...(isAuthenticated
+              ? [
+                  queryClient.prefetchQuery({
+                    queryKey: favoriteKeys.lists(),
+                    queryFn: () => favoritesService.getFavoriteProperties(),
+                    staleTime: 5 * 60 * 1000,
+                  }),
+                ]
+              : []),
           ]);
+
           return null;
         },
       },
@@ -90,6 +106,14 @@ export const routes = [
               </RequireAuth>
             ),
           };
+        },
+        loader: async () => {
+          await queryClient.prefetchQuery({
+            queryKey: favoriteKeys.lists(),
+            queryFn: () => favoritesService.getFavoriteProperties(),
+            staleTime: 5 * 60 * 1000,
+          });
+          return null;
         },
       },
       {

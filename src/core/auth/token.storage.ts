@@ -16,4 +16,8 @@ export const tokenStorage = {
   clearToken: () => {
     Cookies.remove(TOKEN_KEY);
   },
+
+  isAuthenticated: (): boolean => {
+    return !!Cookies.get(TOKEN_KEY);
+  },
 };

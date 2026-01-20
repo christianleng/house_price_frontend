@@ -8,6 +8,10 @@ import type {
 import { API_ENDPOINTS } from "@/core/api/endpoints";
 
 export const authService = {
+  isAuthenticated: (): boolean => {
+    return !!tokenStorage.getToken();
+  },
+
   async login(credentials: LoginCredentials): Promise<AuthTokenResponse> {
     const response = await apiClient.postForm<AuthTokenResponse>(
       API_ENDPOINTS.AUTH.LOGIN,
