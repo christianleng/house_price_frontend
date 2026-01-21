@@ -1,14 +1,13 @@
-export const PROPERTY_TYPE = {
+export const PROPERTY_TYPES = {
   HOUSE: "house",
   APARTMENT: "apartment",
   VILLA: "villa",
   STUDIO: "studio",
   LOFT: "loft",
 } as const;
+export type PropertyType = (typeof PROPERTY_TYPES)[keyof typeof PROPERTY_TYPES];
 
-export type PropertyType = (typeof PROPERTY_TYPE)[keyof typeof PROPERTY_TYPE];
-
-export const ENERGY_RATING = {
+export const ENERGY_RATINGS = {
   A: "A",
   B: "B",
   C: "C",
@@ -17,34 +16,30 @@ export const ENERGY_RATING = {
   F: "F",
   G: "G",
 } as const;
+export type EnergyRating = (typeof ENERGY_RATINGS)[keyof typeof ENERGY_RATINGS];
 
-export type EnergyRating = (typeof ENERGY_RATING)[keyof typeof ENERGY_RATING];
-
-export const HEATING_TYPE = {
+export const HEATING_TYPES = {
   INDIVIDUAL: "individual",
   COLLECTIVE: "collective",
   ELECTRIC: "electric",
   GAS: "gas",
   HEAT_PUMP: "heat_pump",
 } as const;
+export type HeatingType = (typeof HEATING_TYPES)[keyof typeof HEATING_TYPES];
 
-export type HeatingType = (typeof HEATING_TYPE)[keyof typeof HEATING_TYPE];
-
-export const TRANSACTION_TYPE = {
+export const TRANSACTION_TYPES = {
   SALE: "sale",
   RENT: "rent",
 } as const;
-
 export type TransactionType =
-  (typeof TRANSACTION_TYPE)[keyof typeof TRANSACTION_TYPE];
+  (typeof TRANSACTION_TYPES)[keyof typeof TRANSACTION_TYPES];
 
-export interface Property {
+interface BaseProperty {
   id: string;
   agent_id: string;
   reference: string;
   title: string;
   description: string | null;
-
   address: string | null;
   neighborhood: string;
   city: string;
@@ -52,11 +47,6 @@ export interface Property {
   postal_code: string;
   latitude: number;
   longitude: number;
-
-  //? null en cas de location
-  price: number | null;
-  price_per_sqm: number | null;
-
   property_type: PropertyType;
   surface_area: number;
   rooms: number;
@@ -65,7 +55,6 @@ export interface Property {
   toilets: number | null;
   floors: number | null;
   floor_number: number | null;
-
   has_cave: boolean | null;
   has_elevator: boolean;
   has_balcony: boolean;
@@ -73,60 +62,73 @@ export interface Property {
   has_garden: boolean;
   has_parking: boolean;
   parking_spaces: number | null;
-
-  energy_rating: EnergyRating | null;
+  energy_rating: EnergyRating;
   heating_type: HeatingType | null;
-
   construction_year: number | null;
   available_from: string | null;
   is_furnished: boolean | null;
-
-  //? POUR LA LOCATION
-  transaction_type: TransactionType;
-  rent_price_monthly: number | null;
-  deposit: number | null;
-  charges_included: boolean | null;
-
   created_at: string;
   updated_at: string | null;
   is_active: boolean;
   views_count: number;
 }
 
-export interface PropertySummary {
-  id: string;
-  reference: string;
-  title: string;
-  city: string;
-  postal_code: string;
-
-  price: number | null;
-  price_per_sqm: number | null;
-  rent_price_monthly: number | null;
-  deposit: number | null;
-
-  property_type: PropertyType;
-  surface_area: number;
-  rooms: number;
-  bedrooms: number;
-  has_parking: boolean;
-  has_garden: boolean;
-  created_at: string;
-  thumbnail_url: string | null;
-  transaction_type: TransactionType;
-  energy_rating: EnergyRating | null;
-  photos_count: number;
+export interface SaleProperty extends BaseProperty {
+  transaction_type: typeof TRANSACTION_TYPES.SALE;
+  price: number;
+  price_per_sqm: number;
 }
 
-export interface PropertyFilters {
-  [key: string]: string | number | boolean | undefined;
+export interface RentProperty extends BaseProperty {
+  transaction_type: typeof TRANSACTION_TYPES.RENT;
+  rent_price_monthly: number;
+  deposit: number;
+  charges_included: boolean;
+}
 
+export type Property = SaleProperty | RentProperty;
+
+interface BasePropertyPreview extends Pick<
+  BaseProperty,
+  | "id"
+  | "reference"
+  | "title"
+  | "city"
+  | "postal_code"
+  | "property_type"
+  | "surface_area"
+  | "rooms"
+  | "bedrooms"
+  | "created_at"
+> {
+  thumbnail_url: string | null;
+  photos_count: number;
+  energy_rating: EnergyRating;
+}
+
+export interface SalePropertyPreview extends BasePropertyPreview {
+  transaction_type: typeof TRANSACTION_TYPES.SALE;
+  price: number;
+  price_per_sqm: number;
+}
+
+export interface RentPropertyPreview extends BasePropertyPreview {
+  transaction_type: typeof TRANSACTION_TYPES.RENT;
+  rent_price_monthly: number;
+}
+
+export type PropertyPreview = SalePropertyPreview | RentPropertyPreview;
+
+export type PropertySearchParams = {
   city?: string;
   postal_code?: string;
   district?: string;
   neighborhood?: string;
 
   transaction_type?: TransactionType;
+
+  max_price?: number;
+  min_surface?: number;
 
   price_min?: number;
   price_max?: number;
@@ -138,18 +140,17 @@ export interface PropertyFilters {
 
   surface_min?: number;
   surface_max?: number;
-
   rooms_min?: number;
-  rooms_max?: number;
-
   bedrooms_min?: number;
   bathrooms_min?: number;
   toilets_min?: number;
-
   floors_min?: number;
   floor_number_min?: number;
 
   property_type?: PropertyType;
+  energy_rating?: EnergyRating;
+  heating_type?: HeatingType;
+  construction_year_min?: number;
 
   has_garden?: boolean;
   has_terrace?: boolean;
@@ -158,43 +159,25 @@ export interface PropertyFilters {
   has_cave?: boolean;
   has_elevator?: boolean;
   has_pool?: boolean;
-
   is_furnished?: boolean;
   is_quiet?: boolean;
 
-  parking_spaces_min?: number;
-
-  construction_year_min?: number;
+  is_active?: boolean;
   available_from?: string;
 
-  energy_rating?: EnergyRating;
-  heating_type?: HeatingType;
-
-  is_active?: boolean;
-
   sort_by?: "created_at" | "price" | "surface_area" | "price_per_sqm" | "rooms";
-
   sort_order?: "asc" | "desc";
-
   page?: number;
   page_size?: number;
-}
+};
 
-export interface PaginatedProperties {
-  items: PropertySummary[];
-  total: number;
-  page: number;
-  page_size: number;
-  total_pages: number;
-}
-
-export interface CityPropertiesResponse {
+export interface CityPropertyCollection {
   city: string;
-  properties: PropertySummary[];
+  properties: PropertyPreview[];
   total: number;
 }
 
 export interface CitiesPropertiesResponse {
-  data: Record<string, CityPropertiesResponse>;
+  data: Record<string, CityPropertyCollection>;
   transaction_type: TransactionType;
 }

@@ -1,4 +1,5 @@
 import { useGetFavorites } from "@/features/favorite/api/favorites.queries";
+import type { PropertyPreview } from "@/features/properties/types/property.types";
 import { memo } from "react";
 import { Link } from "react-router-dom";
 
@@ -21,16 +22,24 @@ export const UserFavorites = memo(() => {
         Mes propriétés favorites ({favorites.length})
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {favorites.map((property) => (
-          <Link key={property.id} to={`/properties/${property.id}`}>
-            <div className="border rounded-lg p-2">
-              <p className="font-medium">{property.title}</p>
-              <p className="text-sm text-blue-600">
-                {property?.price?.toLocaleString()} €
-              </p>
-            </div>
-          </Link>
-        ))}
+        {favorites.map((property: PropertyPreview) => {
+          const isSale = property.transaction_type === "sale";
+
+          const displayPrice = isSale
+            ? property.price
+            : property.rent_price_monthly;
+
+          return (
+            <Link key={property.id} to={`/properties/${property.id}`}>
+              <div className="border rounded-lg p-2">
+                <p className="font-medium">{property.title}</p>
+                <p className="text-sm text-blue-600">
+                  {displayPrice?.toLocaleString()} €
+                </p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

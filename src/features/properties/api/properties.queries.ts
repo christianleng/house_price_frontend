@@ -1,22 +1,23 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { propertiesService } from "./properties.service";
 import type {
-  PropertyFilters,
+  PropertySearchParams,
   TransactionType,
-  PaginatedProperties,
   Property,
   CitiesPropertiesResponse,
+  PropertyPreview,
 } from "../types/property.types";
+import type { PaginatedResponse } from "@/core/types/api.types";
 
 export const propertiesKeys = {
   all: ["properties"] as const,
 
   lists: () => [...propertiesKeys.all, "list"] as const,
-  list: (filters?: PropertyFilters) =>
+  list: (filters?: PropertySearchParams) =>
     [...propertiesKeys.lists(), filters] as const,
 
   counts: () => [...propertiesKeys.all, "count"] as const,
-  count: (filters?: PropertyFilters) =>
+  count: (filters?: PropertySearchParams) =>
     [...propertiesKeys.counts(), filters] as const,
 
   details: () => [...propertiesKeys.all, "detail"] as const,
@@ -35,8 +36,8 @@ export const propertiesKeys = {
 };
 
 export function useProperties(
-  filters?: PropertyFilters,
-): UseQueryResult<PaginatedProperties, Error> {
+  filters?: PropertySearchParams,
+): UseQueryResult<PaginatedResponse<PropertyPreview>, Error> {
   return useQuery({
     queryKey: propertiesKeys.list(filters),
     queryFn: () => propertiesService.getProperties(filters),
@@ -54,7 +55,7 @@ export function useProperty(id: string): UseQueryResult<Property, Error> {
 }
 
 export function useCountProperties(
-  filters?: PropertyFilters,
+  filters?: PropertySearchParams,
   options?: { enabled?: boolean },
 ): UseQueryResult<number, Error> {
   return useQuery({

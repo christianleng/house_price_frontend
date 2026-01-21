@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { favoritesService } from "./favorites.service";
 import type { FavoriteList } from "../types/favorite.types";
 import { tokenStorage } from "@/features/auth/api/token.storage";
-import type { PropertySummary } from "@/features/properties/types/property.types";
+import type { PropertyPreview } from "@/features/properties/types/property.types";
 
 export const favoriteKeys = {
   all: ["favorites"] as const,
@@ -34,7 +34,7 @@ export const useAddFavorite = () => {
       if (previousFavorites) {
         queryClient.setQueryData<FavoriteList>(favoriteKeys.lists(), [
           ...previousFavorites,
-          { id: propertyId } as PropertySummary,
+          { id: propertyId } as PropertyPreview,
         ]);
       }
 

@@ -270,7 +270,7 @@ export type PropertyType = (typeof PROPERTY_TYPE)[keyof typeof PROPERTY_TYPE];
 ```typescript
 import type {
   Property,
-  PropertyFilters,
+  PropertySearchParams,
 } from "@/features/properties/types/property.types";
 ```
 

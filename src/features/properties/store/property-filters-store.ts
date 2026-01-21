@@ -1,8 +1,8 @@
 import { makeAutoObservable } from "mobx";
-import type { PropertyFilters } from "../types/property.types";
+import type { PropertySearchParams } from "../types/property.types";
 
 class PropertyFiltersStore {
-  filters: PropertyFilters = {
+  filters: PropertySearchParams = {
     page: 1,
     page_size: 20,
     sort_by: "created_at",
@@ -13,14 +13,14 @@ class PropertyFiltersStore {
     makeAutoObservable(this);
   }
 
-  setFilter = <K extends keyof PropertyFilters>(
+  setFilter = <K extends keyof PropertySearchParams>(
     key: K,
-    value: PropertyFilters[K],
+    value: PropertySearchParams[K],
   ) => {
     this.filters = { ...this.filters, [key]: value };
   };
 
-  setFilters = (filters: Partial<PropertyFilters>) => {
+  setFilters = (filters: Partial<PropertySearchParams>) => {
     this.filters = { ...this.filters, ...filters };
   };
 

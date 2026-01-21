@@ -1,4 +1,4 @@
-import type { PropertySummary } from "@/features/properties/types/property.types";
+import type { PropertyPreview } from "@/features/properties/types/property.types";
 
 export interface Favorite {
   id: string;
@@ -7,7 +7,7 @@ export interface Favorite {
   created_at: string;
 }
 
-export type FavoriteList = PropertySummary[];
+export type FavoriteList = PropertyPreview[];
 
 export interface FavoriteError {
   detail: string;

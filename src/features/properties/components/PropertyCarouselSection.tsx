@@ -11,7 +11,7 @@ import { usePrevNextButtons } from "@/shared/components/carousel/useCarouselNavi
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { PropertyFilters } from "../types/property.types";
+import type { PropertySearchParams } from "../types/property.types";
 
 interface PropertyCarouselSectionProps {
   title: string;
@@ -52,7 +52,7 @@ const PropertyCarouselSection = observer(
       emblaApi.on("reInit", updateSlidesInView);
     }, [emblaApi, updateSlidesInView]);
 
-    const filters = useMemo<PropertyFilters>(
+    const filters = useMemo<PropertySearchParams>(
       () => ({
         transaction_type: transactionType,
         page: 1,

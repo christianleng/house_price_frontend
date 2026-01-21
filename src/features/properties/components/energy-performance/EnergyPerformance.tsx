@@ -1,10 +1,10 @@
-import { ENERGY_RATING, type EnergyRating } from "@/core/types";
+import { ENERGY_RATINGS, type EnergyRating } from "../../types/property.types";
 
 interface EnergyPerformanceProps {
   value: EnergyRating;
 }
 
-const DPE_LEVELS = Object.values(ENERGY_RATING);
+const DPE_LEVELS = Object.values(ENERGY_RATINGS);
 
 const DPE_COLORS: Record<EnergyRating, string> = {
   A: "#008D36",
