@@ -3,8 +3,7 @@ import { useCitiesProperties } from "@/features/properties/api/properties.querie
 import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import { FEATURED_CITIES } from "@/core/config/cities.config";
 import { CityPropertySection } from "./property-card/CityPropertySection";
-import type { TransactionType } from "@/core/types";
-
+import type { TransactionType } from "../types/property.types";
 interface PropertyCarouselSectionCityProps {
   transactionType?: TransactionType;
   pageSize?: number;

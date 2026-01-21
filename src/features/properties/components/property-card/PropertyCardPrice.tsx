@@ -1,40 +1,33 @@
 import FavoriteButton from "@/features/favorite/components/FavoriteButton";
-import {
-  TRANSACTION_TYPE,
-  type TransactionType,
-} from "../../types/property.types";
+import { type PropertyPreview } from "../../types/property.types";
+import { memo } from "react";
 
-const PropertyCardPrice = ({
-  price,
-  price_per_sqm,
-  propertyId,
-  transaction_type,
-  rent_price_monthly,
-}: {
-  price: number | null;
-  price_per_sqm: number | null;
-  propertyId: string;
-  transaction_type: TransactionType;
-  rent_price_monthly: number;
-}) => {
+interface PropertyCardPriceProps {
+  property: PropertyPreview;
+}
+
+const PropertyCardPrice = memo(({ property }: PropertyCardPriceProps) => {
+  const isSale = property.transaction_type === "sale";
+
+  const displayPrice = isSale ? property.price : property.rent_price_monthly;
+
   return (
     <div className="flex items-start justify-between gap-2">
       <div className="flex items-baseline gap-1.5 flex-1 min-w-0">
         <span className="text-lg font-bold text-blue-600 truncate">
-          {transaction_type === TRANSACTION_TYPE.SALE
-            ? `${price?.toLocaleString()} €`
-            : `${rent_price_monthly} €`}
+          {displayPrice?.toLocaleString()} €
         </span>
-        <span className="text-xs text-gray-500 whitespace-nowrap">
-          {transaction_type === TRANSACTION_TYPE.RENT
-            ? `/mois`
-            : `${price_per_sqm}/m²`}
-        </span>
+        {isSale && property.price_per_sqm && (
+          <span className="text-xs text-gray-500 whitespace-nowrap">
+            {property.price_per_sqm} €/m²
+          </span>
+        )}
+        {!isSale && <span className="text-xs text-gray-500">/ mois</span>}
       </div>
-      <FavoriteButton propertyId={propertyId} />
+      <FavoriteButton propertyId={property.id} />
     </div>
   );
-};
+});
 
 PropertyCardPrice.displayName = "PropertyCardPrice";
 export { PropertyCardPrice };

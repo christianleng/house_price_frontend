@@ -1,25 +1,31 @@
 import { apiClient } from "@/core/api/api-client";
 import { API_ENDPOINTS } from "@/core/api/endpoints";
 import type {
-  PropertyFilters,
-  PaginatedProperties,
+  PropertySearchParams,
   Property,
   TransactionType,
   CitiesPropertiesResponse,
+  PropertyPreview,
 } from "../types/property.types";
+import type { PaginatedResponse } from "@/core/types/api.types";
 
 class PropertiesService {
-  async getProperties(filters?: PropertyFilters): Promise<PaginatedProperties> {
-    return apiClient.get<PaginatedProperties>(API_ENDPOINTS.PROPERTIES.LIST, {
-      params: filters,
-    });
+  async getProperties(
+    filters?: PropertySearchParams,
+  ): Promise<PaginatedResponse<PropertyPreview>> {
+    return apiClient.get<PaginatedResponse<PropertyPreview>>(
+      API_ENDPOINTS.PROPERTIES.LIST,
+      {
+        params: filters,
+      },
+    );
   }
 
   async getPropertyById(id: string): Promise<Property> {
     return apiClient.get<Property>(API_ENDPOINTS.PROPERTIES.DETAIL(id));
   }
 
-  async getCountProperties(filters?: PropertyFilters): Promise<number> {
+  async getCountProperties(filters?: PropertySearchParams): Promise<number> {
     return apiClient.get<number>(API_ENDPOINTS.PROPERTIES.COUNT, {
       params: filters,
     });

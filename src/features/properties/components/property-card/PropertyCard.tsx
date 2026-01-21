@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { PropertyCardMedia } from "./PropertyCardMedia";
 import { PropertyCardPrice } from "./PropertyCardPrice";
 import { PropertyCardMeta } from "./PropertyCardMeta";
-import type { PropertySummary } from "../../types/property.types";
+import type { PropertyPreview } from "../../types/property.types";
 
 interface IPropertyCardProps {
-  property: PropertySummary;
+  property: PropertyPreview;
   isPriority?: boolean;
 }
 
@@ -26,13 +26,7 @@ const PropertyCard = memo(
           isPriority={isPriority}
         />
         <div className="flex flex-col gap-1.5 py-3 flex-1">
-          <PropertyCardPrice
-            price={property.price}
-            price_per_sqm={property.price_per_sqm}
-            propertyId={property.id}
-            transaction_type={property.transaction_type}
-            rent_price_monthly={property.rent_price_monthly}
-          />
+          <PropertyCardPrice property={property} />
           <PropertyCardMeta property={property} />
         </div>
       </Link>
