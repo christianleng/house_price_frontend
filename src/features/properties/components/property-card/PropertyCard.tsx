@@ -30,6 +30,8 @@ const PropertyCard = memo(
             price={property.price}
             price_per_sqm={property.price_per_sqm}
             propertyId={property.id}
+            transaction_type={property.transaction_type}
+            rent_price_monthly={property.rent_price_monthly}
           />
           <PropertyCardMeta property={property} />
         </div>

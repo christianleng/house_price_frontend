@@ -53,8 +53,9 @@ export interface Property {
   latitude: number;
   longitude: number;
 
-  price: number;
-  price_per_sqm: number;
+  //? null en cas de location
+  price: number | null;
+  price_per_sqm: number | null;
 
   property_type: PropertyType;
   surface_area: number;
@@ -74,11 +75,17 @@ export interface Property {
   parking_spaces: number | null;
 
   energy_rating: EnergyRating | null;
-  heating_type: HeatingType;
+  heating_type: HeatingType | null;
 
   construction_year: number | null;
   available_from: string | null;
   is_furnished: boolean | null;
+
+  //? POUR LA LOCATION
+  transaction_type: TransactionType;
+  rent_price_monthly: number | null;
+  deposit: number | null;
+  charges_included: boolean | null;
 
   created_at: string;
   updated_at: string | null;
@@ -92,8 +99,12 @@ export interface PropertySummary {
   title: string;
   city: string;
   postal_code: string;
+
   price: number | null;
   price_per_sqm: number | null;
+  rent_price_monthly: number | null;
+  deposit: number | null;
+
   property_type: PropertyType;
   surface_area: number;
   rooms: number;
@@ -103,8 +114,7 @@ export interface PropertySummary {
   created_at: string;
   thumbnail_url: string | null;
   transaction_type: TransactionType;
-  rent_price_monthly: number;
-  energy_rating: EnergyRating;
+  energy_rating: EnergyRating | null;
   photos_count: number;
 }
 

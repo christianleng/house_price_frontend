@@ -1,4 +1,3 @@
-import { queryClient } from "@/app/providers/QueryProvider";
 import { propertiesKeys } from "@/features/properties/api/properties.queries";
 import { propertiesService } from "@/features/properties/api/properties.service";
 import { RootLayout } from "@/app/layouts/RootLayout";
@@ -8,6 +7,7 @@ import { favoriteKeys } from "@/features/favorite/api/favorites.queries";
 import { favoritesService } from "@/features/favorite/api/favorites.service";
 import { tokenStorage } from "@/features/auth/api/token.storage";
 import RootErrorBoundary from "@/core/components/RootErrorBoundary";
+import { queryClient } from "../providers/query-client";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -34,13 +34,6 @@ export const routes = [
     HydrateFallback: null, //TODO add fallback
     ErrorBoundary: RootErrorBoundary,
     children: [
-      {
-        path: "test/error",
-        lazy: async () => {
-          const module = await import("@/core/components/test/CrashTest");
-          return { Component: module.default };
-        },
-      },
       {
         index: true,
         lazy: async () => {
@@ -117,6 +110,7 @@ export const routes = [
           };
         },
         loader: async () => {
+          if (!tokenStorage.isAuthenticated()) return null;
           await queryClient.prefetchQuery({
             queryKey: favoriteKeys.lists(),
             queryFn: () => favoritesService.getFavoriteProperties(),
