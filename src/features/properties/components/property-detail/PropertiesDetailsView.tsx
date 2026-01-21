@@ -1,81 +1,102 @@
 import { Card } from "@/core/ui/card";
 import { Button } from "@/core/ui/button";
-import type { Property } from "@/core/types";
+import type { Property } from "../../types/property.types";
+import type { ReactNode } from "react";
+import { TRANSACTION_TYPE } from "../../types/property.types";
 
 interface IPropertiesDetailsView {
   property: Property;
 }
 
 const PropertiesDetailsView = ({ property }: IPropertiesDetailsView) => {
+  const isRent = property.transaction_type === TRANSACTION_TYPE.RENT;
+  const displayPrice = isRent ? property.rent_price_monthly : property.price;
+
   return (
     <div className="container max-w-4/5 m-auto p-4">
       <h1 className="text-4xl font-bold mb-2">{property.title}</h1>
-      <p className="text-gray-600 mb-6">
-        {property.city} - {property.postal_code} - {property.neighborhood}
+      <p className="text-gray-600 mb-6 italic">
+        {property.city} ({property.postal_code}) - {property.neighborhood}
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
-          <Card className="overflow-hidden">
-            <div className="h-96 bg-gray-200 flex items-center justify-center">
+          <Card className="overflow-hidden border-none shadow-sm">
+            <div className="h-96 bg-gray-200 flex items-center justify-center rounded-xl">
               <span className="text-gray-400">Images à venir</span>
             </div>
           </Card>
 
           <Card className="p-6">
             <h2 className="text-2xl font-semibold mb-4">Description</h2>
-            <p className="text-gray-700 whitespace-pre-line">
+            <p className="text-gray-700 whitespace-pre-line leading-relaxed">
               {property.description || "Pas de description disponible"}
             </p>
           </Card>
 
           <Card className="p-6">
             <h2 className="text-2xl font-semibold mb-4">Caractéristiques</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <span className="text-gray-600">Surface :</span>
-                <span className="ml-2 font-semibold">
-                  {property.surface_area}m²
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-600">Pièces :</span>
-                <span className="ml-2 font-semibold">{property.rooms}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Chambres :</span>
-                <span className="ml-2 font-semibold">{property.bedrooms}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Type :</span>
-                <span className="ml-2 font-semibold">
-                  {property.property_type}
-                </span>
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <DetailItem
+                label="Surface"
+                value={`${property.surface_area} m²`}
+              />
+              <DetailItem label="Pièces" value={property.rooms} />
+              <DetailItem label="Chambres" value={property.bedrooms} />
+              <DetailItem label="Type" value={property.property_type} />
+
+              {isRent && (
+                <DetailItem
+                  label="Ameublement"
+                  value={property.is_furnished ? "Meublé" : "Non meublé"}
+                />
+              )}
+
+              {property.available_from && (
+                <DetailItem
+                  label="Disponibilité"
+                  value={new Date(property.available_from).toLocaleDateString()}
+                />
+              )}
+
               {property.energy_rating && (
-                <div>
-                  <span className="text-gray-600">DPE :</span>
-                  <span className="ml-2 font-semibold">
-                    {property.energy_rating}
-                  </span>
-                </div>
+                <DetailItem
+                  label="DPE"
+                  value={property.energy_rating}
+                  highlight
+                />
               )}
             </div>
           </Card>
         </div>
 
         <div className="space-y-6">
-          <Card className="p-6 sticky top-4">
-            <div className="text-3xl font-bold text-blue-600 mb-4">
-              {property.price.toLocaleString()} €
+          <Card className="p-6 sticky top-4 shadow-lg border-t-4 border-t-blue-600">
+            <div className="text-3xl font-bold text-blue-600 mb-1">
+              {displayPrice?.toLocaleString()} €
+              {isRent && (
+                <span className="text-sm text-gray-500 ml-1">/ mois</span>
+              )}
             </div>
-            <div className="text-gray-600 mb-6">
-              {property.price_per_sqm.toLocaleString()} €/m²
+
+            {!isRent && property.price_per_sqm && (
+              <div className="text-gray-500 mb-6 text-sm">
+                {property.price_per_sqm.toLocaleString()} €/m²
+              </div>
+            )}
+
+            {isRent && property.deposit && (
+              <div className="text-sm text-gray-500 mb-6">
+                Dépôt de garantie : {property.deposit.toLocaleString()} €
+              </div>
+            )}
+
+            <div className="flex flex-col gap-3">
+              <Button className="w-full h-12 text-lg">Contacter l'agent</Button>
+              <Button variant="outline" className="w-full">
+                Ajouter aux favoris
+              </Button>
             </div>
-            <Button className="w-full mb-3">Contacter l'agent</Button>
-            <Button variant="outline" className="w-full">
-              Ajouter aux favoris
-            </Button>
           </Card>
         </div>
       </div>
@@ -83,5 +104,21 @@ const PropertiesDetailsView = ({ property }: IPropertiesDetailsView) => {
   );
 };
 
-PropertiesDetailsView.displayName = "PropertiesDetailsView";
+const DetailItem = ({
+  label,
+  value,
+  highlight = false,
+}: {
+  label: string;
+  value: ReactNode;
+  highlight?: boolean;
+}) => (
+  <div className="flex flex-col">
+    <span className="text-sm text-gray-500">{label}</span>
+    <span className={`font-semibold ${highlight ? "text-green-600" : ""}`}>
+      {value}
+    </span>
+  </div>
+);
+
 export default PropertiesDetailsView;

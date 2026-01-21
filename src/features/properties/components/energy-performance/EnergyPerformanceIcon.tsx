@@ -1,4 +1,4 @@
-import type { EnergyRating } from "@/core/types";
+import type { EnergyRating } from "../../types/property.types";
 
 interface EnergyPerformanceProps {
   value: EnergyRating;
