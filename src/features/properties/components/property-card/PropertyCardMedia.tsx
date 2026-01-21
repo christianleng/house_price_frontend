@@ -2,7 +2,7 @@ import { memo, useState } from "react";
 import { Camera01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import EnergyPerformanceIcon from "../energy-performance/EnergyPerformanceIcon";
-import type { EnergyRating } from "@/core/types";
+import type { EnergyRating } from "../../types/property.types";
 
 interface Props {
   thumbnail_url: string | null;

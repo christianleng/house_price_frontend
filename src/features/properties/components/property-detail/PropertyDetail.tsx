@@ -12,7 +12,7 @@ const PropertyDetail = observer(
       isLoading,
       error,
       refetch,
-    } = useProperty(propertyId!);
+    } = useProperty(propertyId ?? "");
 
     const handleError = useCallback(
       (err: Error, retry: () => void) => (
