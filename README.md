@@ -23,23 +23,21 @@ Le projet illustre une réflexion d'ingénieur via :
 
 ## 🏗️ Architecture & Décisions Techniques
 
-### Architecture Frontend : Organisation par "Features"
+### Organisation Modulaire (Feature-Based Architecture)
 
-Le code utilise une structure domain-driven (orientée domaine) plutôt qu'une séparation par couches techniques. Cette approche résout trois problèmes critiques :
+L'application est structurée par domaines métier plutôt que par types de fichiers. Chaque fonctionnalité (`feature`) est un module autonome contenant sa propre logique d'API, ses composants, son store et ses types.
 
-- **Itération Produit Accélérée :** La logique métier est regroupée, réduisant la navigation entre les fichiers.
-- **Prévention des Régressions :** Les modifications d'une fonctionnalité sont isolées dans leur dossier respectif.
-- **Évolution Facilitée :** L'ajout de nouvelles fonctionnalités n'impacte pas les modules existants.
+**Encapsulation stricte :** Une feature comme auth gère l'intégralité de son cycle de vie, incluant le token.storage.ts.
 
-```
-src/features/properties/          # Domaine métier autonome
-  ├── api/                        # Requêtes, mutations, couche service
-  ├── components/                 # UI spécifique au domaine
-  ├── hooks/                      # Logique métier encapsulée
-  └── types/                      # Modèles de données
-```
+**Faible couplage :** Les composants globaux comme la SearchBar sont hébergés dans properties car ils dépendent de son domaine métier, même s'ils sont affichés dans le layout global.
 
-**Principe de design :** Les composants génériques vivent dans core/ui/. Les composants liés au métier restent dans leur feature. Cela évite le couplage et garde la couche partagée légère.
+### Hiérarchie des Composants : Core vs Shared
+
+`core/ui/` : Les atomes du Design System (Shadcn). Composants purs sans logique métier (Boutons, Inputs, Badges).
+
+`shared/components/` : Molécules réutilisables et composants marketing (Carrousels, InfoCards, Skeletons) qui ne sont pas liés à un domaine spécifique.
+
+`features/X/components/` : Organismes complexes liés au métier (Cartes de biens, Boutons de favoris, Filtres).
 
 ### Design System : L'approche "Tokens-First"
 
@@ -95,23 +93,16 @@ Optimisation du LCP (Largest Contentful Paint) par la gestion intelligente des p
 
 ```
 src/
-├── app/                          # Cœur de l'application
-│   ├── layouts/                  # Layouts (RootLayout stable)
-│   ├── providers/                # Providers globaux (Query, Router)
-│   └── router/                   # Configuration des routes & loaders
-│
-├── core/                         # Partagé par TOUTES les features
-│   ├── api/                      # Client API, intercepteurs
-│   ├── config/                   # Design tokens, constantes
-│   ├── components/               # Composants UI atomiques (Base UI)
-│   └── stores/                   # Stores MobX globaux
-│
-├── features/                     # Modules orientés domaine
-│   ├── properties/               # Logique immobilière (vente/location)
-│   ├── header/                   # Navigation et recherche stable
-│   └── home/                     # Composants spécifiques à la page d'accueil
-│
-└── pages/                        # Pages légères (couche de routage)
+├── app/                  # Configuration (Router, Providers, Layouts)
+├── core/                 # Le "Noyau" (API Client, Design System UI, Config)
+├── shared/               # Briques réutilisables (Hooks, Utils, Marketing)
+├── features/             # Logique métier isolée par domaines
+│   ├── auth/             # Login, Token storage, Guard
+│   ├── properties/       # Biens, Recherche, Filtres, Cartes
+│   ├── favorite/         # Gestion des favoris (Bouton, Queries)
+│   └── profile/          # Dashboard utilisateur
+├── pages/                # Composition des features par route
+└── styles/               # CSS global et thèmes
 ```
 
 ## 🔄 Workflow de Développement
@@ -130,7 +121,7 @@ refactor(layout): stabilize header for CLS optimization
 
 - Mode Strict TypeScript : Erreurs détectées à la compilation.
 - Zéro type any : Typage fort sur l'ensemble de la stack.
-- Analyse de performance : Utilisation systématique du Profiler React et de Lighthouse pour valider chaque changement architectural.
+- Analyse de performance : Utilisation systématique du Profiler React, React Scan et de Lighthouse pour valider chaque changement architectural.
 
 ## 👨‍💻 Auteur
 

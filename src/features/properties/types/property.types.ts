@@ -188,5 +188,3 @@ export interface CitiesPropertiesResponse {
   data: Record<string, CityPropertiesResponse>;
   transaction_type: TransactionType;
 }
-
-export type ApiParams = Record<string, unknown>;

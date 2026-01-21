@@ -1,5 +1,6 @@
 import { env } from "@/core/config/01-env";
 import { ApiError } from "./api-error";
+import { tokenStorage } from "../../features/auth/api/token.storage";
 
 interface RequestConfig extends RequestInit {
   params?: Record<string, unknown>;
@@ -7,8 +8,6 @@ interface RequestConfig extends RequestInit {
 
 class APIClient {
   private baseURL: string;
-  private isRefreshing = false;
-  private refreshPromise: Promise<void> | null = null;
 
   constructor(baseURL: string) {
     this.baseURL = baseURL;
@@ -34,27 +33,32 @@ class APIClient {
 
   private async request<T>(
     endpoint: string,
-    { params, ...options }: RequestConfig = {}
+    { params, ...options }: RequestConfig = {},
   ): Promise<T> {
     const url = this.buildURL(endpoint, params);
+    const token = tokenStorage.getToken();
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      ...((options.headers as Record<string, string>) || {}),
+    };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
 
     const config: RequestInit = {
       ...options,
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
+      headers,
     };
 
-    let response = await fetch(url, config);
-
-    if (response.status === 401 && !endpoint.includes("/auth/refresh")) {
-      await this.handleTokenRefresh();
-      response = await fetch(url, config);
-    }
+    const response = await fetch(url, config);
 
     if (!response.ok) {
+      if (response.status === 401) {
+        tokenStorage.clearToken();
+      }
+
       throw await ApiError.fromResponse(response);
     }
 
@@ -65,39 +69,6 @@ class APIClient {
     return response.json();
   }
 
-  private async handleTokenRefresh(): Promise<void> {
-    if (this.isRefreshing && this.refreshPromise) {
-      return this.refreshPromise;
-    }
-
-    this.isRefreshing = true;
-    this.refreshPromise = this.refreshToken();
-
-    try {
-      await this.refreshPromise;
-    } finally {
-      this.isRefreshing = false;
-      this.refreshPromise = null;
-    }
-  }
-
-  private async refreshToken(): Promise<void> {
-    try {
-      const response = await fetch(`${this.baseURL}/api/auth/refresh`, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        window.location.href = "/login";
-        throw new Error("Token refresh failed");
-      }
-    } catch (error) {
-      window.location.href = "/login";
-      throw error;
-    }
-  }
-
   async get<T>(endpoint: string, config?: RequestConfig): Promise<T> {
     return this.request<T>(endpoint, { ...config, method: "GET" });
   }
@@ -105,7 +76,7 @@ class APIClient {
   async post<T>(
     endpoint: string,
     data?: unknown,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     return this.request<T>(endpoint, {
       ...config,
@@ -117,7 +88,7 @@ class APIClient {
   async put<T>(
     endpoint: string,
     data?: unknown,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     return this.request<T>(endpoint, {
       ...config,
@@ -129,7 +100,7 @@ class APIClient {
   async patch<T>(
     endpoint: string,
     data?: unknown,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     return this.request<T>(endpoint, {
       ...config,
@@ -144,7 +115,7 @@ class APIClient {
 
   async postForm<T>(
     endpoint: string,
-    data: Record<string, string>
+    data: Record<string, string>,
   ): Promise<T> {
     const formData = new URLSearchParams();
     Object.entries(data).forEach(([key, value]) => {
@@ -155,7 +126,6 @@ class APIClient {
 
     const response = await fetch(url, {
       method: "POST",
-      credentials: "include",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },

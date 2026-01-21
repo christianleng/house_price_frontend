@@ -1,12 +1,12 @@
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { propertiesService } from "./properties.service";
 import type {
-  Property,
   PropertyFilters,
-  PaginatedProperties,
-  CitiesPropertiesResponse,
   TransactionType,
-} from "@/core/types";
+  PaginatedProperties,
+  Property,
+  CitiesPropertiesResponse,
+} from "../types/property.types";
 
 export const propertiesKeys = {
   all: ["properties"] as const,
@@ -26,7 +26,7 @@ export const propertiesKeys = {
   citiesList: (
     cities: string[],
     transactionType: TransactionType,
-    pageSize: number
+    pageSize: number,
   ) =>
     [
       ...propertiesKeys.cities(),
@@ -35,7 +35,7 @@ export const propertiesKeys = {
 };
 
 export function useProperties(
-  filters?: PropertyFilters
+  filters?: PropertyFilters,
 ): UseQueryResult<PaginatedProperties, Error> {
   return useQuery({
     queryKey: propertiesKeys.list(filters),
@@ -55,7 +55,7 @@ export function useProperty(id: string): UseQueryResult<Property, Error> {
 
 export function useCountProperties(
   filters?: PropertyFilters,
-  options?: { enabled?: boolean }
+  options?: { enabled?: boolean },
 ): UseQueryResult<number, Error> {
   return useQuery({
     queryKey: propertiesKeys.count(filters),
@@ -68,7 +68,7 @@ export function useCountProperties(
 export function useCitiesProperties(
   cities: string[],
   transactionType: TransactionType,
-  pageSize: number = 10
+  pageSize: number = 10,
 ): UseQueryResult<CitiesPropertiesResponse, Error> {
   return useQuery({
     queryKey: propertiesKeys.citiesList(cities, transactionType, pageSize),
@@ -76,7 +76,7 @@ export function useCitiesProperties(
       propertiesService.getPropertiesByCities(
         cities,
         transactionType,
-        pageSize
+        pageSize,
       ),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

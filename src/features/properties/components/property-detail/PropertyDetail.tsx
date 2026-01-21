@@ -1,8 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useProperty } from "../../api/properties.queries";
-import { SmartLoader } from "@/core/components/data-loading/SmartLoader";
-// import { PropertiesSkeleton } from "../PropertiesSkeleton";
-import { ErrorDisplay } from "@/core/components/data-loading/ErrorDisplay";
+import { SmartLoader } from "@/shared/components/data-loading/SmartLoader";
+import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import PropertiesDetailsView from "@/features/properties/components/property-detail/PropertiesDetailsView";
 import { useCallback } from "react";
 
@@ -19,29 +18,27 @@ const PropertyDetail = observer(
       (err: Error, retry: () => void) => (
         <ErrorDisplay error={err} onRetry={retry} />
       ),
-      []
+      [],
     );
 
     return (
-      <div className="container mx-auto px-4 py-8">
-        <SmartLoader
-          isLoading={isLoading}
-          error={error}
-          data={property}
-          skeleton={null}
-          emptyState={
-            <p className="text-center py-10">
-              Aucune propriété à vendre pour le moment.
-            </p>
-          }
-          errorFallback={handleError}
-          retryFn={refetch}
-        >
-          {(items) => <PropertiesDetailsView property={items} />}
-        </SmartLoader>
-      </div>
+      <SmartLoader
+        isLoading={isLoading}
+        error={error}
+        data={property}
+        skeleton={null}
+        emptyState={
+          <p className="text-center py-10">
+            Aucune propriété à vendre pour le moment.
+          </p>
+        }
+        errorFallback={handleError}
+        retryFn={refetch}
+      >
+        {(items) => <PropertiesDetailsView property={items} />}
+      </SmartLoader>
     );
-  }
+  },
 );
 
 export default PropertyDetail;

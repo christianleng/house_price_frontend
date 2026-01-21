@@ -1,4 +1,4 @@
-import type { PropertySummary } from "@/core/types";
+import type { PropertySummary } from "../../types/property.types";
 
 const PropertyCardMeta = ({ property }: { property: PropertySummary }) => {
   const title =

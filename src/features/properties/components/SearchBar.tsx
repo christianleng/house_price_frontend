@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { observer } from "mobx-react-lite";
-import { propertyFiltersStore } from "@/core/stores";
 import { Button } from "@/core/ui/button";
 import { PreferenceHorizontalIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import PropertyFiltersDialog from "@/features/properties/components/PropertyFiltersDialog";
-import type { PropertyType } from "@/core/types";
 import {
   Select,
   SelectContent,
@@ -13,6 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/core/ui/select";
+import { propertyFiltersStore } from "@/features/properties/store/property-filters-store";
+import type { PropertyType } from "../types/property.types";
 
 const SearchBar = observer(() => {
   const [focused, setFocused] = useState(false);
@@ -53,7 +53,7 @@ const SearchBar = observer(() => {
               onValueChange={(v) =>
                 propertyFiltersStore.setFilter(
                   "property_type",
-                  v === "all" ? undefined : (v as PropertyType)
+                  v === "all" ? undefined : (v as PropertyType),
                 )
               }
             >
@@ -76,7 +76,7 @@ const SearchBar = observer(() => {
               onValueChange={(v) =>
                 propertyFiltersStore.setFilter(
                   "max_price",
-                  v === "all" ? undefined : Number(v)
+                  v === "all" ? undefined : Number(v),
                 )
               }
             >
@@ -100,7 +100,7 @@ const SearchBar = observer(() => {
               onValueChange={(v) =>
                 propertyFiltersStore.setFilter(
                   "min_surface",
-                  v === "all" ? undefined : Number(v)
+                  v === "all" ? undefined : Number(v),
                 )
               }
             >

@@ -13,7 +13,6 @@
 ### Brand Colors
 
 - **Primary**: Teal/Turquoise (immobilier, confiance)
-
   - `--primary`: oklch(0.6 0.13 163)
   - Usage: CTA, liens, éléments interactifs principaux
 

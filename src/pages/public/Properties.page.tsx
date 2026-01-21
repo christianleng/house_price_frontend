@@ -1,3 +1,5 @@
+import { PropertiesSplitLayout } from "@/features/properties/components/layout/PropertiesSplitLayout";
+import { PropertyMap } from "@/features/properties/components/map/PropertyMap";
 import PropertiesList from "@/features/properties/components/PropertiesList";
 
 const PropertiesPage = () => {
@@ -10,7 +12,9 @@ const PropertiesPage = () => {
       />
 
       <div className="container max-w-4/5 mx-auto px-4 py-8">
-        <PropertiesList />
+        <PropertiesSplitLayout mapComponent={<PropertyMap />}>
+          <PropertiesList />
+        </PropertiesSplitLayout>
       </div>
     </>
   );

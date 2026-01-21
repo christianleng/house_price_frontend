@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { PropertyCardMedia } from "./PropertyCardMedia";
 import { PropertyCardPrice } from "./PropertyCardPrice";
 import { PropertyCardMeta } from "./PropertyCardMeta";
-import type { PropertySummary } from "@/core/types";
+import type { PropertySummary } from "../../types/property.types";
 
 interface IPropertyCardProps {
   property: PropertySummary;
@@ -29,12 +29,13 @@ const PropertyCard = memo(
           <PropertyCardPrice
             price={property.price}
             price_per_sqm={property.price_per_sqm}
+            propertyId={property.id}
           />
           <PropertyCardMeta property={property} />
         </div>
       </Link>
     );
-  }
+  },
 );
 
 PropertyCard.displayName = "PropertyCard";
