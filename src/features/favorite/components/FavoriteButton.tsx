@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router";
 import { Button } from "@/core/ui/button";
 import { useAuth } from "@/features/auth/providers/authProviders";
 

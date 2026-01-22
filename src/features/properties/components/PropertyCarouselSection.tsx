@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
 import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";

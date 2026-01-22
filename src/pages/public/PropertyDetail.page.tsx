@@ -1,4 +1,4 @@
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate } from "react-router";
 import PropertyDetail from "@/features/properties/components/property-detail/PropertyDetail";
 
 const PropertyDetailPage = () => {

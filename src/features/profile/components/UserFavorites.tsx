@@ -1,7 +1,7 @@
 import { useGetFavorites } from "@/features/favorite/api/favorites.queries";
 import type { PropertyPreview } from "@/features/properties/types/property.types";
 import { memo } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 export const UserFavorites = memo(() => {
   const { data: favorites } = useGetFavorites();
