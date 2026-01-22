@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Outlet, useNavigation } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router";
 import TopBar from "@/app/layouts/components/header/TopBar";
 import MainNavigation from "@/app/layouts/components/header/MainNavigation";
 import SearchBar from "@/features/properties/components/SearchBar";

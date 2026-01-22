@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
