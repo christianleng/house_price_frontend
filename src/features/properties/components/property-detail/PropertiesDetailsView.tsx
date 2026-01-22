@@ -2,14 +2,14 @@ import { Card } from "@/core/ui/card";
 import { Button } from "@/core/ui/button";
 import type { Property } from "../../types/property.types";
 import type { ReactNode } from "react";
-import { TRANSACTION_TYPE } from "../../types/property.types";
+import { TRANSACTION_TYPES } from "../../types/property.types";
 
 interface IPropertiesDetailsView {
   property: Property;
 }
 
 const PropertiesDetailsView = ({ property }: IPropertiesDetailsView) => {
-  const isRent = property.transaction_type === TRANSACTION_TYPE.RENT;
+  const isRent = property.transaction_type === TRANSACTION_TYPES.RENT;
   const displayPrice = isRent ? property.rent_price_monthly : property.price;
 
   return (

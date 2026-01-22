@@ -10,14 +10,14 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useCallback, useEffect, useState } from "react";
 import type {
-  PropertySummary,
+  PropertyPreview,
   TransactionType,
 } from "../../types/property.types";
 
 interface CityPropertySectionProps {
   city: string;
   transactionType: TransactionType;
-  properties: PropertySummary[];
+  properties: PropertyPreview[];
   totalCount: number;
   carouselOptions?: EmblaOptionsType;
 }

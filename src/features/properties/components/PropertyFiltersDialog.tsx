@@ -31,7 +31,7 @@ import {
   EnergyIcon,
 } from "@hugeicons/core-free-icons";
 import type {
-  PropertyFilters,
+  PropertySearchParams,
   TransactionType,
   PropertyType,
   EnergyRating,
@@ -41,8 +41,8 @@ import type {
 interface IPropertyFiltersDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  initialFilters: PropertyFilters;
-  onApply: (filters: PropertyFilters) => void;
+  initialFilters: PropertySearchParams;
+  onApply: (filters: PropertySearchParams) => void;
 }
 
 const PropertyFiltersDialog = observer(
@@ -53,7 +53,7 @@ const PropertyFiltersDialog = observer(
     onApply,
   }: IPropertyFiltersDialogProps) => {
     const [localFilters, setLocalFilters] =
-      useState<PropertyFilters>(initialFilters);
+      useState<PropertySearchParams>(initialFilters);
 
     const debouncedFilters = useDebounce(localFilters, 400);
     // const { data: totalCount } = useCountProperties(debouncedFilters);
@@ -63,10 +63,15 @@ const PropertyFiltersDialog = observer(
     useEffect(() => {
       if (open) setLocalFilters(initialFilters);
     }, [open, initialFilters]);
+    type BooleanFilterKeys =
+      | "has_garden"
+      | "has_parking"
+      | "has_balcony"
+      | "has_elevator";
 
-    const updateFilter = <K extends keyof PropertyFilters>(
+    const updateFilter = <K extends keyof PropertySearchParams>(
       key: K,
-      value: PropertyFilters[K] | "",
+      value: PropertySearchParams[K] | "",
     ) => {
       setLocalFilters((prev) => ({
         ...prev,
@@ -224,11 +229,11 @@ const PropertyFiltersDialog = observer(
             ].map(({ key, label, icon }) => (
               <div key={key} className="flex items-center gap-2">
                 <Checkbox
-                  checked={!!localFilters[key as keyof PropertyFilters]}
+                  checked={Boolean(localFilters[key as BooleanFilterKeys])}
                   onCheckedChange={(checked) =>
                     updateFilter(
-                      key as keyof PropertyFilters,
-                      checked ? true : undefined,
+                      key as BooleanFilterKeys,
+                      checked === true ? true : undefined,
                     )
                   }
                 />

@@ -1,6 +1,6 @@
-import type { PropertySummary } from "../../types/property.types";
+import type { PropertyPreview } from "../../types/property.types";
 
-const PropertyCardMeta = ({ property }: { property: PropertySummary }) => {
+const PropertyCardMeta = ({ property }: { property: PropertyPreview }) => {
   const title =
     property.transaction_type === "sale"
       ? "Appartement à vendre"
