@@ -26,7 +26,7 @@ const PropertiesList = observer(() => {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 py-8">
       <div>
         <h1 className="text-sm font-bold text-gray-900">
           Propriétés disponibles
