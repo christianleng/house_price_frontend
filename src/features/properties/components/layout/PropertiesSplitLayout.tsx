@@ -12,7 +12,7 @@ export const PropertiesSplitLayout = ({
   return (
     <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
       <div className="w-full xl:w-3/5 h-full overflow-y-auto scrollbar-hide">
-        <div className="px-4 pb-20">{children}</div>
+        <div className="pb-20">{children}</div>
       </div>
 
       <aside className="hidden xl:block xl:w-2/5 h-full relative py-8">
