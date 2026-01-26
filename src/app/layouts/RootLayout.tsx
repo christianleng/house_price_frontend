@@ -11,6 +11,7 @@ const MemoizedSearchBar = memo(SearchBar);
 
 const RootLayout = () => {
   const navigation = useNavigation();
+  //? En cas ou si le loader prend plus de temps que le lazy, je mets donc le progressBar
   const isNavigating = navigation.state === "loading";
 
   return (

@@ -1,4 +1,8 @@
-import { useQuery, type UseQueryResult } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useQuery,
+  type UseQueryResult,
+} from "@tanstack/react-query";
 import { propertiesService } from "./properties.service";
 import type {
   PropertySearchParams,
@@ -42,6 +46,7 @@ export function useProperties(
     queryKey: propertiesKeys.list(filters),
     queryFn: () => propertiesService.getProperties(filters),
     staleTime: 5 * 60 * 1000,
+    placeholderData: keepPreviousData,
   });
 }
 
