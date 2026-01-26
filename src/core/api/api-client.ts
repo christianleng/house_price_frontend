@@ -1,9 +1,9 @@
 import { env } from "@/core/config/01-env";
 import { ApiError } from "./api-error";
-import { tokenStorage } from "../../features/auth/api/token.storage";
+import { tokenStorage } from "@/features/auth/api/token.storage";
 
-interface RequestConfig extends RequestInit {
-  params?: Record<string, unknown>;
+interface RequestConfig<P extends object = object> extends RequestInit {
+  params?: P;
 }
 
 class APIClient {
@@ -13,7 +13,7 @@ class APIClient {
     this.baseURL = baseURL;
   }
 
-  private buildURL(endpoint: string, params?: Record<string, unknown>): string {
+  private buildURL<P extends object>(endpoint: string, params?: P): string {
     const url = new URL(`${this.baseURL}${endpoint}`);
 
     if (params) {
@@ -31,9 +31,9 @@ class APIClient {
     return url.toString();
   }
 
-  private async request<T>(
+  private async request<T, P extends object = object>(
     endpoint: string,
-    { params, ...options }: RequestConfig = {},
+    { params, ...options }: RequestConfig<P> = {},
   ): Promise<T> {
     const url = this.buildURL(endpoint, params);
     const token = tokenStorage.getToken();
@@ -43,9 +43,7 @@ class APIClient {
       ...((options.headers as Record<string, string>) || {}),
     };
 
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
+    if (token) headers["Authorization"] = `Bearer ${token}`;
 
     const config: RequestInit = {
       ...options,
@@ -62,55 +60,59 @@ class APIClient {
       throw await ApiError.fromResponse(response);
     }
 
-    if (response.status === 204) {
-      return undefined as T;
-    }
+    if (response.status === 204) return undefined as T;
 
     return response.json();
   }
 
-  async get<T>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.request<T>(endpoint, { ...config, method: "GET" });
+  async get<T, P extends object = object>(
+    endpoint: string,
+    config?: RequestConfig<P>,
+  ): Promise<T> {
+    return this.request<T, P>(endpoint, { ...config, method: "GET" });
   }
 
-  async post<T>(
+  async post<T, P extends object = object>(
     endpoint: string,
     data?: unknown,
-    config?: RequestConfig,
+    config?: RequestConfig<P>,
   ): Promise<T> {
-    return this.request<T>(endpoint, {
+    return this.request<T, P>(endpoint, {
       ...config,
       method: "POST",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  async put<T>(
+  async put<T, P extends object = object>(
     endpoint: string,
     data?: unknown,
-    config?: RequestConfig,
+    config?: RequestConfig<P>,
   ): Promise<T> {
-    return this.request<T>(endpoint, {
+    return this.request<T, P>(endpoint, {
       ...config,
       method: "PUT",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  async patch<T>(
+  async patch<T, P extends object = object>(
     endpoint: string,
     data?: unknown,
-    config?: RequestConfig,
+    config?: RequestConfig<P>,
   ): Promise<T> {
-    return this.request<T>(endpoint, {
+    return this.request<T, P>(endpoint, {
       ...config,
       method: "PATCH",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  async delete<T>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.request<T>(endpoint, { ...config, method: "DELETE" });
+  async delete<T, P extends object = object>(
+    endpoint: string,
+    config?: RequestConfig<P>,
+  ): Promise<T> {
+    return this.request<T, P>(endpoint, { ...config, method: "DELETE" });
   }
 
   async postForm<T>(
@@ -132,9 +134,7 @@ class APIClient {
       body: formData,
     });
 
-    if (!response.ok) {
-      throw await ApiError.fromResponse(response);
-    }
+    if (!response.ok) throw await ApiError.fromResponse(response);
 
     return response.json();
   }

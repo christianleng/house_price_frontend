@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
 import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
@@ -12,6 +12,7 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PropertySearchParams } from "../types/property.types";
+import { EmptyProperties } from "./EmptyProperties";
 
 interface PropertyCarouselSectionProps {
   title: string;
@@ -63,7 +64,7 @@ const PropertyCarouselSection = observer(
       [transactionType],
     );
 
-    const { data, isError, error, refetch } = useProperties(filters);
+    const { data, isError, error, isLoading, refetch } = useProperties(filters);
 
     if (isError) {
       return (
@@ -72,6 +73,7 @@ const PropertyCarouselSection = observer(
         </div>
       );
     }
+    const hasNoProperties = !isLoading && data?.items.length === 0;
 
     return (
       <div className="flex flex-col gap-4">
@@ -84,37 +86,44 @@ const PropertyCarouselSection = observer(
             <HugeiconsIcon icon={ArrowRight01Icon} className="h-5 w-5" />
           </Link>
 
-          <div className="embla__buttons">
-            <PrevButton
-              onClick={nav.onPrevButtonClick}
-              disabled={nav.prevBtnDisabled}
-            />
-            <NextButton
-              onClick={nav.onNextButtonClick}
-              disabled={nav.nextBtnDisabled}
-            />
-          </div>
+          {!hasNoProperties && (
+            <div className="embla__buttons">
+              <PrevButton
+                onClick={nav.onPrevButtonClick}
+                disabled={nav.prevBtnDisabled}
+              />
+              <NextButton
+                onClick={nav.onNextButtonClick}
+                disabled={nav.nextBtnDisabled}
+              />
+            </div>
+          )}
         </div>
 
-        <section className="embla">
-          <div className="embla__viewport" ref={emblaRef}>
-            <div className="embla__container">
-              {data?.items.map((property, index) => {
-                const isVisible = slidesInView.includes(index);
-
-                return (
-                  <div key={property.id} className="embla__slide">
-                    {isVisible ? (
-                      <PropertyCard property={property} />
-                    ) : (
-                      <div className="h-80 w-full bg-gray-50 animate-pulse rounded-xl" />
-                    )}
-                  </div>
-                );
-              })}
+        {hasNoProperties ? (
+          <EmptyProperties
+            message={`Nous n'avons actuellement aucun bien en ${transactionType === "sale" ? "vente" : "location"}.`}
+          />
+        ) : (
+          <section className="embla">
+            <div className="embla__viewport" ref={emblaRef}>
+              <div className="embla__container">
+                {data?.items.map((property, index) => {
+                  const isVisible = slidesInView.includes(index);
+                  return (
+                    <div key={property.id} className="embla__slide">
+                      {isVisible ? (
+                        <PropertyCard property={property} />
+                      ) : (
+                        <div className="h-80 w-full bg-gray-50 animate-pulse rounded-xl" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     );
   },

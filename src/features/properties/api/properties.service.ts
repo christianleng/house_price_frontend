@@ -7,7 +7,7 @@ import type {
   CitiesPropertiesResponse,
   PropertyPreview,
 } from "../types/property.types";
-import type { PaginatedResponse } from "@/core/types/api.types";
+import type { PaginatedResponse } from "@/core/types";
 
 class PropertiesService {
   async getProperties(

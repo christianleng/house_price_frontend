@@ -15,7 +15,7 @@ import {
   FieldSeparator,
 } from "@/core/ui/field";
 import { Input } from "@/core/ui/input";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigation } from "react-router";
 import { useAuth } from "../providers/authProviders";
 import { useState } from "react";
 import { z } from "zod";
@@ -34,8 +34,9 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<"div">) {
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
-  const { login, isLoading } = useAuth();
+  const { login } = useAuth();
   const [globalError, setGlobalError] = useState<string | null>(null);
 
   const {
@@ -45,6 +46,9 @@ export function LoginForm({
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
+
+  const isPending =
+    navigation.state !== "idle" || navigation.formData !== undefined;
 
   const onSubmit = async (data: LoginSchema) => {
     setGlobalError(null);
@@ -136,8 +140,8 @@ export function LoginForm({
               </Field>
 
               <Field>
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Connexion..." : "Login"}
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  {isPending ? "Connexion..." : "Login"}
                 </Button>
 
                 <FieldDescription className="text-center">
