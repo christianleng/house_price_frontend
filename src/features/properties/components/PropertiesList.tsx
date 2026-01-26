@@ -4,10 +4,16 @@ import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import { PropertyCard } from "./property-card/PropertyCard";
 import { propertyFiltersStore } from "../store/property-filters-store";
 import { EmptyProperties } from "./EmptyProperties";
+import { Pagination } from "@/shared/components/pagination";
 
 const PropertiesList = observer(() => {
-  const { filters } = propertyFiltersStore;
-  const { data, isError, error, isLoading, refetch } = useProperties(filters);
+  const { filters, setFilters } = propertyFiltersStore;
+  const { data, isError, error, isLoading, refetch, isPlaceholderData } =
+    useProperties(filters);
+
+  const handlePageChange = (newPage: number) => {
+    setFilters({ ...filters, page: newPage });
+  };
 
   if (isError) {
     return (
@@ -40,6 +46,15 @@ const PropertiesList = observer(() => {
               </div>
             ))}
           </div>
+
+          {data && (
+            <Pagination
+              currentPage={data.page}
+              totalPages={data.total_pages}
+              onPageChange={handlePageChange}
+              isLoading={isPlaceholderData}
+            />
+          )}
         </>
       )}
     </div>

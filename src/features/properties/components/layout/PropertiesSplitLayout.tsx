@@ -10,7 +10,7 @@ export const PropertiesSplitLayout = ({
   mapComponent,
 }: PropertiesSplitLayoutProps) => {
   return (
-    <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden">
+    <div className="flex h-[calc(100vh-64px)] w-full overflow-hidden gap-4">
       <div className="w-full xl:w-3/5 h-full overflow-y-auto scrollbar-hide">
         <div className="pb-20">{children}</div>
       </div>
