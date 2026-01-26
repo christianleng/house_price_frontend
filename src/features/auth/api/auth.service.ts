@@ -28,20 +28,12 @@ export const authService = {
     return response;
   },
 
-  async getMe(): Promise<User | null> {
-    try {
-      return await apiClient.get<User>(API_ENDPOINTS.AUTH.ME);
-    } catch {
-      return null;
-    }
+  async getMe(): Promise<User> {
+    return await apiClient.get<User>(API_ENDPOINTS.AUTH.ME);
   },
 
-  async logout(): Promise<void | null> {
+  async logout(): Promise<void> {
     tokenStorage.clearToken();
-    try {
-      await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
-    } catch {
-      return null;
-    }
+    await apiClient.post(API_ENDPOINTS.AUTH.LOGOUT);
   },
 };

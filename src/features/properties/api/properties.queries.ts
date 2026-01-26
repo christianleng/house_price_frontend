@@ -11,7 +11,7 @@ import type {
   CitiesPropertiesResponse,
   PropertyPreview,
 } from "../types/property.types";
-import type { PaginatedResponse } from "@/core/types/api.types";
+import type { PaginatedResponse } from "@/core/types";
 
 export const propertiesKeys = {
   all: ["properties"] as const,
