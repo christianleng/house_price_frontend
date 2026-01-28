@@ -12,22 +12,30 @@ import type { PaginatedResponse } from "@/core/types";
 class PropertiesService {
   async getProperties(
     filters?: PropertySearchParams,
+    signal?: AbortSignal,
   ): Promise<PaginatedResponse<PropertyPreview>> {
     return apiClient.get<PaginatedResponse<PropertyPreview>>(
       API_ENDPOINTS.PROPERTIES.LIST,
       {
         params: filters,
+        signal,
       },
     );
   }
 
-  async getPropertyById(id: string): Promise<Property> {
-    return apiClient.get<Property>(API_ENDPOINTS.PROPERTIES.DETAIL(id));
+  async getPropertyById(id: string, signal?: AbortSignal): Promise<Property> {
+    return apiClient.get<Property>(API_ENDPOINTS.PROPERTIES.DETAIL(id), {
+      signal,
+    });
   }
 
-  async getCountProperties(filters?: PropertySearchParams): Promise<number> {
+  async getCountProperties(
+    filters?: PropertySearchParams,
+    signal?: AbortSignal,
+  ): Promise<number> {
     return apiClient.get<number>(API_ENDPOINTS.PROPERTIES.COUNT, {
       params: filters,
+      signal,
     });
   }
 
@@ -35,6 +43,7 @@ class PropertiesService {
     cities: string[],
     transactionType: TransactionType,
     pageSize: number = 10,
+    signal?: AbortSignal,
   ): Promise<CitiesPropertiesResponse> {
     return apiClient.get<CitiesPropertiesResponse>(
       API_ENDPOINTS.PROPERTIES.BY_CITIES,
@@ -46,6 +55,7 @@ class PropertiesService {
           sort_order: "desc",
           cities,
         },
+        signal,
       },
     );
   }

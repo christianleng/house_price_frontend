@@ -3,9 +3,10 @@ import type { Favorite, FavoriteList } from "../types/favorite.types";
 import { API_ENDPOINTS } from "@/core/api/endpoints";
 
 export const favoritesService = {
-  async getFavoriteProperties(): Promise<FavoriteList> {
+  async getFavoriteProperties(signal?: AbortSignal): Promise<FavoriteList> {
     const response = await apiClient.get<FavoriteList>(
       API_ENDPOINTS.FAVORITE.LIST,
+      { signal },
     );
 
     return response;
