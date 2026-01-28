@@ -12,7 +12,7 @@ export const favoriteKeys = {
 export const useGetFavorites = (options = {}) => {
   return useQuery({
     queryKey: favoriteKeys.lists(),
-    queryFn: () => favoritesService.getFavoriteProperties(),
+    queryFn: ({ signal }) => favoritesService.getFavoriteProperties(signal),
     staleTime: 5 * 60 * 1000,
     enabled: tokenStorage.isAuthenticated(),
     ...options,
