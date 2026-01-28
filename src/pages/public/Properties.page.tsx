@@ -1,5 +1,5 @@
 import { PropertiesSplitLayout } from "@/features/properties/components/layout/PropertiesSplitLayout";
-import { PropertyMap } from "@/features/properties/components/map/PropertyMap";
+import PropertyMap from "@/features/properties/components/map/PropertyMap";
 import PropertiesList from "@/features/properties/components/PropertiesList";
 
 const PropertiesPage = () => {

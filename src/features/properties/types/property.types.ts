@@ -34,10 +34,16 @@ export const TRANSACTION_TYPES = {
 export type TransactionType =
   (typeof TRANSACTION_TYPES)[keyof typeof TRANSACTION_TYPES];
 
+type Brand<K, T> = K & { __brand: T };
+
+export type PropertyId = Brand<string, "PropertyId">;
+export type AgentId = Brand<string, "AgentId">;
+export type PropertyReference = Brand<string, "PropertyReference">;
+
 interface BaseProperty {
-  id: string;
-  agent_id: string;
-  reference: string;
+  id: PropertyId;
+  agent_id: AgentId;
+  reference: PropertyReference;
   title: string;
   description: string | null;
   address: string | null;
