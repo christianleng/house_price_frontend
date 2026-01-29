@@ -20,14 +20,14 @@ const MainNavigation = () => {
   const [value, setValue] = useState<string | null>(null);
 
   return (
-    <div className="flex items-center justify-between gap-12">
+    <div className="flex w-full items-center justify-between gap-12">
       <Link to="/" className="flex items-center gap-3">
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-linear-to-r from-brand-700 to-brand-400 shadow-brand">
           <HugeiconsIcon icon={Home12Icon} />
         </div>
-        <div className="text-2xl font-bold tracking-[-0.5px] text-secondary-foreground">
+        <h1 className="text-2xl font-bold tracking-[-0.5px] text-secondary-foreground">
           House Price
-        </div>
+        </h1>
       </Link>
 
       <NavigationMenu

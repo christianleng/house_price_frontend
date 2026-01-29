@@ -6,7 +6,7 @@ import { LazySection } from "@/core/components/LazySection";
 
 const HomePage = () => {
   return (
-    <div className="container max-w-4/5 mx-auto px-4 py-16 flex flex-col gap-16">
+    <div className="py-16 flex flex-col gap-16">
       <PropertyCarouselSection
         title="Dernières propriétés à vendre"
         transactionType="sale"
