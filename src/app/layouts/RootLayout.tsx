@@ -11,8 +11,12 @@ const MemoizedSearchBar = memo(SearchBar);
 
 const RootLayout = () => {
   const navigation = useNavigation();
-  //? En cas ou si le loader prend plus de temps que le lazy, je mets donc le progressBar
   const isNavigating = navigation.state === "loading";
+  const isHomePage = location.pathname === "/";
+
+  const headerContainerClass = isHomePage
+    ? "container mx-auto max-w-4/5 px-4"
+    : "lg:px-12 px-4";
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -25,25 +29,19 @@ const RootLayout = () => {
       <MemoizedTopBar />
 
       <header
-        className="
-          bg-header-bg border-header-border sticky top-0 z-50
-          flex h-16 shrink-0 items-center gap-2
-          border-b backdrop-blur-[20px]
-        "
+        className={`${headerContainerClass} transition-all duration-300 bg-header-bg border-header-border sticky top-0 z-50 flex w-full h-16 shrink-0 items-center gap-2 border-b backdrop-blur-[20px]`}
       >
-        <div className="container mx-auto max-w-4/5 px-4">
-          <MemoizedMainNavigation />
-        </div>
+        <MemoizedMainNavigation />
       </header>
 
-      <div className="bg-header-bg border-b border-header-border">
-        <MemoizedSearchBar />
+      <div className="backdrop-blur-[20px] border-b border-black/5 bg-linear-to-b from-slate-50 to-white py-6">
+        <div className={`${headerContainerClass}`}>
+          <MemoizedSearchBar />
+        </div>
       </div>
 
       <main
-        className={`flex-1 transition-opacity duration-300 ${
-          isNavigating ? "opacity-60" : "opacity-100"
-        }`}
+        className={`flex-1 ${headerContainerClass} ${isNavigating ? "opacity-60" : "opacity-100"}`}
       >
         <Outlet />
       </main>

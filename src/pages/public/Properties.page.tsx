@@ -11,11 +11,9 @@ const PropertiesPage = () => {
         content="Découvrez notre sélection de propriétés à vendre et à louer en France."
       />
 
-      <div className="container max-w-4/5 mx-auto px-4">
-        <PropertiesSplitLayout mapComponent={<PropertyMap />}>
-          <PropertiesList />
-        </PropertiesSplitLayout>
-      </div>
+      <PropertiesSplitLayout mapComponent={<PropertyMap />}>
+        <PropertiesList />
+      </PropertiesSplitLayout>
     </>
   );
 };
