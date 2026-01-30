@@ -8,6 +8,9 @@ import { favoritesService } from "@/features/favorite/api/favorites.service";
 import { tokenStorage } from "@/features/auth/api/token.storage";
 import RootErrorBoundary from "@/core/components/RootErrorBoundary";
 import { queryClient } from "../providers/query-client";
+import { parsePropertySearchParams } from "@/features/properties/lib/params";
+import { propertyFiltersStore } from "@/features/properties/store/property-filters-store";
+import type { LoaderFunctionArgs } from "react-router";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -89,12 +92,51 @@ export const routes = [
           const module = await import("@/pages/public/Properties.page");
           return { Component: module.default };
         },
+        loader: async ({ request }: LoaderFunctionArgs) => {
+          const filters = parsePropertySearchParams(request.url);
+
+          propertyFiltersStore.setFilters(filters);
+
+          const isAuthenticated = tokenStorage.isAuthenticated();
+
+          await Promise.all([
+            queryClient.prefetchQuery({
+              queryKey: propertiesKeys.list(filters),
+              queryFn: () => propertiesService.getProperties(filters),
+              staleTime: 5 * 60 * 1000,
+            }),
+            ...(isAuthenticated
+              ? [
+                  queryClient.prefetchQuery({
+                    queryKey: favoriteKeys.lists(),
+                    queryFn: () => favoritesService.getFavoriteProperties(),
+                    staleTime: 5 * 60 * 1000,
+                  }),
+                ]
+              : []),
+          ]);
+
+          return null;
+        },
       },
       {
         path: "properties/:id",
         lazy: async () => {
           const module = await import("@/pages/public/PropertyDetail.page");
           return { Component: module.default };
+        },
+        loader: async ({ params }: LoaderFunctionArgs) => {
+          const { id } = params;
+
+          if (!id) return null;
+
+          await queryClient.prefetchQuery({
+            queryKey: propertiesKeys.detail(id),
+            queryFn: () => propertiesService.getPropertyById(id), //
+            staleTime: 10 * 60 * 1000,
+          });
+
+          return null;
         },
       },
       {
