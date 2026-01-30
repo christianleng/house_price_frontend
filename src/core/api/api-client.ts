@@ -33,21 +33,21 @@ class APIClient {
 
   private async request<T, P extends object = object>(
     endpoint: string,
-    { params, ...options }: RequestConfig<P> = {},
+    { params, signal, ...options }: RequestConfig<P> = {},
   ): Promise<T> {
     const url = this.buildURL(endpoint, params);
     const token = tokenStorage.getToken();
 
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json",
-      ...((options.headers as Record<string, string>) || {}),
-    };
+    const headers = new Headers(options.headers);
 
-    if (token) headers["Authorization"] = `Bearer ${token}`;
+    if (!headers.has("Content-Type"))
+      headers.set("Content-Type", "application/json");
+    if (token) headers.set("Authorization", `Bearer ${token}`);
 
     const config: RequestInit = {
       ...options,
       headers,
+      signal,
     };
 
     const response = await fetch(url, config);
@@ -72,9 +72,9 @@ class APIClient {
     return this.request<T, P>(endpoint, { ...config, method: "GET" });
   }
 
-  async post<T, P extends object = object>(
+  async post<T, P extends object = object, D = unknown>(
     endpoint: string,
-    data?: unknown,
+    data?: D,
     config?: RequestConfig<P>,
   ): Promise<T> {
     return this.request<T, P>(endpoint, {
@@ -84,9 +84,9 @@ class APIClient {
     });
   }
 
-  async put<T, P extends object = object>(
+  async put<T, P extends object = object, D = unknown>(
     endpoint: string,
-    data?: unknown,
+    data?: D,
     config?: RequestConfig<P>,
   ): Promise<T> {
     return this.request<T, P>(endpoint, {
@@ -96,9 +96,9 @@ class APIClient {
     });
   }
 
-  async patch<T, P extends object = object>(
+  async patch<T, P extends object = object, D = unknown>(
     endpoint: string,
-    data?: unknown,
+    data?: D,
     config?: RequestConfig<P>,
   ): Promise<T> {
     return this.request<T, P>(endpoint, {

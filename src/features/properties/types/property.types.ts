@@ -34,10 +34,33 @@ export const TRANSACTION_TYPES = {
 export type TransactionType =
   (typeof TRANSACTION_TYPES)[keyof typeof TRANSACTION_TYPES];
 
+export const SORT_BY = {
+  CREATED_AT: "created_at",
+  PRICE: "price",
+  SURFACE_AREA: "surface_area",
+  PRICE_PER_SQM: "price_per_sqm",
+  ROOMS: "rooms",
+} as const;
+
+export type sort_by = (typeof SORT_BY)[keyof typeof SORT_BY];
+
+export const SORT_ORDER = {
+  ASC: "asc",
+  DESC: "desc",
+} as const;
+
+export type sort_order = (typeof SORT_ORDER)[keyof typeof SORT_ORDER];
+
+type Brand<K, T> = K & { __brand: T };
+
+export type PropertyId = Brand<string, "PropertyId">;
+export type AgentId = Brand<string, "AgentId">;
+export type PropertyReference = Brand<string, "PropertyReference">;
+
 interface BaseProperty {
-  id: string;
-  agent_id: string;
-  reference: string;
+  id: PropertyId;
+  agent_id: AgentId;
+  reference: PropertyReference;
   title: string;
   description: string | null;
   address: string | null;
@@ -165,8 +188,8 @@ export type PropertySearchParams = {
   is_active?: boolean;
   available_from?: string;
 
-  sort_by?: "created_at" | "price" | "surface_area" | "price_per_sqm" | "rooms";
-  sort_order?: "asc" | "desc";
+  sort_by?: sort_by;
+  sort_order?: sort_order;
   page?: number;
   page_size?: number;
 };

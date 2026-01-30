@@ -2,7 +2,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { favoritesService } from "./favorites.service";
 import type { FavoriteList } from "../types/favorite.types";
 import { tokenStorage } from "@/features/auth/api/token.storage";
-import type { PropertyPreview } from "@/features/properties/types/property.types";
+import type {
+  PropertyPreview,
+  PropertyId,
+} from "@/features/properties/types/property.types";
 
 export const favoriteKeys = {
   all: ["favorites"] as const,
@@ -12,7 +15,7 @@ export const favoriteKeys = {
 export const useGetFavorites = (options = {}) => {
   return useQuery({
     queryKey: favoriteKeys.lists(),
-    queryFn: () => favoritesService.getFavoriteProperties(),
+    queryFn: ({ signal }) => favoritesService.getFavoriteProperties(signal),
     staleTime: 5 * 60 * 1000,
     enabled: tokenStorage.isAuthenticated(),
     ...options,
@@ -23,9 +26,9 @@ export const useAddFavorite = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (propertyId: string) =>
+    mutationFn: (propertyId: PropertyId) =>
       favoritesService.addFavoriteProperty(propertyId),
-    onMutate: async (propertyId) => {
+    onMutate: async (propertyId: PropertyId) => {
       await queryClient.cancelQueries({ queryKey: favoriteKeys.lists() });
       const previousFavorites = queryClient.getQueryData<FavoriteList>(
         favoriteKeys.lists(),
@@ -50,9 +53,9 @@ export const useDeleteFavorite = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (propertyId: string) =>
+    mutationFn: (propertyId: PropertyId) =>
       favoritesService.deleteFavoriteProperty(propertyId),
-    onMutate: async (propertyId) => {
+    onMutate: async (propertyId: PropertyId) => {
       await queryClient.cancelQueries({ queryKey: favoriteKeys.lists() });
       const previousFavorites = queryClient.getQueryData<FavoriteList>(
         favoriteKeys.lists(),

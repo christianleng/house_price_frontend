@@ -44,7 +44,7 @@ export function useProperties(
 ): UseQueryResult<PaginatedResponse<PropertyPreview>, Error> {
   return useQuery({
     queryKey: propertiesKeys.list(filters),
-    queryFn: () => propertiesService.getProperties(filters),
+    queryFn: ({ signal }) => propertiesService.getProperties(filters, signal),
     staleTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
   });
@@ -53,7 +53,7 @@ export function useProperties(
 export function useProperty(id: string): UseQueryResult<Property, Error> {
   return useQuery({
     queryKey: propertiesKeys.detail(id),
-    queryFn: () => propertiesService.getPropertyById(id),
+    queryFn: ({ signal }) => propertiesService.getPropertyById(id, signal),
     staleTime: 10 * 60 * 1000,
     enabled: !!id,
   });
@@ -65,7 +65,8 @@ export function useCountProperties(
 ): UseQueryResult<number, Error> {
   return useQuery({
     queryKey: propertiesKeys.count(filters),
-    queryFn: () => propertiesService.getCountProperties(filters),
+    queryFn: ({ signal }) =>
+      propertiesService.getCountProperties(filters, signal),
     staleTime: 1 * 60 * 1000,
     enabled: options?.enabled ?? true,
   });
