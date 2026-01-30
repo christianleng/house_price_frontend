@@ -7,12 +7,12 @@ import { EmptyProperties } from "./EmptyProperties";
 import { Pagination } from "@/shared/components/pagination";
 
 const PropertiesList = observer(() => {
-  const { filters, setFilters } = propertyFiltersStore;
+  const { filters, setPage } = propertyFiltersStore;
   const { data, isError, error, isLoading, refetch, isPlaceholderData } =
     useProperties(filters);
 
   const handlePageChange = (newPage: number) => {
-    setFilters({ ...filters, page: newPage });
+    setPage(newPage);
   };
 
   if (isError) {
