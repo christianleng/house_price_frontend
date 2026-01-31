@@ -1,44 +1,13 @@
 import { observer } from "mobx-react-lite";
 import { useProperty } from "../../api/properties.queries";
-import { SmartLoader } from "@/shared/components/data-loading/SmartLoader";
-import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import PropertiesDetailsView from "@/features/properties/components/property-detail/PropertiesDetailsView";
-import { useCallback } from "react";
+import { useParams } from "react-router";
 
-const PropertyDetail = observer(
-  ({ propertyId }: { propertyId: string | undefined }) => {
-    const {
-      data: property,
-      isLoading,
-      error,
-      refetch,
-    } = useProperty(propertyId ?? "");
+const PropertyDetail = observer(() => {
+  const { id } = useParams<{ id: string }>();
+  const { data: property } = useProperty(id!);
 
-    const handleError = useCallback(
-      (err: Error, retry: () => void) => (
-        <ErrorDisplay error={err} onRetry={retry} />
-      ),
-      [],
-    );
-
-    return (
-      <SmartLoader
-        isLoading={isLoading}
-        error={error}
-        data={property}
-        skeleton={null}
-        emptyState={
-          <p className="text-center py-10">
-            Aucune propriété à vendre pour le moment.
-          </p>
-        }
-        errorFallback={handleError}
-        retryFn={refetch}
-      >
-        {(items) => <PropertiesDetailsView property={items} />}
-      </SmartLoader>
-    );
-  },
-);
+  return <PropertiesDetailsView property={property} />;
+});
 
 export default PropertyDetail;

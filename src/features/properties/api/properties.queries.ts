@@ -1,7 +1,9 @@
 import {
   keepPreviousData,
   useQuery,
+  useSuspenseQuery,
   type UseQueryResult,
+  type UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import { propertiesService } from "./properties.service";
 import type {
@@ -50,12 +52,13 @@ export function useProperties(
   });
 }
 
-export function useProperty(id: string): UseQueryResult<Property, Error> {
-  return useQuery({
+export function useProperty(
+  id: string,
+): UseSuspenseQueryResult<Property, Error> {
+  return useSuspenseQuery({
     queryKey: propertiesKeys.detail(id),
     queryFn: ({ signal }) => propertiesService.getPropertyById(id, signal),
     staleTime: 10 * 60 * 1000,
-    enabled: !!id,
   });
 }
 
