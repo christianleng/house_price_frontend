@@ -15,6 +15,26 @@ import type {
 } from "../types/property.types";
 import type { PaginatedResponse } from "@/core/types";
 
+export const PROPERTY_CACHE = {
+  LIST: {
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+  },
+  DETAIL: {
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
+  },
+  COUNT: {
+    staleTime: 1 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
+  },
+  CITIES: {
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  },
+} as const;
+
 export const propertiesKeys = {
   all: ["properties"] as const,
 
@@ -47,7 +67,7 @@ export function useProperties(
   return useQuery({
     queryKey: propertiesKeys.list(filters),
     queryFn: ({ signal }) => propertiesService.getProperties(filters, signal),
-    staleTime: 5 * 60 * 1000,
+    ...PROPERTY_CACHE.LIST,
     placeholderData: keepPreviousData,
   });
 }
@@ -58,7 +78,7 @@ export function useProperty(
   return useSuspenseQuery({
     queryKey: propertiesKeys.detail(id),
     queryFn: ({ signal }) => propertiesService.getPropertyById(id, signal),
-    staleTime: 10 * 60 * 1000,
+    ...PROPERTY_CACHE.DETAIL,
   });
 }
 
@@ -70,7 +90,7 @@ export function useCountProperties(
     queryKey: propertiesKeys.count(filters),
     queryFn: ({ signal }) =>
       propertiesService.getCountProperties(filters, signal),
-    staleTime: 1 * 60 * 1000,
+    ...PROPERTY_CACHE.COUNT,
     enabled: options?.enabled ?? true,
   });
 }
@@ -88,8 +108,7 @@ export function useCitiesProperties(
         transactionType,
         pageSize,
       ),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    ...PROPERTY_CACHE.CITIES,
     enabled: cities.length > 0,
   });
 }
