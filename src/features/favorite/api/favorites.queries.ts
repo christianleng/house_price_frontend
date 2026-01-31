@@ -7,6 +7,13 @@ import type {
   PropertyId,
 } from "@/features/properties/types/property.types";
 
+export const FAVORITE_CACHE = {
+  LIST: {
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+  },
+} as const;
+
 export const favoriteKeys = {
   all: ["favorites"] as const,
   lists: () => [...favoriteKeys.all, "list"] as const,
@@ -16,7 +23,7 @@ export const useGetFavorites = (options = {}) => {
   return useQuery({
     queryKey: favoriteKeys.lists(),
     queryFn: ({ signal }) => favoritesService.getFavoriteProperties(signal),
-    staleTime: 5 * 60 * 1000,
+    ...FAVORITE_CACHE.LIST,
     enabled: tokenStorage.isAuthenticated(),
     ...options,
   });
