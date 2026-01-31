@@ -1,11 +1,6 @@
-import { useParams, Navigate } from "react-router";
 import PropertyDetail from "@/features/properties/components/property-detail/PropertyDetail";
 
 const PropertyDetailPage = () => {
-  const { id } = useParams<{ id: string }>();
-
-  if (!id) return <Navigate to="/properties" replace />;
-
   return (
     <>
       <title>Détail de la propriété | RealEstate</title>
@@ -14,7 +9,7 @@ const PropertyDetailPage = () => {
         content="Découvrez tous les détails de cette propriété : photos, caractéristiques, prix et localisation."
       />
 
-      <PropertyDetail propertyId={id!} />
+      <PropertyDetail />
     </>
   );
 };

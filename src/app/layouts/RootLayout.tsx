@@ -1,16 +1,22 @@
-import { memo } from "react";
-import { Outlet, useNavigation } from "react-router";
+import { memo, Suspense, lazy } from "react";
+import { Outlet, useNavigation, useLocation } from "react-router";
 import TopBar from "@/app/layouts/components/header/TopBar";
 import MainNavigation from "@/app/layouts/components/header/MainNavigation";
-import SearchBar from "@/features/properties/components/SearchBar";
 import Footer from "@/app/layouts/components/Footer";
+import { SearchBarSkeleton } from "./components/skeletons/SearchBarSkeleton";
 
 const MemoizedTopBar = memo(TopBar);
 const MemoizedMainNavigation = memo(MainNavigation);
-const MemoizedSearchBar = memo(SearchBar);
+const MemoizedFooter = memo(Footer);
+
+const LazySearchBar = lazy(
+  () => import("@/features/properties/components/SearchBar"),
+);
 
 const RootLayout = () => {
   const navigation = useNavigation();
+  const location = useLocation();
+
   const isNavigating = navigation.state === "loading";
   const isHomePage = location.pathname === "/";
 
@@ -36,17 +42,23 @@ const RootLayout = () => {
 
       <div className="backdrop-blur-[20px] border-b border-black/5 bg-linear-to-b from-slate-50 to-white py-6">
         <div className={`${headerContainerClass}`}>
-          <MemoizedSearchBar />
+          <Suspense fallback={<SearchBarSkeleton />}>
+            <LazySearchBar />
+          </Suspense>
         </div>
       </div>
 
       <main
-        className={`flex-1 ${headerContainerClass} ${isNavigating ? "opacity-60" : "opacity-100"}`}
+        className={`flex-1 ${headerContainerClass} transition-opacity duration-300 ${
+          isNavigating ? "opacity-60" : "opacity-100"
+        }`}
       >
-        <Outlet />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </main>
 
-      <Footer />
+      <MemoizedFooter />
     </div>
   );
 };

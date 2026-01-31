@@ -10,7 +10,9 @@ import RootErrorBoundary from "@/core/components/RootErrorBoundary";
 import { queryClient } from "../providers/query-client";
 import { parsePropertySearchParams } from "@/features/properties/lib/params";
 import { propertyFiltersStore } from "@/features/properties/store/property-filters-store";
-import type { LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs, data as apiData } from "react-router";
+import { PropertyDetailSkeleton } from "@/features/properties/components/skeletons/PropertyDetailSkeleton";
+import { PropertyErrorBoundary } from "@/pages/errors/PropertyErrorBoundary.page";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -34,7 +36,8 @@ export const routes = [
   {
     path: "/",
     Component: RootLayout,
-    HydrateFallback: null, //TODO add fallback
+    // HydrateFallback: null,
+    HydrateFallback: () => <div className="min-h-screen bg-white" />,
     ErrorBoundary: RootErrorBoundary,
     children: [
       {
@@ -121,6 +124,8 @@ export const routes = [
       },
       {
         path: "properties/:id",
+        HydrateFallback: PropertyDetailSkeleton,
+        ErrorBoundary: PropertyErrorBoundary,
         lazy: async () => {
           const module = await import("@/pages/public/PropertyDetail.page");
           return { Component: module.default };
@@ -128,15 +133,27 @@ export const routes = [
         loader: async ({ params }: LoaderFunctionArgs) => {
           const { id } = params;
 
-          if (!id) return null;
+          if (!id) {
+            throw apiData(
+              { message: "Identifiant de propriété manquant" },
+              { status: 400 },
+            );
+          }
 
-          await queryClient.prefetchQuery({
+          const propertyPromise = queryClient.ensureQueryData({
             queryKey: propertiesKeys.detail(id),
-            queryFn: () => propertiesService.getPropertyById(id), //
+            queryFn: ({ signal }) =>
+              propertiesService.getPropertyById(id, signal),
             staleTime: 10 * 60 * 1000,
           });
 
-          return null;
+          propertyPromise.catch((error: unknown) => {
+            console.error("Prefetch error:", error);
+          });
+
+          return {
+            property: propertyPromise,
+          };
         },
       },
       {
