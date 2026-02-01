@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
-import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import { Link } from "react-router";
 import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
@@ -14,7 +13,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PropertySearchParams } from "../types/property.types";
 import { EmptyProperties } from "./EmptyProperties";
 
-interface PropertyCarouselSectionProps {
+interface IPropertyCarouselSectionProps {
   title: string;
   transactionType: "sale" | "rent";
   carouselOptions?: EmblaOptionsType;
@@ -30,7 +29,7 @@ const PropertyCarouselSection = observer(
     title,
     transactionType,
     carouselOptions = DEFAULT_CAROUSEL_OPTIONS,
-  }: PropertyCarouselSectionProps) => {
+  }: IPropertyCarouselSectionProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
 
@@ -64,16 +63,9 @@ const PropertyCarouselSection = observer(
       [transactionType],
     );
 
-    const { data, isError, error, isLoading, refetch } = useProperties(filters);
+    const { data } = useProperties(filters);
 
-    if (isError) {
-      return (
-        <div className="flex flex-col gap-4">
-          <ErrorDisplay error={error} onRetry={refetch} />
-        </div>
-      );
-    }
-    const hasNoProperties = !isLoading && data?.items.length === 0;
+    const hasNoProperties = data.items.length === 0;
 
     return (
       <div className="flex flex-col gap-4">

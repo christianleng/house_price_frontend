@@ -10,4 +10,5 @@ const PropertyDetail = observer(() => {
   return <PropertiesDetailsView property={property} />;
 });
 
+PropertyDetail.displayName = "PropertyDetail";
 export default PropertyDetail;

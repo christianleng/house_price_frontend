@@ -1,5 +1,4 @@
 import {
-  keepPreviousData,
   useQuery,
   useSuspenseQuery,
   type UseQueryResult,
@@ -63,12 +62,11 @@ export const propertiesKeys = {
 
 export function useProperties(
   filters?: PropertySearchParams,
-): UseQueryResult<PaginatedResponse<PropertyPreview>, Error> {
-  return useQuery({
+): UseSuspenseQueryResult<PaginatedResponse<PropertyPreview>, Error> {
+  return useSuspenseQuery({
     queryKey: propertiesKeys.list(filters),
     queryFn: ({ signal }) => propertiesService.getProperties(filters, signal),
     ...PROPERTY_CACHE.LIST,
-    placeholderData: keepPreviousData,
   });
 }
 
@@ -99,8 +97,8 @@ export function useCitiesProperties(
   cities: string[],
   transactionType: TransactionType,
   pageSize: number = 10,
-): UseQueryResult<CitiesPropertiesResponse, Error> {
-  return useQuery({
+): UseSuspenseQueryResult<CitiesPropertiesResponse, Error> {
+  return useSuspenseQuery({
     queryKey: propertiesKeys.citiesList(cities, transactionType, pageSize),
     queryFn: () =>
       propertiesService.getPropertiesByCities(
@@ -109,6 +107,5 @@ export function useCitiesProperties(
         pageSize,
       ),
     ...PROPERTY_CACHE.CITIES,
-    enabled: cities.length > 0,
   });
 }
