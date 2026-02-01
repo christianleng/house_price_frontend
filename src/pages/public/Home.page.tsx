@@ -3,21 +3,48 @@ import { InfoCardSection } from "@/shared/components/InfoCardSection";
 import { CTASection } from "@/shared/components/CTASection";
 import PropertyCarouselSectionCity from "@/features/properties/components/PropertyCarouselSectionCity";
 import { LazySection } from "@/core/components/LazySection";
+import PropertyCarouselError from "../errors/PropertyCarouselError";
+import { PropertyCarouselSkeleton } from "@/features/properties/components/skeletons/PropertyCarouselSkeleton";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 const HomePage = () => {
   return (
     <div className="py-16 flex flex-col gap-16">
-      <PropertyCarouselSection
-        title="Dernières propriétés à vendre"
-        transactionType="sale"
-      />
+      <ErrorBoundary
+        fallbackRender={({ resetErrorBoundary }) => (
+          <PropertyCarouselError
+            title="les ventes"
+            resetErrorBoundary={resetErrorBoundary}
+          />
+        )}
+      >
+        <Suspense fallback={<PropertyCarouselSkeleton />}>
+          <PropertyCarouselSection
+            title="Dernières propriétés à vendre"
+            transactionType="sale"
+          />
+        </Suspense>
+      </ErrorBoundary>
 
       <LazySection height="450px">
-        <PropertyCarouselSection
-          title="Dernières propriétés en location"
-          transactionType="rent"
-        />
+        <ErrorBoundary
+          fallbackRender={({ resetErrorBoundary }) => (
+            <PropertyCarouselError
+              title="les locations"
+              resetErrorBoundary={resetErrorBoundary}
+            />
+          )}
+        >
+          <Suspense fallback={<PropertyCarouselSkeleton />}>
+            <PropertyCarouselSection
+              title="Dernières propriétés en location"
+              transactionType="rent"
+            />
+          </Suspense>
+        </ErrorBoundary>
       </LazySection>
+
       <LazySection>
         <InfoCardSection
           badge="Restez informé!"
@@ -29,6 +56,7 @@ const HomePage = () => {
           imageAlt="paris"
         />
       </LazySection>
+
       <LazySection>
         <InfoCardSection
           badge="Restez informé!"
@@ -43,8 +71,20 @@ const HomePage = () => {
       </LazySection>
 
       <LazySection height="600px">
-        <PropertyCarouselSectionCity />
+        <ErrorBoundary
+          fallbackRender={({ resetErrorBoundary }) => (
+            <PropertyCarouselError
+              title="les villes"
+              resetErrorBoundary={resetErrorBoundary}
+            />
+          )}
+        >
+          <Suspense fallback={<PropertyCarouselSkeleton />}>
+            <PropertyCarouselSectionCity />
+          </Suspense>
+        </ErrorBoundary>
       </LazySection>
+
       <LazySection>
         <CTASection
           badge="100% gratuit"

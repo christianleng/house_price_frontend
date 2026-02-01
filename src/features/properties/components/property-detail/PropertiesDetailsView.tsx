@@ -1,8 +1,8 @@
 import { Card } from "@/core/ui/card";
 import { Button } from "@/core/ui/button";
 import type { Property } from "../../types/property.types";
-import type { ReactNode } from "react";
 import { TRANSACTION_TYPES } from "../../types/property.types";
+import DetailItem from "./DetailItem";
 
 interface IPropertiesDetailsView {
   property: Property;
@@ -104,21 +104,5 @@ const PropertiesDetailsView = ({ property }: IPropertiesDetailsView) => {
   );
 };
 
-const DetailItem = ({
-  label,
-  value,
-  highlight = false,
-}: {
-  label: string;
-  value: ReactNode;
-  highlight?: boolean;
-}) => (
-  <div className="flex flex-col">
-    <span className="text-sm text-gray-500">{label}</span>
-    <span className={`font-semibold ${highlight ? "text-green-600" : ""}`}>
-      {value}
-    </span>
-  </div>
-);
-
+PropertiesDetailsView.displayName = "PropertiesDetailsView";
 export default PropertiesDetailsView;

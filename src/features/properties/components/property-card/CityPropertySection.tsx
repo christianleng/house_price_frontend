@@ -14,7 +14,7 @@ import type {
   TransactionType,
 } from "../../types/property.types";
 
-interface CityPropertySectionProps {
+interface ICityPropertySectionProps {
   city: string;
   transactionType: TransactionType;
   properties: PropertyPreview[];
@@ -35,7 +35,7 @@ const CityPropertySection = observer(
     properties,
     totalCount,
     carouselOptions = DEFAULT_CAROUSEL_OPTIONS,
-  }: CityPropertySectionProps) => {
+  }: ICityPropertySectionProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
 

@@ -1,4 +1,7 @@
-import { propertiesKeys } from "@/features/properties/api/properties.queries";
+import {
+  propertiesKeys,
+  PROPERTY_CACHE,
+} from "@/features/properties/api/properties.queries";
 import { propertiesService } from "@/features/properties/api/properties.service";
 import { RootLayout } from "@/app/layouts/RootLayout";
 import { FEATURED_CITIES } from "@/core/config/cities.config";
@@ -6,13 +9,15 @@ import { RequireAuth } from "@/features/auth/components/RequireAuth";
 import { favoriteKeys } from "@/features/favorite/api/favorites.queries";
 import { favoritesService } from "@/features/favorite/api/favorites.service";
 import { tokenStorage } from "@/features/auth/api/token.storage";
-import RootErrorBoundary from "@/core/components/RootErrorBoundary";
+import RootErrorBoundary from "@/pages/errors/RootErrorBoundary";
 import { queryClient } from "../providers/query-client";
 import { parsePropertySearchParams } from "@/features/properties/lib/params";
 import { propertyFiltersStore } from "@/features/properties/store/property-filters-store";
 import { type LoaderFunctionArgs, data as apiData } from "react-router";
 import { PropertyDetailSkeleton } from "@/features/properties/components/skeletons/PropertyDetailSkeleton";
 import { PropertyErrorBoundary } from "@/pages/errors/PropertyErrorBoundary.page";
+import { PropertiesPageSkeleton } from "@/features/properties/components/skeletons/PropertiesPageSkeleton";
+import { PropertiesErrorBoundary } from "@/pages/errors/PropertiesErrorBoundary";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -36,7 +41,6 @@ export const routes = [
   {
     path: "/",
     Component: RootLayout,
-    // HydrateFallback: null,
     HydrateFallback: () => <div className="min-h-screen bg-white" />,
     ErrorBoundary: RootErrorBoundary,
     children: [
@@ -53,12 +57,12 @@ export const routes = [
             queryClient.prefetchQuery({
               queryKey: propertiesKeys.list(SALE_FILTERS),
               queryFn: () => propertiesService.getProperties(SALE_FILTERS),
-              staleTime: 60 * 1000,
+              ...PROPERTY_CACHE.LIST,
             }),
             queryClient.prefetchQuery({
               queryKey: propertiesKeys.list(RENT_FILTERS),
               queryFn: () => propertiesService.getProperties(RENT_FILTERS),
-              staleTime: 60 * 1000,
+              ...PROPERTY_CACHE.LIST,
             }),
             queryClient.prefetchQuery({
               queryKey: propertiesKeys.citiesList(
@@ -72,7 +76,7 @@ export const routes = [
                   "sale",
                   CITY_PAGE_SIZE,
                 ),
-              staleTime: 60 * 1000,
+              ...PROPERTY_CACHE.LIST,
             }),
 
             ...(isAuthenticated
@@ -80,7 +84,7 @@ export const routes = [
                   queryClient.prefetchQuery({
                     queryKey: favoriteKeys.lists(),
                     queryFn: () => favoritesService.getFavoriteProperties(),
-                    staleTime: 5 * 60 * 1000,
+                    ...PROPERTY_CACHE.LIST,
                   }),
                 ]
               : []),
@@ -95,6 +99,8 @@ export const routes = [
           const module = await import("@/pages/public/Properties.page");
           return { Component: module.default };
         },
+        HydrateFallback: PropertiesPageSkeleton,
+        ErrorBoundary: PropertiesErrorBoundary,
         loader: async ({ request }: LoaderFunctionArgs) => {
           const filters = parsePropertySearchParams(request.url);
 
@@ -106,14 +112,14 @@ export const routes = [
             queryClient.prefetchQuery({
               queryKey: propertiesKeys.list(filters),
               queryFn: () => propertiesService.getProperties(filters),
-              staleTime: 5 * 60 * 1000,
+              ...PROPERTY_CACHE.LIST,
             }),
             ...(isAuthenticated
               ? [
                   queryClient.prefetchQuery({
                     queryKey: favoriteKeys.lists(),
                     queryFn: () => favoritesService.getFavoriteProperties(),
-                    staleTime: 5 * 60 * 1000,
+                    ...PROPERTY_CACHE.LIST,
                   }),
                 ]
               : []),
@@ -144,7 +150,7 @@ export const routes = [
             queryKey: propertiesKeys.detail(id),
             queryFn: ({ signal }) =>
               propertiesService.getPropertyById(id, signal),
-            staleTime: 10 * 60 * 1000,
+            ...PROPERTY_CACHE.DETAIL,
           });
 
           propertyPromise.catch((error: unknown) => {

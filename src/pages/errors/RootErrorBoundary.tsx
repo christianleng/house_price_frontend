@@ -1,6 +1,6 @@
 import { useRouteError, isRouteErrorResponse, Link } from "react-router";
 
-const RootErrorBoundary = () => {
+export function RootErrorBoundary() {
   const error = useRouteError();
   const is404 = isRouteErrorResponse(error) && error.status === 404;
 
@@ -45,6 +45,6 @@ const RootErrorBoundary = () => {
       </div>
     </div>
   );
-};
+}
 
 export default RootErrorBoundary;

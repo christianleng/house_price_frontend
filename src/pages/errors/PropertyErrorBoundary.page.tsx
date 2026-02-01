@@ -87,3 +87,5 @@ export function PropertyErrorBoundary() {
     </div>
   );
 }
+
+export default PropertyErrorBoundary;
