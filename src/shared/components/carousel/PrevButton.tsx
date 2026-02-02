@@ -6,7 +6,7 @@ type ButtonProps = ComponentPropsWithRef<"button">;
 
 export const PrevButton = (props: ButtonProps) => (
   <CarouselNavButton
-    aria-label="Previous slide"
+    aria-label="Afficher le bien précédent"
     icon={ArrowLeft01Icon}
     className="embla__button--prev"
     {...props}

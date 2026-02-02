@@ -26,16 +26,27 @@ const PropertyCardMedia = memo(
     const showPlaceholder = !thumbnail_url || imageError;
 
     return (
-      <div className="relative h-48 bg-gray-200 rounded-xl overflow-hidden">
+      <figure className="relative h-48 bg-gray-200 rounded-xl overflow-hidden group">
         {showPlaceholder ? (
-          <div className="flex h-full flex-col items-center justify-center gap-2 text-gray-400">
-            <HugeiconsIcon icon={Camera01Icon} className="h-12 w-12" />
+          <div
+            className="flex h-full flex-col items-center justify-center gap-2 text-gray-400"
+            role="img"
+            aria-label={`Image non disponible pour : ${title}`}
+          >
+            <HugeiconsIcon
+              icon={Camera01Icon}
+              className="h-12 w-12"
+              aria-hidden="true"
+            />
             <span className="text-sm">Pas d'image</span>
           </div>
         ) : (
           <>
             {!imageLoaded && (
-              <div className="absolute inset-0 animate-pulse bg-gray-300" />
+              <div
+                className="absolute inset-0 animate-pulse bg-gray-300"
+                aria-hidden="true"
+              />
             )}
             <img
               src={thumbnail_url}
@@ -51,18 +62,19 @@ const PropertyCardMedia = memo(
             />
           </>
         )}
-
-        <div className="absolute bottom-3 left-3 flex items-center gap-2">
-          <EnergyPerformanceIcon value={energy_rating} />
-        </div>
-
-        {photos_count !== undefined && photos_count > 0 && (
-          <div className="absolute bottom-3 right-3 z-20 flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2 py-1 text-[10px] font-semibold text-white">
-            <HugeiconsIcon icon={Camera01Icon} className="h-3 w-3" />
-            {photos_count}
+        <figcaption>
+          <div className="absolute bottom-3 left-3 flex items-center gap-2">
+            <EnergyPerformanceIcon value={energy_rating} />
           </div>
-        )}
-      </div>
+
+          {photos_count !== undefined && photos_count > 0 && (
+            <div className="absolute bottom-3 right-3 z-20 flex items-center gap-1 rounded-full bg-black/60 backdrop-blur-sm px-2 py-1 text-[10px] font-semibold text-white">
+              <HugeiconsIcon icon={Camera01Icon} className="h-3 w-3" />
+              {photos_count}
+            </div>
+          )}
+        </figcaption>
+      </figure>
     );
   },
 );
