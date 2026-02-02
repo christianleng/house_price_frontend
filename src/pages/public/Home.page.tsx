@@ -47,7 +47,7 @@ const HomePage = () => {
 
       <LazySection>
         <InfoCardSection
-          badge="Restez informé!"
+          badge="Restez informé !"
           title="Découvrez les prix de l'immobilier en France"
           description="Utilisez la carte des prix de SeLoger pour obtenir facilement des informations sur le marché de l'immobilier. Découvrez le prix au mètre carré pour des adresses, des villes et des quartiers spécifiques. Informez-vous et découvrez les prix dans la région de votre choix dès aujourd'hui !"
           ctaText="Explorer la carte des prix"
@@ -59,7 +59,7 @@ const HomePage = () => {
 
       <LazySection>
         <InfoCardSection
-          badge="Restez informé!"
+          badge="Restez informé !"
           title="Estimez votre bien immobilier"
           description="Réalisez votre estimation maison ou appartement maintenant avec notre outil intelligent basé sur les données du marché."
           ctaText="Estimer mon bien"

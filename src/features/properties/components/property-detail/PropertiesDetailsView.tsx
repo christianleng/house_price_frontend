@@ -75,7 +75,9 @@ const PropertiesDetailsView = ({ property }: IPropertiesDetailsView) => {
             <div className="text-3xl font-bold text-blue-600 mb-1">
               {displayPrice?.toLocaleString()} €
               {isRent && (
-                <span className="text-sm text-gray-500 ml-1">/ mois</span>
+                <span className="text-sm text-gray-500 ml-1" aria-hidden="true">
+                  / mois
+                </span>
               )}
             </div>
 

@@ -1,4 +1,6 @@
 import { Button } from "@/core/ui/button";
+import { Link } from "react-router";
+import { useId } from "react";
 
 interface InfoCardSectionProps {
   imageSrc?: string;
@@ -7,8 +9,7 @@ interface InfoCardSectionProps {
   title: string;
   description: string;
   ctaText: string;
-  ctaLink?: string;
-  onCtaClick?: () => void;
+  ctaLink: string;
   reversed?: boolean;
 }
 
@@ -20,16 +21,22 @@ const InfoCardSection = ({
   description,
   ctaText,
   ctaLink,
-  onCtaClick,
   reversed = false,
 }: InfoCardSectionProps) => {
+  const id = useId();
+  const titleId = `title-${id}`;
+
   return (
-    <div
+    <section
       className={`flex flex-col lg:flex-row gap-8 items-center ${
         reversed ? "lg:flex-row-reverse" : ""
       }`}
+      aria-labelledby={titleId}
     >
-      <div className="w-full lg:w-[50%] h-64 lg:h-80 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+      <div
+        role="presentation"
+        className="w-full lg:w-[50%] h-64 lg:h-80 bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center shrink-0"
+      >
         {imageSrc ? (
           <img
             src={imageSrc}
@@ -37,25 +44,30 @@ const InfoCardSection = ({
             className="w-full h-full object-cover"
           />
         ) : (
-          <span className="text-gray-400">Image placeholder</span>
+          <span className="text-gray-400" aria-hidden="true">
+            Image non disponible
+          </span>
         )}
       </div>
 
-      <div className="flex-1 flex flex-col gap-4 justify-center">
-        <span className="text-sm font-medium text-primary">{badge}</span>
-        <h2 className="text-3xl font-bold">{title}</h2>
-        <p className="text-gray-600">{description}</p>
-        <div>
-          {ctaLink ? (
-            <Button>
-              <a href={ctaLink}>{ctaText}</a>
-            </Button>
-          ) : (
-            <Button onClick={onCtaClick}>{ctaText}</Button>
-          )}
-        </div>
+      <div className="flex-1 flex flex-col gap-4 justify-center items-start">
+        <span className="text-sm font-bold uppercase tracking-wider text-primary">
+          {badge}
+        </span>
+
+        <h2 id={titleId} className="text-3xl font-bold text-gray-900">
+          {title}
+        </h2>
+
+        <p className="text-gray-600 leading-relaxed">{description}</p>
+
+        <Button variant="default" className="mt-2 w-fit">
+          <Link to={ctaLink} aria-label={`${ctaText} concernant ${title}`}>
+            {ctaText}
+          </Link>
+        </Button>
       </div>
-    </div>
+    </section>
   );
 };
 

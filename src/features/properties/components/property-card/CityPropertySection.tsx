@@ -8,7 +8,7 @@ import { NextButton } from "@/shared/components/carousel/NextButton";
 import { usePrevNextButtons } from "@/shared/components/carousel/useCarouselNavigation";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useId } from "react";
 import type {
   PropertyPreview,
   TransactionType,
@@ -38,12 +38,14 @@ const CityPropertySection = observer(
   }: ICityPropertySectionProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
-
     const [slidesInView, setSlidesInView] = useState<number[]>([]);
+
+    const uniqueId = useId();
+    const sectionTitleId = `title-${uniqueId}`;
+    const carouselId = `carousel-${uniqueId}`;
 
     const updateSlidesInView = useCallback(() => {
       if (!emblaApi) return;
-
       const inView = emblaApi.slidesInView();
       setSlidesInView((prev) => {
         const allSeen = new Set([...prev, ...inView]);
@@ -68,55 +70,82 @@ const CityPropertySection = observer(
     if (properties.length === 0) return null;
 
     return (
-      <div className="flex flex-col gap-4">
+      <section className="flex flex-col gap-4" aria-labelledby={sectionTitleId}>
         <div className="flex justify-between items-center">
           <Link
-            className="flex items-center gap-2 font-bold text-lg hover:underline group"
+            id={sectionTitleId}
+            className="flex items-center gap-2 font-bold hover:underline group w-fit"
             to={redirectUrl}
+            aria-label={`${title}. Voir les ${totalCount} biens disponibles.`}
           >
-            <span>{title}</span>
-            <span className="text-sm font-normal text-gray-500">
+            <h2 className="text-lg font-bold">{title}</h2>
+            <span
+              className="text-sm font-normal text-gray-500"
+              aria-hidden="true"
+            >
               ({totalCount})
             </span>
             <HugeiconsIcon
               icon={ArrowRight01Icon}
               className="h-5 w-5 group-hover:translate-x-1 transition-transform"
+              aria-hidden="true"
             />
           </Link>
-          <div className="flex gap-2">
+
+          <div
+            className="flex gap-2"
+            role="group"
+            aria-label="Navigation du carrousel"
+          >
             <PrevButton
               onClick={nav.onPrevButtonClick}
               disabled={nav.prevBtnDisabled}
+              aria-controls={carouselId}
             />
             <NextButton
               onClick={nav.onNextButtonClick}
               disabled={nav.nextBtnDisabled}
+              aria-controls={carouselId}
             />
           </div>
         </div>
 
-        <section className="embla">
-          <div className="embla__viewport" ref={emblaRef}>
+        <div className="embla" role="region" aria-roledescription="carrousel">
+          <div
+            className="embla__viewport"
+            ref={emblaRef}
+            id={carouselId}
+            aria-live="polite"
+          >
             <div className="embla__container">
               {properties.map((property, index) => {
                 const isVisible = slidesInView.includes(index);
                 return (
-                  <div key={property.id} className="embla__slide">
+                  <div
+                    key={property.id}
+                    className="embla__slide"
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`${index + 1} sur ${properties.length}`}
+                  >
                     {isVisible ? (
                       <PropertyCard
                         property={property}
                         isPriority={index < 2}
                       />
                     ) : (
-                      <div className="h-80 w-full bg-gray-50 animate-pulse rounded-xl" />
+                      <div
+                        className="h-80 w-full bg-gray-50 animate-pulse rounded-xl"
+                        aria-hidden="true"
+                      />
                     )}
                   </div>
                 );
               })}
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     );
   },
 );
