@@ -111,22 +111,19 @@ export const routes = [
 
           const isAuthenticated = tokenStorage.isAuthenticated();
 
-          await Promise.allSettled([
+          queryClient.prefetchQuery({
+            queryKey: propertiesKeys.list(filters),
+            queryFn: () => propertiesService.getProperties(filters),
+            ...PROPERTY_CACHE.LIST,
+          });
+
+          if (isAuthenticated) {
             queryClient.prefetchQuery({
-              queryKey: propertiesKeys.list(filters),
-              queryFn: () => propertiesService.getProperties(filters),
+              queryKey: favoriteKeys.lists(),
+              queryFn: () => favoritesService.getFavoriteProperties(),
               ...PROPERTY_CACHE.LIST,
-            }),
-            ...(isAuthenticated
-              ? [
-                  queryClient.prefetchQuery({
-                    queryKey: favoriteKeys.lists(),
-                    queryFn: () => favoritesService.getFavoriteProperties(),
-                    ...PROPERTY_CACHE.LIST,
-                  }),
-                ]
-              : []),
-          ]);
+            });
+          }
 
           return null;
         },

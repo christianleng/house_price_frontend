@@ -18,10 +18,11 @@ const PropertyCard = memo(
       rootMargin: "10px",
       triggerOnce: true,
     });
+    const shouldShowContent = isPriority || inView;
 
     return (
       <div ref={ref}>
-        {!inView ? (
+        {!shouldShowContent ? (
           <PropertyCardSkeleton />
         ) : (
           <Link

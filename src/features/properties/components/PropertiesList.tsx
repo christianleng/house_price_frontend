@@ -4,11 +4,13 @@ import { PropertyCard } from "./property-card/PropertyCard";
 import { propertyFiltersStore } from "../store/property-filters-store";
 import { EmptyProperties } from "./EmptyProperties";
 import { Pagination } from "@/shared/components/pagination";
+import { usePriorityCount } from "@/shared/hooks/usePriorityCount";
 
 const PropertiesList = observer(() => {
   const { filters, setPage } = propertyFiltersStore;
 
   const { data } = useProperties(filters);
+  const priorityLimit = usePriorityCount();
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
@@ -30,9 +32,12 @@ const PropertiesList = observer(() => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
-            {data?.items.map((property) => (
+            {data?.items.map((property, index) => (
               <div key={property.id} className="h-full">
-                <PropertyCard property={property} />
+                <PropertyCard
+                  property={property}
+                  isPriority={index < priorityLimit}
+                />
               </div>
             ))}
           </div>

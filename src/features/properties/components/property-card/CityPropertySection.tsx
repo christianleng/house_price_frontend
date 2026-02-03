@@ -13,6 +13,7 @@ import type {
   PropertyPreview,
   TransactionType,
 } from "../../types/property.types";
+import { usePriorityCount } from "@/shared/hooks/usePriorityCount";
 
 interface ICityPropertySectionProps {
   city: string;
@@ -38,6 +39,7 @@ const CityPropertySection = observer(
   }: ICityPropertySectionProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
+    const priorityLimit = usePriorityCount();
 
     const uniqueId = useId();
     const sectionTitleId = `title-${uniqueId}`;
@@ -110,7 +112,10 @@ const CityPropertySection = observer(
                     aria-roledescription="slide"
                     aria-label={`${index + 1} sur ${properties.length}`}
                   >
-                    <PropertyCard property={property} isPriority={index < 2} />
+                    <PropertyCard
+                      property={property}
+                      isPriority={index < priorityLimit}
+                    />
                   </div>
                 );
               })}
