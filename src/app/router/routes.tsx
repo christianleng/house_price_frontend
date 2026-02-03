@@ -6,7 +6,10 @@ import { propertiesService } from "@/features/properties/api/properties.service"
 import { RootLayout } from "@/app/layouts/RootLayout";
 import { FEATURED_CITIES } from "@/core/config/cities.config";
 import { RequireAuth } from "@/features/auth/components/RequireAuth";
-import { favoriteKeys } from "@/features/favorite/api/favorites.queries";
+import {
+  FAVORITE_CACHE,
+  favoriteKeys,
+} from "@/features/favorite/api/favorites.queries";
 import { favoritesService } from "@/features/favorite/api/favorites.service";
 import { tokenStorage } from "@/features/auth/api/token.storage";
 import RootErrorBoundary from "@/pages/errors/RootErrorBoundary";
@@ -53,7 +56,7 @@ export const routes = [
         loader: async () => {
           const isAuthenticated = tokenStorage.isAuthenticated();
 
-          await Promise.all([
+          Promise.allSettled([
             queryClient.prefetchQuery({
               queryKey: propertiesKeys.list(SALE_FILTERS),
               queryFn: () => propertiesService.getProperties(SALE_FILTERS),
@@ -108,7 +111,7 @@ export const routes = [
 
           const isAuthenticated = tokenStorage.isAuthenticated();
 
-          await Promise.all([
+          await Promise.allSettled([
             queryClient.prefetchQuery({
               queryKey: propertiesKeys.list(filters),
               queryFn: () => propertiesService.getProperties(filters),
@@ -146,20 +149,14 @@ export const routes = [
             );
           }
 
-          const propertyPromise = queryClient.ensureQueryData({
+          await queryClient.ensureQueryData({
             queryKey: propertiesKeys.detail(id),
             queryFn: ({ signal }) =>
               propertiesService.getPropertyById(id, signal),
             ...PROPERTY_CACHE.DETAIL,
           });
 
-          propertyPromise.catch((error: unknown) => {
-            console.error("Prefetch error:", error);
-          });
-
-          return {
-            property: propertyPromise,
-          };
+          return null;
         },
       },
       {
@@ -179,8 +176,9 @@ export const routes = [
           await queryClient.prefetchQuery({
             queryKey: favoriteKeys.lists(),
             queryFn: () => favoritesService.getFavoriteProperties(),
-            staleTime: 5 * 60 * 1000,
+            ...FAVORITE_CACHE.LIST,
           });
+
           return null;
         },
       },

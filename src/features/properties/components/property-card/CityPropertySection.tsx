@@ -8,7 +8,7 @@ import { NextButton } from "@/shared/components/carousel/NextButton";
 import { usePrevNextButtons } from "@/shared/components/carousel/useCarouselNavigation";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useCallback, useEffect, useState, useId } from "react";
+import { useId } from "react";
 import type {
   PropertyPreview,
   TransactionType,
@@ -38,27 +38,10 @@ const CityPropertySection = observer(
   }: ICityPropertySectionProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
-    const [slidesInView, setSlidesInView] = useState<number[]>([]);
 
     const uniqueId = useId();
     const sectionTitleId = `title-${uniqueId}`;
     const carouselId = `carousel-${uniqueId}`;
-
-    const updateSlidesInView = useCallback(() => {
-      if (!emblaApi) return;
-      const inView = emblaApi.slidesInView();
-      setSlidesInView((prev) => {
-        const allSeen = new Set([...prev, ...inView]);
-        return Array.from(allSeen);
-      });
-    }, [emblaApi]);
-
-    useEffect(() => {
-      if (!emblaApi) return;
-      updateSlidesInView();
-      emblaApi.on("slidesInView", updateSlidesInView);
-      emblaApi.on("reInit", updateSlidesInView);
-    }, [emblaApi, updateSlidesInView]);
 
     const title =
       transactionType === "sale"
@@ -119,7 +102,6 @@ const CityPropertySection = observer(
           >
             <div className="embla__container">
               {properties.map((property, index) => {
-                const isVisible = slidesInView.includes(index);
                 return (
                   <div
                     key={property.id}
@@ -128,17 +110,7 @@ const CityPropertySection = observer(
                     aria-roledescription="slide"
                     aria-label={`${index + 1} sur ${properties.length}`}
                   >
-                    {isVisible ? (
-                      <PropertyCard
-                        property={property}
-                        isPriority={index < 2}
-                      />
-                    ) : (
-                      <div
-                        className="h-80 w-full bg-gray-50 animate-pulse rounded-xl"
-                        aria-hidden="true"
-                      />
-                    )}
+                    <PropertyCard property={property} isPriority={index < 2} />
                   </div>
                 );
               })}

@@ -9,7 +9,7 @@ import { NextButton } from "@/shared/components/carousel/NextButton";
 import { usePrevNextButtons } from "@/shared/components/carousel/useCarouselNavigation";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useCallback, useEffect, useMemo, useState, useId } from "react";
+import { useMemo, useId } from "react";
 import type { PropertySearchParams } from "../types/property.types";
 import { EmptyProperties } from "./EmptyProperties";
 
@@ -32,27 +32,10 @@ const PropertyCarouselSection = observer(
   }: IPropertyCarouselSectionProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
-    const [slidesInView, setSlidesInView] = useState<number[]>([]);
 
     const baseId = useId();
     const viewportId = `viewport-${baseId}`;
     const titleId = `title-${baseId}`;
-
-    const updateSlidesInView = useCallback(() => {
-      if (!emblaApi) return;
-      const inView = emblaApi.slidesInView();
-      setSlidesInView((prev) => {
-        const allSeen = new Set([...prev, ...inView]);
-        return Array.from(allSeen);
-      });
-    }, [emblaApi]);
-
-    useEffect(() => {
-      if (!emblaApi) return;
-      updateSlidesInView();
-      emblaApi.on("slidesInView", updateSlidesInView);
-      emblaApi.on("reInit", updateSlidesInView);
-    }, [emblaApi, updateSlidesInView]);
 
     const filters = useMemo<PropertySearchParams>(
       () => ({
@@ -126,7 +109,6 @@ const PropertyCarouselSection = observer(
             >
               <div className="embla__container">
                 {data?.items.map((property, index) => {
-                  const isVisible = slidesInView.includes(index);
                   return (
                     <div
                       key={property.id}
@@ -135,14 +117,10 @@ const PropertyCarouselSection = observer(
                       aria-roledescription="slide"
                       aria-label={`${index + 1} sur ${data.items.length}`}
                     >
-                      {isVisible ? (
-                        <PropertyCard property={property} />
-                      ) : (
-                        <div
-                          className="h-80 w-full bg-gray-50 animate-pulse rounded-xl"
-                          aria-hidden="true"
-                        />
-                      )}
+                      <PropertyCard
+                        property={property}
+                        isPriority={index < 2}
+                      />
                     </div>
                   );
                 })}

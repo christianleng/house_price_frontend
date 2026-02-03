@@ -1,5 +1,5 @@
-import { Card } from "@/core/ui/card";
 import { PropertiesSplitLayout } from "../layout/PropertiesSplitLayout";
+import { PropertyCardSkeleton } from "./PropertyCardSkeleton";
 
 export const PropertiesPageSkeleton = () => {
   return (
@@ -16,7 +16,7 @@ export const PropertiesPageSkeleton = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
-            <Card key={i} className="h-100 border-none shadow-sm bg-gray-50" />
+            <PropertyCardSkeleton key={i} />
           ))}
         </div>
       </div>
