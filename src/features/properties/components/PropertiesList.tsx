@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
-import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import { PropertyCard } from "./property-card/PropertyCard";
 import { propertyFiltersStore } from "../store/property-filters-store";
 import { EmptyProperties } from "./EmptyProperties";
@@ -8,25 +7,16 @@ import { Pagination } from "@/shared/components/pagination";
 
 const PropertiesList = observer(() => {
   const { filters, setPage } = propertyFiltersStore;
-  const { data, isError, error, isLoading, refetch, isPlaceholderData } =
-    useProperties(filters);
+
+  const { data } = useProperties(filters);
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
 
-  if (isError) {
-    return (
-      <div className="flex flex-col gap-4 py-10">
-        <ErrorDisplay error={error} onRetry={refetch} />
-      </div>
-    );
-  }
-  const hasNoProperties = !isLoading && data?.items.length === 0;
-
   return (
     <div className="flex flex-col gap-6 py-8">
-      {hasNoProperties ? (
+      {data.items.length === 0 ? (
         <EmptyProperties message={`Nous n'avons actuellement aucun bien.`} />
       ) : (
         <>
@@ -47,14 +37,11 @@ const PropertiesList = observer(() => {
             ))}
           </div>
 
-          {data && (
-            <Pagination
-              currentPage={data.page}
-              totalPages={data.total_pages}
-              onPageChange={handlePageChange}
-              isLoading={isPlaceholderData}
-            />
-          )}
+          <Pagination
+            currentPage={data.page}
+            totalPages={data.total_pages}
+            onPageChange={handlePageChange}
+          />
         </>
       )}
     </div>

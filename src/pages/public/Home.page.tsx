@@ -3,24 +3,51 @@ import { InfoCardSection } from "@/shared/components/InfoCardSection";
 import { CTASection } from "@/shared/components/CTASection";
 import PropertyCarouselSectionCity from "@/features/properties/components/PropertyCarouselSectionCity";
 import { LazySection } from "@/core/components/LazySection";
+import PropertyCarouselError from "../errors/PropertyCarouselError";
+import { PropertyCardSkeleton } from "@/features/properties/components/skeletons/PropertyCardSkeleton";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
 const HomePage = () => {
   return (
     <div className="py-16 flex flex-col gap-16">
-      <PropertyCarouselSection
-        title="Dernières propriétés à vendre"
-        transactionType="sale"
-      />
+      <ErrorBoundary
+        fallbackRender={({ resetErrorBoundary }) => (
+          <PropertyCarouselError
+            title="les ventes"
+            resetErrorBoundary={resetErrorBoundary}
+          />
+        )}
+      >
+        <Suspense fallback={<PropertyCardSkeleton />}>
+          <PropertyCarouselSection
+            title="Dernières propriétés à vendre"
+            transactionType="sale"
+          />
+        </Suspense>
+      </ErrorBoundary>
 
       <LazySection height="450px">
-        <PropertyCarouselSection
-          title="Dernières propriétés en location"
-          transactionType="rent"
-        />
+        <ErrorBoundary
+          fallbackRender={({ resetErrorBoundary }) => (
+            <PropertyCarouselError
+              title="les locations"
+              resetErrorBoundary={resetErrorBoundary}
+            />
+          )}
+        >
+          <Suspense fallback={<PropertyCardSkeleton />}>
+            <PropertyCarouselSection
+              title="Dernières propriétés en location"
+              transactionType="rent"
+            />
+          </Suspense>
+        </ErrorBoundary>
       </LazySection>
+
       <LazySection>
         <InfoCardSection
-          badge="Restez informé!"
+          badge="Restez informé !"
           title="Découvrez les prix de l'immobilier en France"
           description="Utilisez la carte des prix de SeLoger pour obtenir facilement des informations sur le marché de l'immobilier. Découvrez le prix au mètre carré pour des adresses, des villes et des quartiers spécifiques. Informez-vous et découvrez les prix dans la région de votre choix dès aujourd'hui !"
           ctaText="Explorer la carte des prix"
@@ -29,9 +56,10 @@ const HomePage = () => {
           imageAlt="paris"
         />
       </LazySection>
+
       <LazySection>
         <InfoCardSection
-          badge="Restez informé!"
+          badge="Restez informé !"
           title="Estimez votre bien immobilier"
           description="Réalisez votre estimation maison ou appartement maintenant avec notre outil intelligent basé sur les données du marché."
           ctaText="Estimer mon bien"
@@ -43,8 +71,20 @@ const HomePage = () => {
       </LazySection>
 
       <LazySection height="600px">
-        <PropertyCarouselSectionCity />
+        <ErrorBoundary
+          fallbackRender={({ resetErrorBoundary }) => (
+            <PropertyCarouselError
+              title="les villes"
+              resetErrorBoundary={resetErrorBoundary}
+            />
+          )}
+        >
+          <Suspense fallback={<PropertyCardSkeleton />}>
+            <PropertyCarouselSectionCity />
+          </Suspense>
+        </ErrorBoundary>
       </LazySection>
+
       <LazySection>
         <CTASection
           badge="100% gratuit"

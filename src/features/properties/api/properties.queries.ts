@@ -1,7 +1,8 @@
 import {
-  keepPreviousData,
   useQuery,
+  useSuspenseQuery,
   type UseQueryResult,
+  type UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 import { propertiesService } from "./properties.service";
 import type {
@@ -12,6 +13,26 @@ import type {
   PropertyPreview,
 } from "../types/property.types";
 import type { PaginatedResponse } from "@/core/types";
+
+export const PROPERTY_CACHE = {
+  LIST: {
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
+  },
+  DETAIL: {
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
+  },
+  COUNT: {
+    staleTime: 1 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
+  },
+  CITIES: {
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  },
+} as const;
 
 export const propertiesKeys = {
   all: ["properties"] as const,
@@ -41,21 +62,21 @@ export const propertiesKeys = {
 
 export function useProperties(
   filters?: PropertySearchParams,
-): UseQueryResult<PaginatedResponse<PropertyPreview>, Error> {
-  return useQuery({
+): UseSuspenseQueryResult<PaginatedResponse<PropertyPreview>, Error> {
+  return useSuspenseQuery({
     queryKey: propertiesKeys.list(filters),
     queryFn: ({ signal }) => propertiesService.getProperties(filters, signal),
-    staleTime: 5 * 60 * 1000,
-    placeholderData: keepPreviousData,
+    ...PROPERTY_CACHE.LIST,
   });
 }
 
-export function useProperty(id: string): UseQueryResult<Property, Error> {
-  return useQuery({
+export function useProperty(
+  id: string,
+): UseSuspenseQueryResult<Property, Error> {
+  return useSuspenseQuery({
     queryKey: propertiesKeys.detail(id),
     queryFn: ({ signal }) => propertiesService.getPropertyById(id, signal),
-    staleTime: 10 * 60 * 1000,
-    enabled: !!id,
+    ...PROPERTY_CACHE.DETAIL,
   });
 }
 
@@ -67,7 +88,7 @@ export function useCountProperties(
     queryKey: propertiesKeys.count(filters),
     queryFn: ({ signal }) =>
       propertiesService.getCountProperties(filters, signal),
-    staleTime: 1 * 60 * 1000,
+    ...PROPERTY_CACHE.COUNT,
     enabled: options?.enabled ?? true,
   });
 }
@@ -76,8 +97,8 @@ export function useCitiesProperties(
   cities: string[],
   transactionType: TransactionType,
   pageSize: number = 10,
-): UseQueryResult<CitiesPropertiesResponse, Error> {
-  return useQuery({
+): UseSuspenseQueryResult<CitiesPropertiesResponse, Error> {
+  return useSuspenseQuery({
     queryKey: propertiesKeys.citiesList(cities, transactionType, pageSize),
     queryFn: () =>
       propertiesService.getPropertiesByCities(
@@ -85,8 +106,6 @@ export function useCitiesProperties(
         transactionType,
         pageSize,
       ),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    enabled: cities.length > 0,
+    ...PROPERTY_CACHE.CITIES,
   });
 }

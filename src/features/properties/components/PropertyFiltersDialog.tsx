@@ -20,7 +20,7 @@ import {
 import { Checkbox } from "@/core/ui/checkbox";
 import { observer } from "mobx-react-lite";
 import { useCountProperties } from "../api/properties.queries";
-import { useDebounce } from "@/shared/hooks/use-debounce";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   PrisonGuardIcon,

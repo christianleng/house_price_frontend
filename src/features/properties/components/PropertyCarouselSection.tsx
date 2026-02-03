@@ -1,6 +1,5 @@
 import { observer } from "mobx-react-lite";
 import { useProperties } from "@/features/properties/api/properties.queries";
-import { ErrorDisplay } from "@/shared/components/data-loading/ErrorDisplay";
 import { Link } from "react-router";
 import { PropertyCard } from "@/features/properties/components/property-card/PropertyCard";
 import type { EmblaOptionsType } from "embla-carousel";
@@ -10,11 +9,11 @@ import { NextButton } from "@/shared/components/carousel/NextButton";
 import { usePrevNextButtons } from "@/shared/components/carousel/useCarouselNavigation";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useId } from "react";
 import type { PropertySearchParams } from "../types/property.types";
 import { EmptyProperties } from "./EmptyProperties";
 
-interface PropertyCarouselSectionProps {
+interface IPropertyCarouselSectionProps {
   title: string;
   transactionType: "sale" | "rent";
   carouselOptions?: EmblaOptionsType;
@@ -30,28 +29,13 @@ const PropertyCarouselSection = observer(
     title,
     transactionType,
     carouselOptions = DEFAULT_CAROUSEL_OPTIONS,
-  }: PropertyCarouselSectionProps) => {
+  }: IPropertyCarouselSectionProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
 
-    const [slidesInView, setSlidesInView] = useState<number[]>([]);
-
-    const updateSlidesInView = useCallback(() => {
-      if (!emblaApi) return;
-
-      const inView = emblaApi.slidesInView();
-      setSlidesInView((prev) => {
-        const allSeen = new Set([...prev, ...inView]);
-        return Array.from(allSeen);
-      });
-    }, [emblaApi]);
-
-    useEffect(() => {
-      if (!emblaApi) return;
-      updateSlidesInView();
-      emblaApi.on("slidesInView", updateSlidesInView);
-      emblaApi.on("reInit", updateSlidesInView);
-    }, [emblaApi, updateSlidesInView]);
+    const baseId = useId();
+    const viewportId = `viewport-${baseId}`;
+    const titleId = `title-${baseId}`;
 
     const filters = useMemo<PropertySearchParams>(
       () => ({
@@ -64,37 +48,48 @@ const PropertyCarouselSection = observer(
       [transactionType],
     );
 
-    const { data, isError, error, isLoading, refetch } = useProperties(filters);
-
-    if (isError) {
-      return (
-        <div className="flex flex-col gap-4">
-          <ErrorDisplay error={error} onRetry={refetch} />
-        </div>
-      );
-    }
-    const hasNoProperties = !isLoading && data?.items.length === 0;
+    const { data } = useProperties(filters);
+    const hasNoProperties = data.items.length === 0;
 
     return (
-      <div className="flex flex-col gap-4">
+      <section
+        className="flex flex-col gap-4"
+        aria-labelledby={titleId}
+        role="region"
+        aria-roledescription="carrousel"
+      >
         <div className="flex justify-between items-center">
           <Link
-            className="flex items-center gap-1 font-bold hover:underline"
+            id={titleId}
+            className="flex items-center gap-1 font-bold hover:underline w-fit"
             to={`/properties?transaction_type=${transactionType}`}
+            aria-label={`${title}, voir toutes les propriétés`}
           >
             <span>{title}</span>
-            <HugeiconsIcon icon={ArrowRight01Icon} className="h-5 w-5" />
+            <HugeiconsIcon
+              icon={ArrowRight01Icon}
+              className="h-5 w-5"
+              aria-hidden="true"
+            />
           </Link>
 
           {!hasNoProperties && (
-            <div className="embla__buttons">
+            <div
+              className="embla__buttons flex gap-2"
+              role="group"
+              aria-label="Navigation"
+            >
               <PrevButton
                 onClick={nav.onPrevButtonClick}
                 disabled={nav.prevBtnDisabled}
+                aria-controls={viewportId}
+                aria-label="Voir les biens précédents"
               />
               <NextButton
                 onClick={nav.onNextButtonClick}
                 disabled={nav.nextBtnDisabled}
+                aria-controls={viewportId}
+                aria-label="Voir les biens suivants"
               />
             </div>
           )}
@@ -105,26 +100,35 @@ const PropertyCarouselSection = observer(
             message={`Nous n'avons actuellement aucun bien en ${transactionType === "sale" ? "vente" : "location"}.`}
           />
         ) : (
-          <section className="embla">
-            <div className="embla__viewport" ref={emblaRef}>
+          <div className="embla">
+            <div
+              className="embla__viewport"
+              ref={emblaRef}
+              id={viewportId}
+              aria-live="polite"
+            >
               <div className="embla__container">
                 {data?.items.map((property, index) => {
-                  const isVisible = slidesInView.includes(index);
                   return (
-                    <div key={property.id} className="embla__slide">
-                      {isVisible ? (
-                        <PropertyCard property={property} />
-                      ) : (
-                        <div className="h-80 w-full bg-gray-50 animate-pulse rounded-xl" />
-                      )}
+                    <div
+                      key={property.id}
+                      className="embla__slide"
+                      role="group"
+                      aria-roledescription="slide"
+                      aria-label={`${index + 1} sur ${data.items.length}`}
+                    >
+                      <PropertyCard
+                        property={property}
+                        isPriority={index < 2}
+                      />
                     </div>
                   );
                 })}
               </div>
             </div>
-          </section>
+          </div>
         )}
-      </div>
+      </section>
     );
   },
 );
