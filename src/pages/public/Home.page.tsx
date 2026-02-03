@@ -4,7 +4,7 @@ import { CTASection } from "@/shared/components/CTASection";
 import PropertyCarouselSectionCity from "@/features/properties/components/PropertyCarouselSectionCity";
 import { LazySection } from "@/core/components/LazySection";
 import PropertyCarouselError from "../errors/PropertyCarouselError";
-import { PropertyCarouselSkeleton } from "@/features/properties/components/skeletons/PropertyCarouselSkeleton";
+import { PropertyCardSkeleton } from "@/features/properties/components/skeletons/PropertyCardSkeleton";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -19,7 +19,7 @@ const HomePage = () => {
           />
         )}
       >
-        <Suspense fallback={<PropertyCarouselSkeleton />}>
+        <Suspense fallback={<PropertyCardSkeleton />}>
           <PropertyCarouselSection
             title="Dernières propriétés à vendre"
             transactionType="sale"
@@ -36,7 +36,7 @@ const HomePage = () => {
             />
           )}
         >
-          <Suspense fallback={<PropertyCarouselSkeleton />}>
+          <Suspense fallback={<PropertyCardSkeleton />}>
             <PropertyCarouselSection
               title="Dernières propriétés en location"
               transactionType="rent"
@@ -79,7 +79,7 @@ const HomePage = () => {
             />
           )}
         >
-          <Suspense fallback={<PropertyCarouselSkeleton />}>
+          <Suspense fallback={<PropertyCardSkeleton />}>
             <PropertyCarouselSectionCity />
           </Suspense>
         </ErrorBoundary>
