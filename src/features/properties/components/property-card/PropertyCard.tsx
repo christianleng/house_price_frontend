@@ -6,6 +6,7 @@ import { PropertyCardMeta } from "./PropertyCardMeta";
 import type { PropertyPreview } from "../../types/property.types";
 import { PropertyCardSkeleton } from "../skeletons/PropertyCardSkeleton";
 import { useInView } from "@/shared/hooks/useInView";
+import { propertiesSyncStore } from "../../store/properties-sync-store";
 
 interface IPropertyCardProps {
   property: PropertyPreview;
@@ -21,7 +22,13 @@ const PropertyCard = memo(
     const shouldShowContent = isPriority || inView;
 
     return (
-      <div ref={ref}>
+      <div
+        ref={ref}
+        onMouseEnter={() =>
+          propertiesSyncStore.setHoveredPropertyId(property.id)
+        }
+        onMouseLeave={() => propertiesSyncStore.setHoveredPropertyId(null)}
+      >
         {!shouldShowContent ? (
           <PropertyCardSkeleton />
         ) : (

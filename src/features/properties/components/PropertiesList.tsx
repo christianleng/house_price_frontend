@@ -5,6 +5,8 @@ import { propertyFiltersStore } from "../store/property-filters-store";
 import { EmptyProperties } from "./EmptyProperties";
 import { Pagination } from "@/shared/components/pagination";
 import { usePriorityCount } from "@/shared/hooks/usePriorityCount";
+import { useEffect } from "react";
+import { propertiesSyncStore } from "../store/properties-sync-store";
 
 const PropertiesList = observer(() => {
   const { filters, setPage } = propertyFiltersStore;
@@ -15,6 +17,12 @@ const PropertiesList = observer(() => {
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
+
+  useEffect(() => {
+    if (data?.items) {
+      propertiesSyncStore.setProperties(data.items);
+    }
+  }, [data?.items]);
 
   return (
     <div className="flex flex-col gap-6 py-8">
