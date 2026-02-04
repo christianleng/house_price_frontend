@@ -122,6 +122,8 @@ interface BasePropertyPreview extends Pick<
   | "surface_area"
   | "rooms"
   | "bedrooms"
+  | "latitude"
+  | "longitude"
   | "created_at"
 > {
   thumbnail_url: string | null;
