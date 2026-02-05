@@ -1,23 +1,13 @@
 @import "tailwindcss";
-
 @import "./styles/themes/theme.css";
-
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+
 @import "@fontsource-variable/noto-sans";
 
 @custom-variant dark (&:is(.dark *));
-
 @import "./styles/base/reset.css";
-
 @import "./styles/components/embla.css";
-
-@font-face {
-  font-family: "Noto Sans Variable";
-  src: url("/fonts/noto-sans-latin.woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-display: swap;
-}
 
 @theme {
   --font-noto: "Noto Sans Variable", sans-serif;

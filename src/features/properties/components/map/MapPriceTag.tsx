@@ -8,6 +8,8 @@ interface IMapPriceTagProps {
 
 export const MapPriceTag = observer(({ property }: IMapPriceTagProps) => {
   const isHovered = propertiesSyncStore.hoveredPropertyId === property.id;
+  const isSelected = propertiesSyncStore.selectedPropertyId === property.id;
+  const isActive = isHovered || isSelected;
 
   const formatPrice = (p: number) => {
     if (p >= 1000) return `${(p / 1000).toFixed(0)}\u00A0k`;
@@ -21,12 +23,11 @@ export const MapPriceTag = observer(({ property }: IMapPriceTagProps) => {
 
   return (
     <div
-      className={`
-        relative flex items-center justify-center 
-        px-3 py-1 rounded-full font-bold text-[14px] 
-        transition-all duration-200 ease-in-out cursor-pointer shadow-md border
+      onMouseEnter={() => propertiesSyncStore.setHoveredPropertyId(property.id)}
+      onMouseLeave={() => propertiesSyncStore.setHoveredPropertyId(null)}
+      className={`px-3 py-1 rounded-full font-bold text-sm cursor-pointer shadow-md border
         ${
-          isHovered
+          isActive
             ? "bg-black text-white scale-110 z-50 border-black"
             : "bg-white text-gray-900 z-10 border-gray-200 hover:scale-105"
         }
@@ -39,3 +40,6 @@ export const MapPriceTag = observer(({ property }: IMapPriceTagProps) => {
     </div>
   );
 });
+
+MapPriceTag.displayName = "MapPriceTag";
+export default MapPriceTag;
