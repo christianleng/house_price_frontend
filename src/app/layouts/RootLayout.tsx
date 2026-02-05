@@ -1,4 +1,4 @@
-import { memo, Suspense, lazy } from "react";
+import { memo, Suspense, lazy, useEffect } from "react";
 import { Outlet, useNavigation, useLocation } from "react-router";
 import TopBar from "@/app/layouts/components/header/TopBar";
 import MainNavigation from "@/app/layouts/components/header/MainNavigation";
@@ -14,6 +14,7 @@ const LazySearchBar = lazy(
 );
 
 const RootLayout = () => {
+  const { pathname } = useLocation();
   const navigation = useNavigation();
   const location = useLocation();
 
@@ -23,6 +24,10 @@ const RootLayout = () => {
   const headerContainerClass = isHomePage
     ? "container mx-auto max-w-4/5 px-4"
     : "lg:px-12 px-4";
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <div className="relative flex min-h-screen flex-col">

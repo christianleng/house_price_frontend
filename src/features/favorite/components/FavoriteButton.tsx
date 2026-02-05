@@ -11,6 +11,7 @@ import {
 } from "../api/favorites.queries";
 import { memo } from "react";
 import type { FavoriteList } from "../types/favorite.types";
+import type { PropertyId } from "@/features/properties/types/property.types";
 
 const FavoriteButton = memo(({ propertyId }: { propertyId: string }) => {
   const { isAuthenticated } = useAuth();
@@ -34,9 +35,9 @@ const FavoriteButton = memo(({ propertyId }: { propertyId: string }) => {
     }
 
     if (isFavorite) {
-      deleteFavorite(propertyId);
+      deleteFavorite(propertyId as PropertyId);
     } else {
-      addFavorite(propertyId);
+      addFavorite(propertyId as PropertyId);
     }
   };
 
