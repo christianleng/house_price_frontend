@@ -1,4 +1,6 @@
 import PropertyDetail from "@/features/properties/components/property-detail/PropertyDetail";
+import PropertyDetailSkeleton from "@/features/properties/components/skeletons/PropertyDetailSkeleton";
+import { Suspense } from "react";
 
 const PropertyDetailPage = () => {
   return (
@@ -9,7 +11,9 @@ const PropertyDetailPage = () => {
         content="Découvrez tous les détails de cette propriété : photos, caractéristiques, prix et localisation."
       />
 
-      <PropertyDetail />
+      <Suspense fallback={<PropertyDetailSkeleton />}>
+        <PropertyDetail />
+      </Suspense>
     </>
   );
 };

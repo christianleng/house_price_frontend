@@ -1,6 +1,7 @@
 import { useAuth } from "@/features/auth/providers/authProviders";
 import { UserFavorites } from "@/features/profile/components/UserFavorites";
 import { UserProfileCard } from "@/features/profile/components/UserProfileCard";
+import { Suspense } from "react";
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
@@ -14,7 +15,20 @@ const ProfilePage = () => {
       </section>
 
       <section className="space-y-6">
-        <UserFavorites />
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="border rounded-lg p-2 h-20 bg-gray-100 animate-pulse"
+                />
+              ))}
+            </div>
+          }
+        >
+          <UserFavorites />
+        </Suspense>
       </section>
     </div>
   );
