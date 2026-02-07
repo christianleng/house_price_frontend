@@ -21,6 +21,8 @@ import { PropertyDetailSkeleton } from "@/features/properties/components/skeleto
 import { PropertyErrorBoundary } from "@/pages/errors/PropertyErrorBoundary.page";
 import { PropertiesPageSkeleton } from "@/features/properties/components/skeletons/PropertiesPageSkeleton";
 import { PropertiesErrorBoundary } from "@/pages/errors/PropertiesErrorBoundary";
+import ProfilePageSkeleton from "@/pages/components/skeletons/ProfilePageSkeleton";
+import ProfileErrorBoundary from "@/pages/errors/ProfileErrorBoundary";
 
 const SALE_FILTERS = {
   transaction_type: "sale",
@@ -146,7 +148,7 @@ export const routes = [
             );
           }
 
-          await queryClient.ensureQueryData({
+          queryClient.prefetchQuery({
             queryKey: propertiesKeys.detail(id),
             queryFn: ({ signal }) =>
               propertiesService.getPropertyById(id, signal),
@@ -158,6 +160,8 @@ export const routes = [
       },
       {
         path: "profile",
+        HydrateFallback: ProfilePageSkeleton,
+        ErrorBoundary: ProfileErrorBoundary,
         lazy: async () => {
           const module = await import("@/pages/profile/Profile.page");
           return {
@@ -170,7 +174,8 @@ export const routes = [
         },
         loader: async () => {
           if (!tokenStorage.isAuthenticated()) return null;
-          await queryClient.prefetchQuery({
+
+          queryClient.prefetchQuery({
             queryKey: favoriteKeys.lists(),
             queryFn: () => favoritesService.getFavoriteProperties(),
             ...FAVORITE_CACHE.LIST,
