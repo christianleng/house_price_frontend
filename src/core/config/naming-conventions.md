@@ -6,6 +6,7 @@
 
 - [README.md](../../../README.md)
 - [Documentation du Design System](./design-tokens.md)
+- [Documentation Storybook](./storybook.md)
 - 🔥 [Performance Guide - Render as you fetch](./case-study-render-as-you-fetch.md)
 
 ## Vue d'ensemble

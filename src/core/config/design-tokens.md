@@ -6,6 +6,7 @@
 
 - [README.md](../../../README.md)
 - [Guide des Conventions de Nommage](./naming-conventions.md)
+- [Documentation Storybook](./storybook.md)
 - 🔥 [Performance Guide - Render as you fetch](./case-study-render-as-you-fetch.md)
 
 ## 🎨 Colors

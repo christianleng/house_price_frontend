@@ -6,6 +6,7 @@
 
 - [README.md](../../../README.md)
 - [Documentation du Design System](./design-tokens.md)
+- [Documentation Storybook](./storybook.md)
 - [Guide des Conventions de Nommage](./naming-conventions.md)
 
 ## Case Study: Optimisation du Cycle de Rendu (162ms → < 50ms)
