@@ -12,6 +12,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useMemo, useId } from "react";
 import type { PropertySearchParams } from "../types/property.types";
 import { EmptyProperties } from "./EmptyProperties";
+import { usePriorityCount } from "@/shared/hooks/usePriorityCount";
 
 interface IPropertyCarouselSectionProps {
   title: string;
@@ -32,6 +33,7 @@ const PropertyCarouselSection = observer(
   }: IPropertyCarouselSectionProps) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(carouselOptions);
     const nav = usePrevNextButtons(emblaApi);
+    const priorityLimit = usePriorityCount();
 
     const baseId = useId();
     const viewportId = `viewport-${baseId}`;
@@ -119,7 +121,7 @@ const PropertyCarouselSection = observer(
                     >
                       <PropertyCard
                         property={property}
-                        isPriority={index < 2}
+                        isPriority={index < priorityLimit}
                       />
                     </div>
                   );

@@ -1,6 +1,9 @@
 import { PropertiesSplitLayout } from "@/features/properties/components/layout/PropertiesSplitLayout";
 import PropertyMap from "@/features/properties/components/map/PropertyMap";
 import PropertiesList from "@/features/properties/components/PropertiesList";
+import PropertiesPageSkeleton from "@/features/properties/components/skeletons/PropertiesPageSkeleton";
+
+import { Suspense } from "react";
 
 const PropertiesPage = () => {
   return (
@@ -12,7 +15,9 @@ const PropertiesPage = () => {
       />
 
       <PropertiesSplitLayout mapComponent={<PropertyMap />}>
-        <PropertiesList />
+        <Suspense fallback={<PropertiesPageSkeleton />}>
+          <PropertiesList />
+        </Suspense>
       </PropertiesSplitLayout>
     </>
   );
