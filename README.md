@@ -7,6 +7,7 @@ Une plateforme complète d'estimation et de recherche immobilière bâtie avec l
 ## 📚 Ressources de Documentation
 
 - [Documentation du Design System](./src/core/config/design-tokens.md)
+- [Documentation Storybook](./src/core/config/storybook.md)
 - [Guide des Conventions de Nommage](./src/core/config/naming-conventions.md)
 - [🔥 Étude de Cas : Optimisation Performance & Render-as-you-fetch](./src/core/config/case-study-render-as-you-fetch.md)
 
