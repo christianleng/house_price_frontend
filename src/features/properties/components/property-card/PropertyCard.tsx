@@ -12,6 +12,7 @@ interface IPropertyCardProps {
   property: PropertyPreview;
   isPriority?: boolean;
 }
+
 const PropertyCard = memo(
   ({ property, isPriority = false }: IPropertyCardProps) => {
     const { ref, inView } = useInView({
