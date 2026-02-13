@@ -29,7 +29,7 @@ const PropertyCardMedia = memo(
       <figure className="relative h-48 bg-gray-200 rounded-xl overflow-hidden group">
         {showPlaceholder ? (
           <div
-            className="flex h-full flex-col items-center justify-center gap-2 text-gray-400"
+            className="flex h-full flex-col items-center justify-center gap-2 text-gray-600"
             role="img"
             aria-label={`Image non disponible pour : ${title}`}
           >
@@ -38,7 +38,7 @@ const PropertyCardMedia = memo(
               className="h-12 w-12"
               aria-hidden="true"
             />
-            <span className="text-sm">Pas d'image</span>
+            <span className="text-sm font-medium">Pas d'image</span>
           </div>
         ) : (
           <>
