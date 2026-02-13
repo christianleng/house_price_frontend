@@ -4,6 +4,7 @@ import { cn } from "@/core/lib/utils";
 import { Cancel01Icon, FavouriteIcon } from "@hugeicons/core-free-icons";
 import { propertiesSyncStore } from "../../store/properties-sync-store";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { Button } from "@/core/ui/button";
 
 interface IPropertyPreviewCardProps {
   property: PropertyPreview;
@@ -38,19 +39,21 @@ export const PropertyPreviewCard = ({
       )}
     >
       <div className="absolute top-3 right-3 z-20 flex gap-2">
-        <button
+        <Button
+          variant="ghost"
           onClick={handleFavorite}
-          className="flex items-center justify-center w-8 h-8 bg-white/90 hover:bg-white rounded-full shadow-md transition-all active:scale-90"
+          className="flex items-center hover:cursor-pointer justify-center w-8 h-8 hover:bg-white rounded-full shadow-md"
         >
           <HugeiconsIcon icon={FavouriteIcon} />
-        </button>
+        </Button>
 
-        <button
+        <Button
+          variant="ghost"
           onClick={handleClose}
-          className="flex items-center justify-center w-8 h-8 bg-white/90 hover:bg-white rounded-full shadow-md transition-all active:scale-90"
+          className="flex items-center hover:cursor-pointer justify-center w-8 h-8 hover:bg-white rounded-full shadow-md"
         >
           <HugeiconsIcon icon={Cancel01Icon} />
-        </button>
+        </Button>
       </div>
 
       <Link
@@ -61,7 +64,7 @@ export const PropertyPreviewCard = ({
           <img
             src={property.thumbnail_url || "/placeholder-property.jpg"}
             alt={property.title}
-            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+            className="object-cover w-full h-full"
           />
         </div>
 

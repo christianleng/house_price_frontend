@@ -13,7 +13,6 @@ import {
 } from "@hugeicons/core-free-icons";
 
 const Select = SelectPrimitive.Root;
-
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   return (
     <SelectPrimitive.Group
@@ -23,29 +22,13 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
     />
   );
 }
-
-interface SelectValueProps extends SelectPrimitive.Value.Props {
-  placeholder?: string;
-}
-
-function SelectValue({
-  className,
-  placeholder,
-  children,
-  ...props
-}: SelectValueProps) {
+function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
-      className={cn(
-        "flex flex-1 text-left text-muted-foreground",
-        !children && placeholder ? "text-muted-foreground" : "text-foreground",
-        className,
-      )}
+      className={cn("flex flex-1 text-left", className)}
       {...props}
-    >
-      {children || placeholder}
-    </SelectPrimitive.Value>
+    />
   );
 }
 function SelectTrigger({
@@ -61,7 +44,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "border-input data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 gap-1.5 rounded-lg border bg-transparent py-2 pr-2 pl-2.5 text-sm transition-colors select-none focus-visible:ring-[3px] aria-invalid:ring-[3px] data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] *:data-[slot=select-value]:flex *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 flex w-fit items-center justify-between whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:items-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
+        "border-input data-placeholder:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 gap-1.5 rounded-lg border bg-transparent py-2 pr-2 pl-2.5 text-sm transition-colors select-none focus-visible:ring-3 aria-invalid:ring-3 data-[size=default]:h-8 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] *:data-[slot=select-value]:gap-1.5 [&_svg:not([class*='size-'])]:size-4 flex w-fit items-center justify-between whitespace-nowrap outline-none disabled:cursor-not-allowed disabled:opacity-50 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -71,15 +54,13 @@ function SelectTrigger({
         render={
           <HugeiconsIcon
             icon={UnfoldMoreIcon}
-            strokeWidth={2}
-            className="text-muted-foreground size-4 pointer-events-none"
+            className="ml-2 h-4 w-4 opacity-50 shrink-0"
           />
         }
       />
     </SelectPrimitive.Trigger>
   );
 }
-
 function SelectContent({
   className,
   children,
@@ -106,8 +87,9 @@ function SelectContent({
       >
         <SelectPrimitive.Popup
           data-slot="select-content"
+          data-align-trigger={alignItemWithTrigger}
           className={cn(
-            "bg-popover text-popover-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 ring-foreground/10 min-w-36 rounded-lg shadow-md ring-1 duration-100 relative isolate z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto",
+            "bg-popover text-popover-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 ring-foreground/10 min-w-36 rounded-lg shadow-md ring-1 duration-100 data-[side=inline-start]:slide-in-from-right-2 data-[side=inline-end]:slide-in-from-left-2 relative isolate z-50 max-h-(--available-height) w-(--anchor-width) origin-(--transform-origin) overflow-x-hidden overflow-y-auto data-[align-trigger=true]:animate-none",
             className,
           )}
           {...props}
@@ -120,7 +102,6 @@ function SelectContent({
     </SelectPrimitive.Portal>
   );
 }
-
 function SelectLabel({
   className,
   ...props
@@ -133,7 +114,6 @@ function SelectLabel({
     />
   );
 }
-
 function SelectItem({
   className,
   children,
@@ -153,19 +133,18 @@ function SelectItem({
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
         render={
-          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
+          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
+            <HugeiconsIcon
+              icon={Tick02Icon}
+              strokeWidth={2}
+              className="pointer-events-none"
+            />
+          </span>
         }
-      >
-        <HugeiconsIcon
-          icon={Tick02Icon}
-          strokeWidth={2}
-          className="pointer-events-none"
-        />
-      </SelectPrimitive.ItemIndicator>
+      />
     </SelectPrimitive.Item>
   );
 }
-
 function SelectSeparator({
   className,
   ...props
@@ -178,7 +157,6 @@ function SelectSeparator({
     />
   );
 }
-
 function SelectScrollUpButton({
   className,
   ...props
@@ -196,7 +174,6 @@ function SelectScrollUpButton({
     </SelectPrimitive.ScrollUpArrow>
   );
 }
-
 function SelectScrollDownButton({
   className,
   ...props
@@ -210,11 +187,10 @@ function SelectScrollDownButton({
       )}
       {...props}
     >
-      <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />
+      <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />;
     </SelectPrimitive.ScrollDownArrow>
   );
 }
-
 export {
   Select,
   SelectContent,
