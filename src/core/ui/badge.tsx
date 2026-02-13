@@ -1,28 +1,34 @@
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/core/lib/utils";
 
 const badgeVariants = cva(
-  "h-5 gap-1 rounded-4xl border border-transparent px-2 py-0.5 text-xs font-medium transition-all has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&>svg]:size-3! inline-flex items-center justify-center w-fit whitespace-nowrap shrink-0 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-colors overflow-hidden group/badge",
+  "inline-flex items-center justify-center w-fit whitespace-nowrap shrink-0 transition-all duration-200 ease-smooth focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground [a]:hover:bg-primary/80",
+        default:
+          "rounded-full bg-primary text-primary-foreground hover:bg-primary/90",
         secondary:
-          "bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80",
+          "rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:
-          "bg-destructive/10 [a]:hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-destructive dark:bg-destructive/20",
+          "rounded-full bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground",
-        ghost:
-          "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
-        link: "text-primary underline-offset-4 hover:underline",
+          "rounded-full text-foreground border border-input hover:bg-accent hover:text-accent-foreground",
+        pill: "rounded-full border border-gray-200 bg-white text-gray-700 font-medium hover:border-brand-400 hover:bg-brand-50 hover:text-brand-700 hover:-translate-y-[1px] shadow-sm",
+        pillActive:
+          "rounded-full border border-brand-600 bg-gradient-to-br from-brand-600 to-brand-500 text-white shadow-brand hover:shadow-lg hover:-translate-y-[1px]",
+      },
+      size: {
+        default: "h-9 px-4 py-2 text-sm gap-2 [&>svg]:size-4",
+        sm: "h-5 px-2.5 text-xs gap-1 [&>svg]:size-3",
+        icon: "h-9 w-9 p-0",
       },
     },
     defaultVariants: {
       variant: "default",
+      size: "default",
     },
   },
 );
@@ -30,6 +36,7 @@ const badgeVariants = cva(
 function Badge({
   className,
   variant = "default",
+  size,
   render,
   ...props
 }: useRender.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
@@ -37,7 +44,7 @@ function Badge({
     defaultTagName: "span",
     props: mergeProps<"span">(
       {
-        className: cn(badgeVariants({ className, variant })),
+        className: cn(badgeVariants({ variant, size, className })),
       },
       props,
     ),
