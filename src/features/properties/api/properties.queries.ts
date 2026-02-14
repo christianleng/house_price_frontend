@@ -13,6 +13,7 @@ import type {
   PropertyPreview,
 } from "../types/property.types";
 import type { PaginatedResponse } from "@/core/types";
+import { propertiesSyncStore } from "../store/properties-sync-store";
 
 export const PROPERTY_CACHE = {
   LIST: {
@@ -67,6 +68,12 @@ export function useProperties(
     queryKey: propertiesKeys.list(filters),
     queryFn: ({ signal }) => propertiesService.getProperties(filters, signal),
     ...PROPERTY_CACHE.LIST,
+    select: (data) => {
+      if (data?.items) {
+        propertiesSyncStore.setProperties(data.items);
+      }
+      return data;
+    },
   });
 }
 
