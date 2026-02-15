@@ -4,17 +4,9 @@ import { Suspense } from "react";
 
 const PropertyDetailPage = () => {
   return (
-    <>
-      <title>Détail de la propriété | RealEstate</title>
-      <meta
-        name="description"
-        content="Découvrez tous les détails de cette propriété : photos, caractéristiques, prix et localisation."
-      />
-
-      <Suspense fallback={<PropertyDetailSkeleton />}>
-        <PropertyDetail />
-      </Suspense>
-    </>
+    <Suspense fallback={<PropertyDetailSkeleton />}>
+      <PropertyDetail />
+    </Suspense>
   );
 };
 
