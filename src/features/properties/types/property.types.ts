@@ -57,6 +57,14 @@ export type PropertyId = Brand<string, "PropertyId">;
 export type AgentId = Brand<string, "AgentId">;
 export type PropertyReference = Brand<string, "PropertyReference">;
 
+interface PropertyPhoto {
+  id: string;
+  url: string | null;
+  url_thumbnail: string | null;
+  is_primary: boolean;
+  order: number;
+}
+
 interface BaseProperty {
   id: PropertyId;
   agent_id: AgentId;
@@ -94,6 +102,9 @@ interface BaseProperty {
   updated_at: string | null;
   is_active: boolean;
   views_count: number;
+
+  photos: PropertyPhoto[];
+  thumbnail_url: string | null;
 }
 
 export interface SaleProperty extends BaseProperty {
@@ -105,7 +116,7 @@ export interface SaleProperty extends BaseProperty {
 export interface RentProperty extends BaseProperty {
   transaction_type: typeof TRANSACTION_TYPES.RENT;
   rent_price_monthly: number;
-  deposit: number;
+  deposit: number | null;
   charges_included: boolean;
 }
 
